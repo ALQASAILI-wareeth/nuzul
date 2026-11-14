@@ -20,12 +20,15 @@
 
   /* Header */
   header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:10}
-  .bar{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
   .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:24px}
   .logo svg{width:30px;height:30px}
   .logo small{font-weight:500;font-size:12px;color:var(--sand2);display:block;line-height:1}
-  nav a{font-size:15px;opacity:.85;margin-inline-start:18px}
+  .right{display:flex;align-items:center;gap:6px}
+  nav a{font-size:15px;opacity:.85;margin-inline-end:16px}
   nav a:hover{opacity:1;color:var(--sand2)}
+  .lang{border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;font:inherit;font-weight:700;font-size:14px;padding:5px 14px;border-radius:999px;cursor:pointer}
+  .lang:hover{border-color:var(--sand);color:var(--sand2)}
   @media(max-width:600px){nav{display:none}}
 
   /* Hero */
@@ -104,55 +107,58 @@
   <div class="wrap bar">
     <a class="logo" href="#top">
       <svg viewBox="0 0 32 32" fill="none"><rect x="3" y="12" width="26" height="17" rx="3" fill="#e8b04b"/><path d="M16 3 3 13h26L16 3Z" fill="#fff"/><rect x="13" y="19" width="6" height="10" rx="1" fill="#0f2a44"/></svg>
-      <div>نُزُل<small>احجز إقامتك بثقة</small></div>
+      <div><span data-i="brand">نُزُل</span><small data-i="tagline">احجز إقامتك بثقة</small></div>
     </a>
-    <nav>
-      <a href="#destinations">الوجهات</a>
-      <a href="#types">أنواع الإقامة</a>
-      <a href="#how">كيف نعمل</a>
-    </nav>
+    <div class="right">
+      <nav>
+        <a href="#destinations" data-i="nav1">الوجهات</a>
+        <a href="#types" data-i="nav2">أنواع الإقامة</a>
+        <a href="#how" data-i="nav3">كيف نعمل</a>
+      </nav>
+      <button class="lang" id="langBtn" type="button">English</button>
+    </div>
   </div>
 </header>
 
 <div class="hero" id="top">
   <div class="wrap">
-    <h1>اعثر على فندقك المثالي<br>بـ<span>أفضل الأسعار</span> حول العالم</h1>
-    <p>أكثر من مليون فندق وشقة ومنتجع، مع إلغاء مجاني لمعظم الحجوزات.</p>
+    <h1 data-h="h1">اعثر على فندقك المثالي<br>بـ<span>أفضل الأسعار</span> حول العالم</h1>
+    <p data-i="heroP">ملايين الفنادق والشقق والمنتجعات، مع إلغاء مجاني لمعظم الحجوزات.</p>
   </div>
 </div>
 
 <div class="wrap search">
   <form class="sbox" id="sform" onsubmit="return false">
     <div class="f dest">
-      <label for="dest">إلى أين تسافر؟</label>
-      <input id="dest" list="cities" placeholder="مثال: دبي، إسطنبول، القاهرة" autocomplete="off">
+      <label for="dest" data-i="destL">إلى أين تسافر؟</label>
+      <input id="dest" list="cities" data-ph="destPh" placeholder="مثال: دبي، إسطنبول، القاهرة" autocomplete="off">
       <datalist id="cities"></datalist>
     </div>
     <div class="f">
-      <label for="cin">الوصول</label>
+      <label for="cin" data-i="cinL">الوصول</label>
       <input id="cin" type="date">
     </div>
     <div class="f">
-      <label for="cout">المغادرة</label>
+      <label for="cout" data-i="coutL">المغادرة</label>
       <input id="cout" type="date">
     </div>
     <div class="f">
-      <label for="adults">البالغون</label>
+      <label for="adults" data-i="adultsL">البالغون</label>
       <select id="adults"></select>
     </div>
     <div class="f">
-      <label for="rooms">الغرف</label>
+      <label for="rooms" data-i="roomsL">الغرف</label>
       <select id="rooms"></select>
     </div>
-    <a class="go off" id="go" href="#" target="_blank" rel="noopener">🔍 ابحث</a>
+    <a class="go off" id="go" href="#" target="_blank" rel="noopener" data-i="searchB">🔍 ابحث</a>
     <div class="err" id="err"></div>
   </form>
 </div>
 
 <section id="destinations">
   <div class="wrap">
-    <h2>وجهات حول العالم</h2>
-    <p class="sub">اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث</p>
+    <h2 data-i="destH">وجهات حول العالم</h2>
+    <p class="sub" data-i="destSub">اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث</p>
     <div class="tabs" id="tabs"></div>
     <div class="grid" id="grid"></div>
   </div>
@@ -160,33 +166,33 @@
 
 <section id="types">
   <div class="wrap">
-    <h2>اختر نوع إقامتك</h2>
-    <p class="sub">اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب</p>
+    <h2 data-i="typesH">اختر نوع إقامتك</h2>
+    <p class="sub" data-i="typesSub">اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب</p>
     <div class="types" id="typegrid"></div>
   </div>
 </section>
 
 <section id="how">
   <div class="wrap">
-    <h2>كيف تحجز معنا؟</h2>
-    <p class="sub">ثلاث خطوات بسيطة</p>
+    <h2 data-i="howH">كيف تحجز معنا؟</h2>
+    <p class="sub" data-i="howSub">ثلاث خطوات بسيطة</p>
     <div class="steps">
-      <div class="step"><div class="n">١</div><b>ابحث</b><p>اكتب المدينة والتواريخ وعدد الأشخاص.</p></div>
-      <div class="step"><div class="n">٢</div><b>قارن واختر</b><p>شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.</p></div>
-      <div class="step"><div class="n">٣</div><b>احجز بأمان</b><p>أكمل الحجز والدفع عبر شريكنا Booking.com بحماية كاملة.</p></div>
+      <div class="step"><div class="n">1</div><b data-i="s1t">ابحث</b><p data-i="s1p">اكتب المدينة والتواريخ وعدد الأشخاص.</p></div>
+      <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.</p></div>
+      <div class="step"><div class="n">3</div><b data-i="s3t">احجز بأمان</b><p data-i="s3p">أكمل الحجز والدفع عبر شريكنا Booking.com بحماية كاملة.</p></div>
     </div>
     <div class="why">
-      <div><b>✔ أسعار شفافة</b><p>نفس السعر بدون أي رسوم إضافية علينا.</p></div>
-      <div><b>✔ إلغاء مجاني</b><p>معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.</p></div>
-      <div><b>✔ دعم على مدار الساعة</b><p>خدمة عملاء شريكنا متاحة 24/7 وبالعربية.</p></div>
+      <div><b data-i="w1t">✔ أسعار شفافة</b><p data-i="w1p">نفس السعر بدون أي رسوم إضافية علينا.</p></div>
+      <div><b data-i="w2t">✔ إلغاء مجاني</b><p data-i="w2p">معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.</p></div>
+      <div><b data-i="w3t">✔ دعم على مدار الساعة</b><p data-i="w3p">خدمة عملاء شريكنا متاحة 24/7 بعدة لغات منها العربية.</p></div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <b style="color:#fff">نُزُل</b> — © <span id="yr"></span> جميع الحقوق محفوظة.
-    <p class="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
+    <b style="color:#fff" data-i="brand">نُزُل</b> — © <span id="yr"></span> <span data-i="rights">جميع الحقوق محفوظة.</span>
+    <p class="disc" data-i="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
   </div>
 </footer>
 
@@ -195,60 +201,109 @@
   // ضع هنا رقم الشريك (Affiliate ID) بعد التسجيل في برنامج العمولة
   const AID = '';
 
+  const T = {
+    ar: {
+      title: 'نُزُل — احجز فندقك بأفضل سعر', brand: 'نُزُل', tagline: 'احجز إقامتك بثقة', other: 'English',
+      nav1: 'الوجهات', nav2: 'أنواع الإقامة', nav3: 'كيف نعمل',
+      h1: 'اعثر على فندقك المثالي<br>بـ<span>أفضل الأسعار</span> حول العالم',
+      heroP: 'ملايين الفنادق والشقق والمنتجعات، مع إلغاء مجاني لمعظم الحجوزات.',
+      destL: 'إلى أين تسافر؟', destPh: 'مثال: دبي، إسطنبول، القاهرة', cinL: 'الوصول', coutL: 'المغادرة',
+      adultsL: 'البالغون', roomsL: 'الغرف', searchB: '🔍 ابحث',
+      errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.',
+      destH: 'وجهات حول العالم', destSub: 'اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث',
+      typesH: 'اختر نوع إقامتك', typesSub: 'اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب',
+      howH: 'كيف تحجز معنا؟', howSub: 'ثلاث خطوات بسيطة',
+      s1t: 'ابحث', s1p: 'اكتب المدينة والتواريخ وعدد الأشخاص.',
+      s2t: 'قارن واختر', s2p: 'شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.',
+      s3t: 'احجز بأمان', s3p: 'أكمل الحجز والدفع عبر شريكنا Booking.com بحماية كاملة.',
+      w1t: '✔ أسعار شفافة', w1p: 'نفس السعر بدون أي رسوم إضافية علينا.',
+      w2t: '✔ إلغاء مجاني', w2p: 'معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.',
+      w3t: '✔ دعم على مدار الساعة', w3p: 'خدمة عملاء شريكنا متاحة 24/7 بعدة لغات منها العربية.',
+      rights: 'جميع الحقوق محفوظة.',
+      disc: 'نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.',
+      regions: {all:'🌍 الكل', me:'الشرق الأوسط', eu:'أوروبا', as:'آسيا', af:'أفريقيا', am:'الأمريكتان', oc:'أستراليا والمحيط'},
+      types: [['فنادق','خيارات لكل الميزانيات'],['شقق فندقية','مساحة ومطبخ للعائلة'],['منتجعات','استجمام وشواطئ'],['فلل وبيوت','خصوصية تامة'],['فنادق 5 نجوم','فخامة وخدمة راقية']]
+    },
+    en: {
+      title: 'Nuzul — Book your hotel at the best price', brand: 'Nuzul', tagline: 'Book your stay with confidence', other: 'العربية',
+      nav1: 'Destinations', nav2: 'Stay types', nav3: 'How it works',
+      h1: 'Find your perfect hotel<br>at the <span>best prices</span> worldwide',
+      heroP: 'Millions of hotels, apartments and resorts, with free cancellation on most bookings.',
+      destL: 'Where are you going?', destPh: 'e.g. Paris, New York, Dubai', cinL: 'Check-in', coutL: 'Check-out',
+      adultsL: 'Adults', roomsL: 'Rooms', searchB: '🔍 Search',
+      errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.',
+      destH: 'Destinations around the world', destSub: 'Tap any city to see available hotels, or search any city in the world above',
+      typesH: 'Choose your type of stay', typesSub: 'Type your destination in the search above, then pick a stay type',
+      howH: 'How to book with us', howSub: 'Three simple steps',
+      s1t: 'Search', s1p: 'Enter your city, dates and number of guests.',
+      s2t: 'Compare and choose', s2p: 'See hotels with photos, real guest reviews and prices.',
+      s3t: 'Book securely', s3p: 'Complete your booking and payment with our partner Booking.com.',
+      w1t: '✔ Transparent prices', w1p: 'Same price, with no extra fees from us.',
+      w2t: '✔ Free cancellation', w2p: 'Most rooms offer free cancellation before arrival.',
+      w3t: '✔ 24/7 support', w3p: 'Our partner offers round-the-clock customer service in many languages.',
+      rights: 'All rights reserved.',
+      disc: 'Nuzul is an independent website that shows you places to stay. Bookings and payments are completed on Booking.com, and we may earn a commission on bookings made through our links at no extra cost to you.',
+      regions: {all:'🌍 All', me:'Middle East', eu:'Europe', as:'Asia', af:'Africa', am:'Americas', oc:'Oceania'},
+      types: [['Hotels','Options for every budget'],['Apartments','Space and a kitchen for families'],['Resorts','Relaxation and beaches'],['Villas & homes','Total privacy'],['5-star hotels','Luxury and fine service']]
+    }
+  };
+
   const G = [['#c0392b','#e67e22'],['#16a085','#1abc9c'],['#1e5631','#4c9a2a'],['#0077b6','#00b4d8'],['#6d1a36','#a4133c'],
              ['#9c6644','#ddb892'],['#3a0ca3','#7209b7'],['#0f4c5c','#5f0f40'],['#6a040f','#e85d04'],['#023e8a','#0096c7'],
              ['#386641','#a7c957'],['#14213d','#3d5a80'],['#5a189a','#c77dff'],['#b5838d','#e5989b']];
   const RAW = [
-    // [عربي, English, الدولة, علم, المنطقة]
-    ['دبي','Dubai','الإمارات','🇦🇪','me'],['أبوظبي','Abu Dhabi','الإمارات','🇦🇪','me'],
-    ['مكة المكرمة','Makkah','السعودية','🇸🇦','me'],['المدينة المنورة','Madinah','السعودية','🇸🇦','me'],
-    ['الرياض','Riyadh','السعودية','🇸🇦','me'],['جدة','Jeddah','السعودية','🇸🇦','me'],
-    ['الدوحة','Doha','قطر','🇶🇦','me'],['مسقط','Muscat','عُمان','🇴🇲','me'],
-    ['المنامة','Manama','البحرين','🇧🇭','me'],['الكويت','Kuwait City','الكويت','🇰🇼','me'],
-    ['عمّان','Amman','الأردن','🇯🇴','me'],['بيروت','Beirut','لبنان','🇱🇧','me'],
-    ['إسطنبول','Istanbul','تركيا','🇹🇷','eu'],['طرابزون','Trabzon','تركيا','🇹🇷','eu'],
-    ['لندن','London','بريطانيا','🇬🇧','eu'],['باريس','Paris','فرنسا','🇫🇷','eu'],
-    ['روما','Rome','إيطاليا','🇮🇹','eu'],['برشلونة','Barcelona','إسبانيا','🇪🇸','eu'],
-    ['أمستردام','Amsterdam','هولندا','🇳🇱','eu'],['فيينا','Vienna','النمسا','🇦🇹','eu'],
-    ['إنترلاكن','Interlaken','سويسرا','🇨🇭','eu'],['ميونخ','Munich','ألمانيا','🇩🇪','eu'],
-    ['باكو','Baku','أذربيجان','🇦🇿','eu'],['تبليسي','Tbilisi','جورجيا','🇬🇪','eu'],
-    ['كوالالمبور','Kuala Lumpur','ماليزيا','🇲🇾','as'],['بالي','Bali','إندونيسيا','🇮🇩','as'],
-    ['بانكوك','Bangkok','تايلاند','🇹🇭','as'],['بوكيت','Phuket','تايلاند','🇹🇭','as'],
-    ['المالديف','Maldives','المالديف','🇲🇻','as'],['طوكيو','Tokyo','اليابان','🇯🇵','as'],
-    ['سنغافورة','Singapore','سنغافورة','🇸🇬','as'],['سيول','Seoul','كوريا الجنوبية','🇰🇷','as'],
-    ['القاهرة','Cairo','مصر','🇪🇬','af'],['شرم الشيخ','Sharm El Sheikh','مصر','🇪🇬','af'],
-    ['مراكش','Marrakech','المغرب','🇲🇦','af'],['تونس','Tunis','تونس','🇹🇳','af'],
-    ['زنجبار','Zanzibar','تنزانيا','🇹🇿','af'],['كيب تاون','Cape Town','جنوب أفريقيا','🇿🇦','af'],
-    ['نيويورك','New York','أمريكا','🇺🇸','am'],['لوس أنجلوس','Los Angeles','أمريكا','🇺🇸','am'],
-    ['أورلاندو','Orlando','أمريكا','🇺🇸','am'],['تورونتو','Toronto','كندا','🇨🇦','am'],
-    ['كانكون','Cancun','المكسيك','🇲🇽','am'],['ريو دي جانيرو','Rio de Janeiro','البرازيل','🇧🇷','am'],
-    ['سيدني','Sydney','أستراليا','🇦🇺','oc'],['ملبورن','Melbourne','أستراليا','🇦🇺','oc'],
-    ['أوكلاند','Auckland','نيوزيلندا','🇳🇿','oc'],['فيجي','Fiji','فيجي','🇫🇯','oc'],
+    // [عربي, English, الدولة, Country, علم, المنطقة]
+    ['دبي','Dubai','الإمارات','UAE','🇦🇪','me'],['أبوظبي','Abu Dhabi','الإمارات','UAE','🇦🇪','me'],
+    ['مكة المكرمة','Makkah','السعودية','Saudi Arabia','🇸🇦','me'],['المدينة المنورة','Madinah','السعودية','Saudi Arabia','🇸🇦','me'],
+    ['الرياض','Riyadh','السعودية','Saudi Arabia','🇸🇦','me'],['جدة','Jeddah','السعودية','Saudi Arabia','🇸🇦','me'],
+    ['الدوحة','Doha','قطر','Qatar','🇶🇦','me'],['مسقط','Muscat','عُمان','Oman','🇴🇲','me'],
+    ['المنامة','Manama','البحرين','Bahrain','🇧🇭','me'],['الكويت','Kuwait City','الكويت','Kuwait','🇰🇼','me'],
+    ['عمّان','Amman','الأردن','Jordan','🇯🇴','me'],['بيروت','Beirut','لبنان','Lebanon','🇱🇧','me'],
+    ['إسطنبول','Istanbul','تركيا','Türkiye','🇹🇷','eu'],['طرابزون','Trabzon','تركيا','Türkiye','🇹🇷','eu'],
+    ['لندن','London','بريطانيا','United Kingdom','🇬🇧','eu'],['باريس','Paris','فرنسا','France','🇫🇷','eu'],
+    ['روما','Rome','إيطاليا','Italy','🇮🇹','eu'],['برشلونة','Barcelona','إسبانيا','Spain','🇪🇸','eu'],
+    ['أمستردام','Amsterdam','هولندا','Netherlands','🇳🇱','eu'],['فيينا','Vienna','النمسا','Austria','🇦🇹','eu'],
+    ['إنترلاكن','Interlaken','سويسرا','Switzerland','🇨🇭','eu'],['ميونخ','Munich','ألمانيا','Germany','🇩🇪','eu'],
+    ['باكو','Baku','أذربيجان','Azerbaijan','🇦🇿','eu'],['تبليسي','Tbilisi','جورجيا','Georgia','🇬🇪','eu'],
+    ['كوالالمبور','Kuala Lumpur','ماليزيا','Malaysia','🇲🇾','as'],['بالي','Bali','إندونيسيا','Indonesia','🇮🇩','as'],
+    ['بانكوك','Bangkok','تايلاند','Thailand','🇹🇭','as'],['بوكيت','Phuket','تايلاند','Thailand','🇹🇭','as'],
+    ['المالديف','Maldives','المالديف','Maldives','🇲🇻','as'],['طوكيو','Tokyo','اليابان','Japan','🇯🇵','as'],
+    ['سنغافورة','Singapore','سنغافورة','Singapore','🇸🇬','as'],['سيول','Seoul','كوريا الجنوبية','South Korea','🇰🇷','as'],
+    ['القاهرة','Cairo','مصر','Egypt','🇪🇬','af'],['شرم الشيخ','Sharm El Sheikh','مصر','Egypt','🇪🇬','af'],
+    ['مراكش','Marrakech','المغرب','Morocco','🇲🇦','af'],['تونس','Tunis','تونس','Tunisia','🇹🇳','af'],
+    ['زنجبار','Zanzibar','تنزانيا','Tanzania','🇹🇿','af'],['كيب تاون','Cape Town','جنوب أفريقيا','South Africa','🇿🇦','af'],
+    ['نيويورك','New York','أمريكا','USA','🇺🇸','am'],['لوس أنجلوس','Los Angeles','أمريكا','USA','🇺🇸','am'],
+    ['أورلاندو','Orlando','أمريكا','USA','🇺🇸','am'],['تورونتو','Toronto','كندا','Canada','🇨🇦','am'],
+    ['كانكون','Cancun','المكسيك','Mexico','🇲🇽','am'],['ريو دي جانيرو','Rio de Janeiro','البرازيل','Brazil','🇧🇷','am'],
+    ['سيدني','Sydney','أستراليا','Australia','🇦🇺','oc'],['ملبورن','Melbourne','أستراليا','Australia','🇦🇺','oc'],
+    ['أوكلاند','Auckland','نيوزيلندا','New Zealand','🇳🇿','oc'],['فيجي','Fiji','فيجي','Fiji','🇫🇯','oc'],
   ];
-  const CITIES = RAW.map((r,i) => ({ar:r[0], en:r[1], c:r[2], f:r[3], r:r[4], g:G[i % G.length]}));
-  const REGIONS = [
-    ['all','🌍 الكل'],['me','الشرق الأوسط'],['eu','أوروبا'],['as','آسيا'],
-    ['af','أفريقيا'],['am','الأمريكتان'],['oc','أستراليا والمحيط'],
+  const CITIES = RAW.map((r,i) => ({ar:r[0], en:r[1], cAr:r[2], cEn:r[3], f:r[4], r:r[5], g:G[i % G.length]}));
+  const REGION_KEYS = ['all','me','eu','as','af','am','oc'];
+  const TYPE_DATA = [
+    {ic:'🏨', q:'ht_id=204'}, {ic:'🏢', q:'ht_id=201'}, {ic:'🏝️', q:'ht_id=206'},
+    {ic:'🏡', q:'ht_id=213'}, {ic:'⭐', q:'class=5'},
   ];
-  let region = 'me';
 
-  const TYPES = [
-    {ic:'🏨', ar:'فنادق', d:'خيارات لكل الميزانيات', q:'ht_id=204'},
-    {ic:'🏢', ar:'شقق فندقية', d:'مساحة ومطبخ للعائلة', q:'ht_id=201'},
-    {ic:'🏝️', ar:'منتجعات', d:'استجمام وشواطئ', q:'ht_id=206'},
-    {ic:'🏡', ar:'فلل وبيوت', d:'خصوصية تامة', q:'ht_id=213'},
-    {ic:'⭐', ar:'فنادق 5 نجوم', d:'فخامة وخدمة راقية', q:'class=5'},
-  ];
+  let lang = 'ar';
+  try {
+    const saved = localStorage.getItem('nuzul_lang');
+    if (saved === 'en' || saved === 'ar') lang = saved;
+  } catch (e) {}
+  if (location.hash === '#en') lang = 'en';
+  if (location.hash === '#ar') lang = 'ar';
+  let region = lang === 'ar' ? 'me' : 'all';
 
   const $ = id => document.getElementById(id);
+  const t = k => T[lang][k];
   const pad = n => String(n).padStart(2,'0');
   const fmt = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
   const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
 
   function toEn(text){
-    const t = text.trim();
-    const hit = CITIES.find(c => c.ar === t || c.en.toLowerCase() === t.toLowerCase());
-    return hit ? hit.en : t;
+    const s = text.trim();
+    const hit = CITIES.find(c => c.ar === s || c.en.toLowerCase() === s.toLowerCase());
+    return hit ? hit.en : s;
   }
 
   function bookingUrl(place, opts = {}){
@@ -260,9 +315,10 @@
     p.set('no_rooms', opts.rooms || 1);
     p.set('group_children', 0);
     if (opts.filter) p.set('nflt', opts.filter);
-    p.set('lang', 'ar');
+    const bl = lang === 'ar' ? 'ar' : 'en-gb';
+    p.set('lang', bl);
     if (AID) p.set('aid', AID);
-    return 'https://www.booking.com/searchresults.ar.html?' + p.toString();
+    return 'https://www.booking.com/searchresults.' + bl + '.html?' + p.toString();
   }
 
   // init form
@@ -272,7 +328,6 @@
   $('cout').value = fmt(addDays(today,4));
   for (let i=1;i<=10;i++) $('adults').add(new Option(i, i, i===2, i===2));
   for (let i=1;i<=5;i++) $('rooms').add(new Option(i, i));
-  CITIES.forEach(c => $('cities').append(new Option(c.ar + ' — ' + c.c, c.ar)));
   $('yr').textContent = today.getFullYear();
 
   function update(){
@@ -280,8 +335,8 @@
     const cin = $('cin').value, cout = $('cout').value;
     let msg = '';
     if (!dest) msg = '';
-    else if (!cin || !cout) msg = 'اختر تاريخ الوصول والمغادرة.';
-    else if (cout <= cin) msg = 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.';
+    else if (!cin || !cout) msg = t('errDates');
+    else if (cout <= cin) msg = t('errOrder');
     $('err').textContent = msg;
     $('err').style.display = msg ? 'block' : 'none';
     const ok = dest && !msg;
@@ -304,13 +359,12 @@
     return {cin:$('cin').value, cout:$('cout').value, adults:$('adults').value, rooms:$('rooms').value};
   }
 
-  // destinations
   function renderCities(){
     $('grid').innerHTML = '';
     $('tabs').innerHTML = '';
-    REGIONS.forEach(([k,label]) => {
+    REGION_KEYS.forEach(k => {
       const b = document.createElement('button');
-      b.type = 'button'; b.textContent = label;
+      b.type = 'button'; b.textContent = t('regions')[k];
       b.className = 'tab' + (k === region ? ' on' : '');
       b.onclick = () => { region = k; renderCities(); };
       $('tabs').append(b);
@@ -321,7 +375,9 @@
       a.target = '_blank'; a.rel = 'noopener';
       a.style.background = 'linear-gradient(140deg, ' + c.g[0] + ', ' + c.g[1] + ')';
       a.href = bookingUrl(c.en, currentOpts());
-      a.innerHTML = '<div class="flag">' + c.f + '</div><b>' + c.ar + '</b><span>' + c.c + ' · ' + c.en + '</span>';
+      const name = lang === 'ar' ? c.ar : c.en;
+      const sub = lang === 'ar' ? (c.cAr + ' · ' + c.en) : c.cEn;
+      a.innerHTML = '<div class="flag">' + c.f + '</div><b>' + name + '</b><span>' + sub + '</span>';
       a.addEventListener('mouseenter', () => a.href = bookingUrl(c.en, currentOpts()));
       a.addEventListener('touchstart', () => a.href = bookingUrl(c.en, currentOpts()), {passive:true});
       $('grid').append(a);
@@ -331,16 +387,39 @@
   function renderTypes(){
     const dest = toEn($('dest').value) || 'Dubai';
     $('typegrid').innerHTML = '';
-    TYPES.forEach(t => {
+    TYPE_DATA.forEach((d, i) => {
       const a = document.createElement('a');
       a.className = 'type'; a.target = '_blank'; a.rel = 'noopener';
-      a.href = bookingUrl(dest, {...currentOpts(), filter:t.q});
-      a.innerHTML = '<div class="ic">' + t.ic + '</div><b>' + t.ar + '</b><span>' + t.d + '</span>';
+      a.href = bookingUrl(dest, {...currentOpts(), filter:d.q});
+      a.innerHTML = '<div class="ic">' + d.ic + '</div><b>' + t('types')[i][0] + '</b><span>' + t('types')[i][1] + '</span>';
       $('typegrid').append(a);
     });
   }
 
-  renderCities(); renderTypes(); update();
+  function applyLang(){
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.title = t('title');
+    document.querySelectorAll('[data-i]').forEach(el => { el.textContent = t(el.dataset.i); });
+    document.querySelectorAll('[data-h]').forEach(el => { el.innerHTML = t(el.dataset.h); });
+    document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = t(el.dataset.ph); });
+    $('langBtn').textContent = t('other');
+    $('cities').innerHTML = '';
+    CITIES.forEach(c => $('cities').append(new Option(lang === 'ar' ? (c.ar + ' — ' + c.cAr) : (c.en + ' — ' + c.cEn), lang === 'ar' ? c.ar : c.en)));
+    renderCities(); renderTypes(); update();
+  }
+
+  $('langBtn').addEventListener('click', () => {
+    lang = lang === 'ar' ? 'en' : 'ar';
+    try { localStorage.setItem('nuzul_lang', lang); } catch (e) {}
+    try { history.replaceState(null, '', '#' + lang); } catch (e) {}
+    applyLang();
+  });
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#en' || location.hash === '#ar') { lang = location.hash.slice(1); applyLang(); }
+  });
+
+  applyLang();
 </script>
 </body>
 </html>
