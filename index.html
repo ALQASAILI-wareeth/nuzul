@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نُزُل — احجز فندقك بأفضل سعر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2a44; --navy2:#173b5e; --sand:#e8b04b; --sand2:#f3cf86;
+    --bg:#f7f4ee; --card:#ffffff; --ink:#1d2733; --muted:#5f6b78; --line:#e6e0d4;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Tajawal',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+  /* Header */
+  header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:10}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:24px}
+  .logo svg{width:30px;height:30px}
+  .logo small{font-weight:500;font-size:12px;color:var(--sand2);display:block;line-height:1}
+  nav a{font-size:15px;opacity:.85;margin-inline-start:18px}
+  nav a:hover{opacity:1;color:var(--sand2)}
+  @media(max-width:600px){nav{display:none}}
+
+  /* Hero */
+  .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 60%,#2a5a7f 100%);color:#fff;padding:42px 0 90px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:auto -10% -60px -10%;height:140px;background:var(--bg);border-radius:50% 50% 0 0}
+  .hero h1{font-size:clamp(28px,6vw,46px);font-weight:800;line-height:1.25;max-width:640px}
+  .hero h1 span{color:var(--sand)}
+  .hero p{margin-top:10px;font-size:clamp(15px,3.6vw,19px);opacity:.85;max-width:560px}
+
+  /* Search */
+  .search{position:relative;z-index:2;margin-top:-70px}
+  .sbox{background:var(--card);border-radius:20px;box-shadow:0 14px 40px rgba(15,42,68,.18);padding:18px;display:grid;gap:12px;
+        grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;align-items:end;border:3px solid var(--sand)}
+  .f label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
+  .f input,.f select{width:100%;height:48px;border:1.5px solid var(--line);border-radius:12px;padding:0 12px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
+  .f input:focus,.f select:focus{outline:none;border-color:var(--navy2)}
+  .go{height:48px;padding:0 26px;border-radius:12px;background:var(--navy);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+  .go:hover{background:var(--navy2)}
+  .go.off{background:#9aa6b2;pointer-events:none}
+  .err{grid-column:1/-1;color:#b3261e;font-size:14px;display:none}
+  @media(max-width:860px){
+    .sbox{grid-template-columns:1fr 1fr}
+    .f.dest,.go,.err{grid-column:1/-1}
+  }
+
+  /* Sections */
+  section{padding:46px 0 10px}
+  h2{font-size:clamp(22px,5vw,30px);font-weight:800;color:var(--navy)}
+  .sub{color:var(--muted);margin-top:4px;margin-bottom:20px}
+
+  /* Destinations */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+  .city{border-radius:var(--radius);min-height:150px;padding:14px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;
+        transition:transform .2s, box-shadow .2s}
+  .city:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+  .city .flag{position:absolute;top:12px;inset-inline-start:12px;font-size:26px}
+  .city b{font-size:21px;font-weight:800;line-height:1.2}
+  .city span{font-size:13px;opacity:.9}
+  .city::before{content:"";position:absolute;inset:0;background:
+     radial-gradient(circle at 85% 15%,rgba(255,255,255,.22) 0 40px,transparent 41px),
+     radial-gradient(circle at 10% 110%,rgba(255,255,255,.12) 0 70px,transparent 71px)}
+  .city > *{position:relative}
+
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin-bottom:6px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;color:var(--navy);font:inherit;font-weight:700;font-size:15px;padding:8px 16px;border-radius:999px;cursor:pointer}
+  .tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+  /* Types */
+  .types{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .type{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px 14px;text-align:center;transition:border-color .2s}
+  .type:hover{border-color:var(--sand)}
+  .type .ic{font-size:30px}
+  .type b{display:block;margin-top:6px;color:var(--navy)}
+  .type span{font-size:13px;color:var(--muted)}
+
+  /* Steps */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .step{background:var(--card);border-radius:var(--radius);padding:20px;border:1.5px solid var(--line)}
+  .step .n{width:38px;height:38px;border-radius:50%;background:var(--sand);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .step b{display:block;margin-top:10px;font-size:18px;color:var(--navy)}
+  .step p{color:var(--muted);font-size:15px}
+
+  /* Why */
+  .why{background:var(--navy);color:#fff;border-radius:22px;padding:28px 22px;margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+  .why div b{display:block;color:var(--sand2);font-size:17px}
+  .why div p{opacity:.85;font-size:15px}
+
+  footer{margin-top:50px;background:#0b1f33;color:#c9d3dd;padding:28px 0;font-size:14px}
+  footer .disc{margin-top:10px;opacity:.75;font-size:13px;max-width:760px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top">
+      <svg viewBox="0 0 32 32" fill="none"><rect x="3" y="12" width="26" height="17" rx="3" fill="#e8b04b"/><path d="M16 3 3 13h26L16 3Z" fill="#fff"/><rect x="13" y="19" width="6" height="10" rx="1" fill="#0f2a44"/></svg>
+      <div>نُزُل<small>احجز إقامتك بثقة</small></div>
+    </a>
+    <nav>
+      <a href="#destinations">الوجهات</a>
+      <a href="#types">أنواع الإقامة</a>
+      <a href="#how">كيف نعمل</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap">
+    <h1>اعثر على فندقك المثالي<br>بـ<span>أفضل الأسعار</span> حول العالم</h1>
+    <p>أكثر من مليون فندق وشقة ومنتجع، مع إلغاء مجاني لمعظم الحجوزات.</p>
+  </div>
+</div>
+
+<div class="wrap search">
+  <form class="sbox" id="sform" onsubmit="return false">
+    <div class="f dest">
+      <label for="dest">إلى أين تسافر؟</label>
+      <input id="dest" list="cities" placeholder="مثال: دبي، إسطنبول، القاهرة" autocomplete="off">
+      <datalist id="cities"></datalist>
+    </div>
+    <div class="f">
+      <label for="cin">الوصول</label>
+      <input id="cin" type="date">
+    </div>
+    <div class="f">
+      <label for="cout">المغادرة</label>
+      <input id="cout" type="date">
+    </div>
+    <div class="f">
+      <label for="adults">البالغون</label>
+      <select id="adults"></select>
+    </div>
+    <div class="f">
+      <label for="rooms">الغرف</label>
+      <select id="rooms"></select>
+    </div>
+    <a class="go off" id="go" href="#" target="_blank" rel="noopener">🔍 ابحث</a>
+    <div class="err" id="err"></div>
+  </form>
+</div>
+
+<section id="destinations">
+  <div class="wrap">
+    <h2>وجهات حول العالم</h2>
+    <p class="sub">اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث</p>
+    <div class="tabs" id="tabs"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="types">
+  <div class="wrap">
+    <h2>اختر نوع إقامتك</h2>
+    <p class="sub">اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب</p>
+    <div class="types" id="typegrid"></div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>كيف تحجز معنا؟</h2>
+    <p class="sub">ثلاث خطوات بسيطة</p>
+    <div class="steps">
+      <div class="step"><div class="n">١</div><b>ابحث</b><p>اكتب المدينة والتواريخ وعدد الأشخاص.</p></div>
+      <div class="step"><div class="n">٢</div><b>قارن واختر</b><p>شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.</p></div>
+      <div class="step"><div class="n">٣</div><b>احجز بأمان</b><p>أكمل الحجز والدفع عبر شريكنا Booking.com بحماية كاملة.</p></div>
+    </div>
+    <div class="why">
+      <div><b>✔ أسعار شفافة</b><p>نفس السعر بدون أي رسوم إضافية علينا.</p></div>
+      <div><b>✔ إلغاء مجاني</b><p>معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.</p></div>
+      <div><b>✔ دعم على مدار الساعة</b><p>خدمة عملاء شريكنا متاحة 24/7 وبالعربية.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b style="color:#fff">نُزُل</b> — © <span id="yr"></span> جميع الحقوق محفوظة.
+    <p class="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
+  </div>
+</footer>
+
+<script>
+  // ===== الإعدادات =====
+  // ضع هنا رقم الشريك (Affiliate ID) بعد التسجيل في برنامج العمولة
+  const AID = '';
+
+  const G = [['#c0392b','#e67e22'],['#16a085','#1abc9c'],['#1e5631','#4c9a2a'],['#0077b6','#00b4d8'],['#6d1a36','#a4133c'],
+             ['#9c6644','#ddb892'],['#3a0ca3','#7209b7'],['#0f4c5c','#5f0f40'],['#6a040f','#e85d04'],['#023e8a','#0096c7'],
+             ['#386641','#a7c957'],['#14213d','#3d5a80'],['#5a189a','#c77dff'],['#b5838d','#e5989b']];
+  const RAW = [
+    // [عربي, English, الدولة, علم, المنطقة]
+    ['دبي','Dubai','الإمارات','🇦🇪','me'],['أبوظبي','Abu Dhabi','الإمارات','🇦🇪','me'],
+    ['مكة المكرمة','Makkah','السعودية','🇸🇦','me'],['المدينة المنورة','Madinah','السعودية','🇸🇦','me'],
+    ['الرياض','Riyadh','السعودية','🇸🇦','me'],['جدة','Jeddah','السعودية','🇸🇦','me'],
+    ['الدوحة','Doha','قطر','🇶🇦','me'],['مسقط','Muscat','عُمان','🇴🇲','me'],
+    ['المنامة','Manama','البحرين','🇧🇭','me'],['الكويت','Kuwait City','الكويت','🇰🇼','me'],
+    ['عمّان','Amman','الأردن','🇯🇴','me'],['بيروت','Beirut','لبنان','🇱🇧','me'],
+    ['إسطنبول','Istanbul','تركيا','🇹🇷','eu'],['طرابزون','Trabzon','تركيا','🇹🇷','eu'],
+    ['لندن','London','بريطانيا','🇬🇧','eu'],['باريس','Paris','فرنسا','🇫🇷','eu'],
+    ['روما','Rome','إيطاليا','🇮🇹','eu'],['برشلونة','Barcelona','إسبانيا','🇪🇸','eu'],
+    ['أمستردام','Amsterdam','هولندا','🇳🇱','eu'],['فيينا','Vienna','النمسا','🇦🇹','eu'],
+    ['إنترلاكن','Interlaken','سويسرا','🇨🇭','eu'],['ميونخ','Munich','ألمانيا','🇩🇪','eu'],
+    ['باكو','Baku','أذربيجان','🇦🇿','eu'],['تبليسي','Tbilisi','جورجيا','🇬🇪','eu'],
+    ['كوالالمبور','Kuala Lumpur','ماليزيا','🇲🇾','as'],['بالي','Bali','إندونيسيا','🇮🇩','as'],
+    ['بانكوك','Bangkok','تايلاند','🇹🇭','as'],['بوكيت','Phuket','تايلاند','🇹🇭','as'],
+    ['المالديف','Maldives','المالديف','🇲🇻','as'],['طوكيو','Tokyo','اليابان','🇯🇵','as'],
+    ['سنغافورة','Singapore','سنغافورة','🇸🇬','as'],['سيول','Seoul','كوريا الجنوبية','🇰🇷','as'],
+    ['القاهرة','Cairo','مصر','🇪🇬','af'],['شرم الشيخ','Sharm El Sheikh','مصر','🇪🇬','af'],
+    ['مراكش','Marrakech','المغرب','🇲🇦','af'],['تونس','Tunis','تونس','🇹🇳','af'],
+    ['زنجبار','Zanzibar','تنزانيا','🇹🇿','af'],['كيب تاون','Cape Town','جنوب أفريقيا','🇿🇦','af'],
+    ['نيويورك','New York','أمريكا','🇺🇸','am'],['لوس أنجلوس','Los Angeles','أمريكا','🇺🇸','am'],
+    ['أورلاندو','Orlando','أمريكا','🇺🇸','am'],['تورونتو','Toronto','كندا','🇨🇦','am'],
+    ['كانكون','Cancun','المكسيك','🇲🇽','am'],['ريو دي جانيرو','Rio de Janeiro','البرازيل','🇧🇷','am'],
+    ['سيدني','Sydney','أستراليا','🇦🇺','oc'],['ملبورن','Melbourne','أستراليا','🇦🇺','oc'],
+    ['أوكلاند','Auckland','نيوزيلندا','🇳🇿','oc'],['فيجي','Fiji','فيجي','🇫🇯','oc'],
+  ];
+  const CITIES = RAW.map((r,i) => ({ar:r[0], en:r[1], c:r[2], f:r[3], r:r[4], g:G[i % G.length]}));
+  const REGIONS = [
+    ['all','🌍 الكل'],['me','الشرق الأوسط'],['eu','أوروبا'],['as','آسيا'],
+    ['af','أفريقيا'],['am','الأمريكتان'],['oc','أستراليا والمحيط'],
+  ];
+  let region = 'me';
+
+  const TYPES = [
+    {ic:'🏨', ar:'فنادق', d:'خيارات لكل الميزانيات', q:'ht_id=204'},
+    {ic:'🏢', ar:'شقق فندقية', d:'مساحة ومطبخ للعائلة', q:'ht_id=201'},
+    {ic:'🏝️', ar:'منتجعات', d:'استجمام وشواطئ', q:'ht_id=206'},
+    {ic:'🏡', ar:'فلل وبيوت', d:'خصوصية تامة', q:'ht_id=213'},
+    {ic:'⭐', ar:'فنادق 5 نجوم', d:'فخامة وخدمة راقية', q:'class=5'},
+  ];
+
+  const $ = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2,'0');
+  const fmt = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+
+  function toEn(text){
+    const t = text.trim();
+    const hit = CITIES.find(c => c.ar === t || c.en.toLowerCase() === t.toLowerCase());
+    return hit ? hit.en : t;
+  }
+
+  function bookingUrl(place, opts = {}){
+    const p = new URLSearchParams();
+    p.set('ss', place);
+    if (opts.cin) p.set('checkin', opts.cin);
+    if (opts.cout) p.set('checkout', opts.cout);
+    p.set('group_adults', opts.adults || 2);
+    p.set('no_rooms', opts.rooms || 1);
+    p.set('group_children', 0);
+    if (opts.filter) p.set('nflt', opts.filter);
+    p.set('lang', 'ar');
+    if (AID) p.set('aid', AID);
+    return 'https://www.booking.com/searchresults.ar.html?' + p.toString();
+  }
+
+  // init form
+  const today = new Date();
+  $('cin').min = fmt(today);
+  $('cin').value = fmt(addDays(today,1));
+  $('cout').value = fmt(addDays(today,4));
+  for (let i=1;i<=10;i++) $('adults').add(new Option(i, i, i===2, i===2));
+  for (let i=1;i<=5;i++) $('rooms').add(new Option(i, i));
+  CITIES.forEach(c => $('cities').append(new Option(c.ar + ' — ' + c.c, c.ar)));
+  $('yr').textContent = today.getFullYear();
+
+  function update(){
+    const dest = $('dest').value.trim();
+    const cin = $('cin').value, cout = $('cout').value;
+    let msg = '';
+    if (!dest) msg = '';
+    else if (!cin || !cout) msg = 'اختر تاريخ الوصول والمغادرة.';
+    else if (cout <= cin) msg = 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.';
+    $('err').textContent = msg;
+    $('err').style.display = msg ? 'block' : 'none';
+    const ok = dest && !msg;
+    $('go').classList.toggle('off', !ok);
+    $('go').href = ok ? bookingUrl(toEn(dest), {cin, cout, adults:$('adults').value, rooms:$('rooms').value}) : '#';
+    return ok;
+  }
+  $('cin').addEventListener('change', () => {
+    if ($('cout').value <= $('cin').value) $('cout').value = fmt(addDays(new Date($('cin').value),1));
+    $('cout').min = fmt(addDays(new Date($('cin').value),1));
+    update(); renderTypes();
+  });
+  ['dest','cout','adults','rooms'].forEach(id => {
+    $(id).addEventListener('input', () => { update(); renderTypes(); });
+    $(id).addEventListener('change', () => { update(); renderTypes(); });
+  });
+  $('go').addEventListener('click', e => { if (!update()) { e.preventDefault(); $('dest').focus(); } });
+
+  function currentOpts(){
+    return {cin:$('cin').value, cout:$('cout').value, adults:$('adults').value, rooms:$('rooms').value};
+  }
+
+  // destinations
+  function renderCities(){
+    $('grid').innerHTML = '';
+    $('tabs').innerHTML = '';
+    REGIONS.forEach(([k,label]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = label;
+      b.className = 'tab' + (k === region ? ' on' : '');
+      b.onclick = () => { region = k; renderCities(); };
+      $('tabs').append(b);
+    });
+    CITIES.filter(c => region === 'all' || c.r === region).forEach(c => {
+      const a = document.createElement('a');
+      a.className = 'city';
+      a.target = '_blank'; a.rel = 'noopener';
+      a.style.background = 'linear-gradient(140deg, ' + c.g[0] + ', ' + c.g[1] + ')';
+      a.href = bookingUrl(c.en, currentOpts());
+      a.innerHTML = '<div class="flag">' + c.f + '</div><b>' + c.ar + '</b><span>' + c.c + ' · ' + c.en + '</span>';
+      a.addEventListener('mouseenter', () => a.href = bookingUrl(c.en, currentOpts()));
+      a.addEventListener('touchstart', () => a.href = bookingUrl(c.en, currentOpts()), {passive:true});
+      $('grid').append(a);
+    });
+  }
+
+  function renderTypes(){
+    const dest = toEn($('dest').value) || 'Dubai';
+    $('typegrid').innerHTML = '';
+    TYPES.forEach(t => {
+      const a = document.createElement('a');
+      a.className = 'type'; a.target = '_blank'; a.rel = 'noopener';
+      a.href = bookingUrl(dest, {...currentOpts(), filter:t.q});
+      a.innerHTML = '<div class="ic">' + t.ic + '</div><b>' + t.ar + '</b><span>' + t.d + '</span>';
+      $('typegrid').append(a);
+    });
+  }
+
+  renderCities(); renderTypes(); update();
+</script>
+</body>
+</html>
