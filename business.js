@@ -4,7 +4,7 @@
   'use strict';
 
   // ===== الإعدادات =====
-  var NUZUL_WHATSAPP = '';          // رقم واتساب فريق نُزُل بالصيغة الدولية بدون + أو أصفار، مثال: 9715XXXXXXXX
+  var NUZUL_WHATSAPP = '971568599446'; // رقم واتساب فريق نُزُل
   var NUZUL_EMAIL = 'info@nuzultravel.com'; // إيميل استقبال طلبات الشركات
   var TP_MARKER = '805832';         // رقم الشريك في Travelpayouts (من روابطك الحالية)
   var LINKS = {
