@@ -27,7 +27,8 @@
 
   var css = document.createElement('style');
   css.textContent =
-    '.extras{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}' +
+    '.extras{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}' +
+    '@media(max-width:860px){.extras{grid-template-columns:repeat(2,1fr);gap:10px}.extra{padding:14px}.extra b{font-size:16px}.extra span{font-size:13px}}' +
     '.extra{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:6px;transition:border-color .2s,transform .2s}' +
     '.extra:hover{border-color:var(--sand);transform:translateY(-2px)}' +
     '.extra .ic{font-size:30px}' +
