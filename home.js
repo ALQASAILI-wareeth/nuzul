@@ -54,7 +54,7 @@
     '.deal:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(6,47,82,.14)}' +
     '.deal .ph{height:130px;background-size:cover;background-position:center;position:relative}' +
     '.deal .tag{position:absolute;top:12px;inset-inline-start:12px;color:#fff;font-weight:800;font-size:13px;padding:4px 12px;border-radius:999px}' +
-    '.deal .left{position:absolute;bottom:10px;inset-inline-end:12px;background:rgba(4,22,40,.78);color:#FFD27A;font-weight:700;font-size:12px;padding:3px 10px;border-radius:999px}' +
+    '.deal .left{position:absolute;bottom:10px;inset-inline-start:12px;background:rgba(4,22,40,.78);color:#FFD27A;font-weight:700;font-size:12px;padding:3px 10px;border-radius:999px}' +
     '.deal .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}' +
     '.deal b{color:var(--navy);font-size:18px;line-height:1.35}' +
     '.deal p{color:var(--muted);font-size:14px;flex:1}' +
