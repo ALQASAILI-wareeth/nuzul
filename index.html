@@ -4,13 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>نُزُل — احجز فندقك بأفضل سعر</title>
+<meta name="description" content="نُزُل: قارن أسعار الفنادق والشقق والمنتجعات في دبي ومكة وإسطنبول وحول العالم، واحجز بثقة مع إلغاء مجاني لمعظم الحجوزات. تذاكر طيران، سيارات، eSIM وجولات.">
+<link rel="canonical" href="https://nuzultravel.com/">
+<meta name="theme-color" content="#062F52">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="نُزُل">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="https://nuzultravel.com/">
+<meta property="og:title" content="نُزُل — قارن أسعار الفنادق واحجز بثقة">
+<meta property="og:description" content="فنادق وشقق ومنتجعات حول العالم بأفضل الأسعار، مع إلغاء مجاني لمعظم الحجوزات.">
+<meta property="og:image" content="https://nuzultravel.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nuzultravel.com/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0f2a44; --navy2:#173b5e; --sand:#e8b04b; --sand2:#f3cf86;
-    --bg:#f7f4ee; --card:#ffffff; --ink:#1d2733; --muted:#5f6b78; --line:#e6e0d4;
+    --navy:#062F52; --navy2:#0062A8; --sand:#FFB238; --sand2:#FFD27A; --teal:#00C2D1;
+    --bg:#f3f8fb; --card:#ffffff; --ink:#1d2733; --muted:#5f6b78; --line:#dce7ee;
     --radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -32,7 +49,7 @@
   @media(max-width:600px){nav{display:none}}
 
   /* Hero */
-  .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 60%,#2a5a7f 100%);color:#fff;padding:42px 0 90px;position:relative;overflow:hidden}
+  .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 62%,#0a93c2 100%);color:#fff;padding:42px 0 90px;position:relative;overflow:hidden}
   .hero::after{content:"";position:absolute;inset:auto -10% -60px -10%;height:140px;background:var(--bg);border-radius:50% 50% 0 0}
   .hero h1{font-size:clamp(28px,6vw,46px);font-weight:800;line-height:1.25;max-width:640px}
   .hero h1 span{color:var(--sand)}
@@ -40,13 +57,13 @@
 
   /* Search */
   .search{position:relative;z-index:2;margin-top:-70px}
-  .sbox{background:var(--card);border-radius:20px;box-shadow:0 14px 40px rgba(15,42,68,.18);padding:18px;display:grid;gap:12px;
-        grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;align-items:end;border:3px solid var(--sand)}
+  .sbox{background:var(--card);border-radius:20px;box-shadow:0 14px 40px rgba(6,47,82,.18);padding:18px;display:grid;gap:12px;
+        grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;align-items:end;border:3px solid var(--teal)}
   .f label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
   .f input,.f select{width:100%;height:48px;border:1.5px solid var(--line);border-radius:12px;padding:0 12px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
   .f input:focus,.f select:focus{outline:none;border-color:var(--navy2)}
-  .go{height:48px;padding:0 26px;border-radius:12px;background:var(--navy);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
-  .go:hover{background:var(--navy2)}
+  .go{height:48px;padding:0 26px;border-radius:12px;background:var(--sand);color:var(--navy);font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+  .go:hover{background:#ffc35c}
   .go.off{background:#9aa6b2;pointer-events:none}
   .err{grid-column:1/-1;color:#b3261e;font-size:14px;display:none}
   @media(max-width:860px){
@@ -97,8 +114,12 @@
   .why div b{display:block;color:var(--sand2);font-size:17px}
   .why div p{opacity:.85;font-size:15px}
 
-  footer{margin-top:50px;background:#0b1f33;color:#c9d3dd;padding:28px 0;font-size:14px}
+  footer{margin-top:50px;background:#041f36;color:#c9d3dd;padding:28px 0;font-size:14px}
   footer .disc{margin-top:10px;opacity:.75;font-size:13px;max-width:760px}
+  .fl{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:14px}
+  .fl a{color:#fff;opacity:.85}
+  .fl a:hover{opacity:1;color:var(--sand2)}
+  .fl b{color:var(--teal);font-weight:700}
 </style>
 </head>
 <body>
@@ -106,7 +127,7 @@
 <header>
   <div class="wrap bar">
     <a class="logo" href="#top">
-      <svg viewBox="0 0 32 32" fill="none"><rect x="3" y="12" width="26" height="17" rx="3" fill="#e8b04b"/><path d="M16 3 3 13h26L16 3Z" fill="#fff"/><rect x="13" y="19" width="6" height="10" rx="1" fill="#0f2a44"/></svg>
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="3" y="13" width="26" height="17" rx="3.2" fill="#0062A8"/><path d="M16 2.5 1.5 14.5h29L16 2.5Z" fill="#00C2D1"/><rect x="12.8" y="19.5" width="6.4" height="10.5" rx="1.6" fill="#FFB238"/></svg>
       <div><span data-i="brand">نُزُل</span><small data-i="tagline">احجز إقامتك بثقة</small></div>
     </a>
     <div class="right">
@@ -192,6 +213,19 @@
 <footer>
   <div class="wrap">
     <b style="color:#fff" data-i="brand">نُزُل</b> — © <span id="yr"></span> <span data-i="rights">جميع الحقوق محفوظة.</span>
+    <div class="fl">
+      <b data-i="contact">تواصل معنا:</b>
+      <a href="https://wa.me/971568599446" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="mailto:info@nuzultravel.com">info@nuzultravel.com</a>
+    </div>
+    <div class="fl">
+      <b data-i="follow">تابعنا:</b>
+      <a href="https://www.instagram.com/nuzul.travel" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@nuzul_travel" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://www.youtube.com/@nuzul.travel" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://www.pinterest.com/nuzultravel" target="_blank" rel="noopener">Pinterest</a>
+      <a href="/privacy.html" data-i="privacy">سياسة الخصوصية</a>
+    </div>
     <p class="disc" data-i="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
   </div>
 </footer>
@@ -219,7 +253,7 @@
       w1t: '✔ أسعار شفافة', w1p: 'نفس السعر بدون أي رسوم إضافية علينا.',
       w2t: '✔ إلغاء مجاني', w2p: 'معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.',
       w3t: '✔ دعم على مدار الساعة', w3p: 'خدمة عملاء شريكنا متاحة 24/7 بعدة لغات منها العربية.',
-      rights: 'جميع الحقوق محفوظة.',
+      rights: 'جميع الحقوق محفوظة.', contact: 'تواصل معنا:', follow: 'تابعنا:', privacy: 'سياسة الخصوصية',
       disc: 'نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.',
       regions: {all:'🌍 الكل', me:'الشرق الأوسط', eu:'أوروبا', as:'آسيا', af:'أفريقيا', am:'الأمريكتان', oc:'أستراليا والمحيط'},
       types: [['فنادق','خيارات لكل الميزانيات'],['شقق فندقية','مساحة ومطبخ للعائلة'],['منتجعات','استجمام وشواطئ'],['فلل وبيوت','خصوصية تامة'],['فنادق 5 نجوم','فخامة وخدمة راقية']]
@@ -241,7 +275,7 @@
       w1t: '✔ Transparent prices', w1p: 'Same price, with no extra fees from us.',
       w2t: '✔ Free cancellation', w2p: 'Most rooms offer free cancellation before arrival.',
       w3t: '✔ 24/7 support', w3p: 'Our partner offers round-the-clock customer service in many languages.',
-      rights: 'All rights reserved.',
+      rights: 'All rights reserved.', contact: 'Contact us:', follow: 'Follow us:', privacy: 'Privacy policy',
       disc: 'Nuzul is an independent website that shows you places to stay. Bookings and payments are completed on Booking.com, and we may earn a commission on bookings made through our links at no extra cost to you.',
       regions: {all:'🌍 All', me:'Middle East', eu:'Europe', as:'Asia', af:'Africa', am:'Americas', oc:'Oceania'},
       types: [['Hotels','Options for every budget'],['Apartments','Space and a kitchen for families'],['Resorts','Relaxation and beaches'],['Villas & homes','Total privacy'],['5-star hotels','Luxury and fine service']]
