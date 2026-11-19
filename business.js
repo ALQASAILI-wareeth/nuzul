@@ -5,7 +5,7 @@
 
   // ===== الإعدادات =====
   var NUZUL_WHATSAPP = '';          // رقم واتساب فريق نُزُل بالصيغة الدولية بدون + أو أصفار، مثال: 9715XXXXXXXX
-  var NUZUL_EMAIL = '';             // إيميل استقبال طلبات الشركات، مثال: b2b@example.com
+  var NUZUL_EMAIL = 'info@nuzultravel.com'; // إيميل استقبال طلبات الشركات
   var TP_MARKER = '805832';         // رقم الشريك في Travelpayouts (من روابطك الحالية)
   var LINKS = {
     flightsHome: 'https://aviasales.tpo.lu/XkLo0FCi',
