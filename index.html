@@ -70,6 +70,10 @@
   .go:hover{background:#ffc35c}
   .go.off{opacity:.6}
   .err{grid-column:1/-1;color:#b3261e;font-size:14px;display:none}
+  .alt{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:14px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+  .alt a{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 16px;border-radius:10px;border:1.5px solid var(--navy2);color:var(--navy2);font-weight:700;background:#fff}
+  .alt a:hover{background:var(--navy2);color:#fff}
+  .alt a.off{opacity:.5;pointer-events:none}
   @media(max-width:860px){
     .sbox{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
     .f.dest,.go,.err{grid-column:1/-1}
@@ -179,6 +183,7 @@
     </div>
     <a class="go off" id="go" href="#" target="_blank" rel="noopener" data-i="searchB">🔍 ابحث</a>
     <div class="err" id="err"></div>
+    <div class="alt"><span data-i="altL">قارن السعر نفسه على موقع ثاني:</span><a class="off" id="go2" href="#" target="_blank" rel="noopener sponsored">Hotels.com ↗</a></div>
   </form>
 </div>
 
@@ -206,7 +211,7 @@
     <div class="steps">
       <div class="step"><div class="n">1</div><b data-i="s1t">ابحث</b><p data-i="s1p">اكتب المدينة والتواريخ وعدد الأشخاص.</p></div>
       <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.</p></div>
-      <div class="step"><div class="n">3</div><b data-i="s3t">احجز بأمان</b><p data-i="s3p">أكمل الحجز والدفع عبر شريكنا Booking.com بحماية كاملة.</p></div>
+      <div class="step"><div class="n">3</div><b data-i="s3t">احجز بأمان</b><p data-i="s3p">أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.</p></div>
     </div>
     <div class="why">
       <div><b data-i="w1t">✔ أسعار شفافة</b><p data-i="w1p">نفس السعر بدون أي رسوم إضافية علينا.</p></div>
@@ -232,7 +237,7 @@
       <a href="https://www.pinterest.com/nuzultravel" target="_blank" rel="noopener">Pinterest</a>
       <a href="/privacy.html" data-i="privacy">سياسة الخصوصية</a>
     </div>
-    <p class="disc" data-i="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
+    <p class="disc" data-i="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
   </div>
 </footer>
 
@@ -240,6 +245,8 @@
   // ===== الإعدادات =====
   // ضع هنا رقم الشريك (Affiliate ID) بعد التسجيل في برنامج العمولة
   const AID = '';
+  // Expedia Group Creator (Hotels.com / Expedia / Vrbo) — Partnerize
+  const EG = {camref:'1011l6vPKX', creativeref:'1011l66481'};
 
   const T = {
     ar: {
@@ -249,18 +256,18 @@
       heroP: 'ملايين الفنادق والشقق والمنتجعات، مع إلغاء مجاني لمعظم الحجوزات.',
       destL: 'إلى أين تسافر؟', destPh: 'مثال: دبي، إسطنبول، القاهرة', cinL: 'الوصول', coutL: 'المغادرة',
       adultsL: 'البالغون', roomsL: 'الغرف', searchB: '🔍 ابحث',
-      errDest: 'اكتب المدينة اللي تبي تسافر لها.', errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.',
+      altL: 'قارن السعر نفسه على موقع ثاني:', errDest: 'اكتب المدينة اللي تبي تسافر لها.', errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.',
       destH: 'وجهات حول العالم', destSub: 'اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث',
       typesH: 'اختر نوع إقامتك', typesSub: 'اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب',
       howH: 'كيف تحجز معنا؟', howSub: 'ثلاث خطوات بسيطة',
       s1t: 'ابحث', s1p: 'اكتب المدينة والتواريخ وعدد الأشخاص.',
       s2t: 'قارن واختر', s2p: 'شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.',
-      s3t: 'احجز بأمان', s3p: 'أكمل الحجز والدفع عبر شريكنا Booking.com بحماية كاملة.',
+      s3t: 'احجز بأمان', s3p: 'أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.',
       w1t: '✔ أسعار شفافة', w1p: 'نفس السعر بدون أي رسوم إضافية علينا.',
       w2t: '✔ إلغاء مجاني', w2p: 'معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.',
       w3t: '✔ دعم على مدار الساعة', w3p: 'خدمة عملاء شريكنا متاحة 24/7 بعدة لغات منها العربية.',
       rights: 'جميع الحقوق محفوظة.', contact: 'تواصل معنا:', follow: 'تابعنا:', privacy: 'سياسة الخصوصية',
-      disc: 'نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر Booking.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.',
+      disc: 'نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.',
       regions: {all:'🌍 الكل', me:'الشرق الأوسط', eu:'أوروبا', as:'آسيا', af:'أفريقيا', am:'الأمريكتان', oc:'أستراليا والمحيط'},
       types: [['فنادق','خيارات لكل الميزانيات'],['شقق فندقية','مساحة ومطبخ للعائلة'],['منتجعات','استجمام وشواطئ'],['فلل وبيوت','خصوصية تامة'],['فنادق 5 نجوم','فخامة وخدمة راقية']]
     },
@@ -271,18 +278,18 @@
       heroP: 'Millions of hotels, apartments and resorts, with free cancellation on most bookings.',
       destL: 'Where are you going?', destPh: 'e.g. Paris, New York, Dubai', cinL: 'Check-in', coutL: 'Check-out',
       adultsL: 'Adults', roomsL: 'Rooms', searchB: '🔍 Search',
-      errDest: 'Type the city you want to visit.', errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.',
+      altL: 'Compare the same stay on another site:', errDest: 'Type the city you want to visit.', errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.',
       destH: 'Destinations around the world', destSub: 'Tap any city to see available hotels, or search any city in the world above',
       typesH: 'Choose your type of stay', typesSub: 'Type your destination in the search above, then pick a stay type',
       howH: 'How to book with us', howSub: 'Three simple steps',
       s1t: 'Search', s1p: 'Enter your city, dates and number of guests.',
       s2t: 'Compare and choose', s2p: 'See hotels with photos, real guest reviews and prices.',
-      s3t: 'Book securely', s3p: 'Complete your booking and payment with our partner Booking.com.',
+      s3t: 'Book securely', s3p: 'Complete your booking and payment with our partners Booking.com or Hotels.com.',
       w1t: '✔ Transparent prices', w1p: 'Same price, with no extra fees from us.',
       w2t: '✔ Free cancellation', w2p: 'Most rooms offer free cancellation before arrival.',
       w3t: '✔ 24/7 support', w3p: 'Our partner offers round-the-clock customer service in many languages.',
       rights: 'All rights reserved.', contact: 'Contact us:', follow: 'Follow us:', privacy: 'Privacy policy',
-      disc: 'Nuzul is an independent website that shows you places to stay. Bookings and payments are completed on Booking.com, and we may earn a commission on bookings made through our links at no extra cost to you.',
+      disc: 'Nuzul is an independent website that shows you places to stay. Bookings and payments are completed with our partners such as Booking.com and Hotels.com, and we may earn a commission on bookings made through our links at no extra cost to you.',
       regions: {all:'🌍 All', me:'Middle East', eu:'Europe', as:'Asia', af:'Africa', am:'Americas', oc:'Oceania'},
       types: [['Hotels','Options for every budget'],['Apartments','Space and a kitchen for families'],['Resorts','Relaxation and beaches'],['Villas & homes','Total privacy'],['5-star hotels','Luxury and fine service']]
     }
@@ -361,6 +368,23 @@
     return 'https://www.booking.com/searchresults.' + bl + '.html?' + p.toString();
   }
 
+  function hotelsUrl(place, opts = {}, ref = 'site-search'){
+    const p = new URLSearchParams();
+    p.set('destination', place);
+    if (opts.cin) p.set('startDate', opts.cin);
+    if (opts.cout) p.set('endDate', opts.cout);
+    const rooms = Math.max(1, +opts.rooms || 1), adults = Math.max(1, +opts.adults || 2);
+    // Hotels.com: one "adults" value per room (comma separated)
+    const per = [];
+    for (let i = 0; i < rooms; i++) per.push(Math.max(1, Math.floor(adults / rooms) + (i < adults % rooms ? 1 : 0)));
+    p.set('adults', per.join(','));
+    p.set('rooms', rooms);
+    const landing = 'https://www.hotels.com/Hotel-Search?' + p.toString();
+    const a = new URLSearchParams({landingPage: landing, camref: EG.camref, creativeref: EG.creativeref, adref: ref});
+    return 'https://www.hotels.com/affiliate?' + a.toString();
+  }
+  window.nuzulHotelsUrl = hotelsUrl;
+
   // init form
   const today = new Date();
   $('cin').min = fmt(today);
@@ -382,7 +406,10 @@
     const ok = dest && !msg;
     $('go').classList.toggle('off', !ok);
     $('go').setAttribute('aria-disabled', ok ? 'false' : 'true');
-    $('go').href = ok ? bookingUrl(toEn(dest), {cin, cout, adults:$('adults').value, rooms:$('rooms').value}) : '#';
+    const o = {cin, cout, adults:$('adults').value, rooms:$('rooms').value};
+    $('go').href = ok ? bookingUrl(toEn(dest), o) : '#';
+    $('go2').href = ok ? hotelsUrl(toEn(dest), o) : '#';
+    $('go2').classList.toggle('off', !ok);
     return ok;
   }
   $('cin').addEventListener('change', () => {
