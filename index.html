@@ -84,9 +84,9 @@
   .city .flag{position:absolute;top:12px;inset-inline-start:12px;font-size:26px}
   .city b{font-size:clamp(17px,1.6vw,21px);font-weight:800;line-height:1.2;text-wrap:balance}
   .city span{font-size:13px;opacity:.9}
-  .city::before{content:"";position:absolute;inset:0;background:
-     radial-gradient(circle at 85% 15%,rgba(255,255,255,.22) 0 40px,transparent 41px),
-     radial-gradient(circle at 10% 110%,rgba(255,255,255,.12) 0 70px,transparent 71px)}
+  .city::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(4,22,40,.82) 0%,rgba(4,22,40,.35) 45%,rgba(4,22,40,0) 75%)}
+  .city .flag{text-shadow:0 1px 4px rgba(0,0,0,.4)}
+  .city b,.city span{text-shadow:0 1px 6px rgba(0,0,0,.45)}
   .city > *{position:relative}
 
   .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin-bottom:6px;scrollbar-width:none}
@@ -416,7 +416,7 @@
       const a = document.createElement('a');
       a.className = 'city';
       a.target = '_blank'; a.rel = 'noopener';
-      a.style.background = 'linear-gradient(140deg, ' + c.g[0] + ', ' + c.g[1] + ')';
+      a.style.background = "url('/img/cities/" + c.en.toLowerCase().replace(/[^a-z0-9]+/g,'-') + ".webp') center/cover no-repeat, linear-gradient(140deg, " + c.g[0] + ', ' + c.g[1] + ')';
       a.href = bookingUrl(c.en, currentOpts());
       const name = lang === 'ar' ? c.ar : c.en;
       const sub = lang === 'ar' ? (c.cAr + ' · ' + c.en) : c.cEn;
@@ -468,5 +468,6 @@
 </body>
 </html>
 <script src="extras.js"></script>
+<script src="home.js"></script>
 <script src="business-parser.js"></script>
 <script src="business.js"></script>
