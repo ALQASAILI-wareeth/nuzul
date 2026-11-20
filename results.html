@@ -30,7 +30,6 @@
 
   .top{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0a93c2 100%);color:#fff;padding:22px 0 26px;position:relative;background-size:cover;background-position:center}
   .top.ph{padding:70px 0 26px;text-shadow:0 1px 6px rgba(0,0,0,.55)}
-  .top .tcr{position:absolute;bottom:6px;inset-inline-end:8px;font-size:10.5px;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-radius:6px;direction:ltr;text-shadow:none;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .top h1{font-size:clamp(24px,5.5vw,34px);font-weight:800;line-height:1.25}
   .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:15px;opacity:.92}
   .meta span{display:inline-flex;align-items:center;gap:5px}
@@ -68,9 +67,8 @@
   .hc .hx{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
   .hc .hi{position:relative;aspect-ratio:16/9;background:#E6EEF4}
   .hc .hi img{width:100%;height:100%;object-fit:cover;display:block}
-  .hc .hi.noimg{background:linear-gradient(135deg,var(--teal),var(--navy2))}.hc .hi.noimg img,.hc .hi.noimg .cr,.hc .hi.noimg .lab{display:none}
+  .hc .hi.noimg{background:linear-gradient(135deg,var(--teal),var(--navy2))}.hc .hi.noimg img,.hc .hi.noimg .lab{display:none}
   .hc .hi .lab{position:absolute;top:8px;inset-inline-start:8px;background:rgba(10,37,64,.78);color:#fff;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px}
-  .hc .hi .cr{position:absolute;bottom:6px;inset-inline-end:6px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 6px;border-radius:6px;direction:ltr;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .hc .hm .vv{background:#E5F7EE;color:#137A47;font-weight:800}
   .hc .hn{font-size:17px;font-weight:800;line-height:1.35}
   .hc .he{font-size:12.5px;color:var(--muted);direction:ltr;text-align:start}
@@ -108,6 +106,7 @@
   .back{display:inline-block;margin-top:18px;color:var(--navy2);font-weight:700}
   footer{margin-top:40px;background:#041f36;color:#c9d3dd;padding:22px 0;font-size:13px}
   footer a{color:#fff;opacity:.85}
+  .creds{margin-top:10px;font-size:12px}.creds summary{cursor:pointer;opacity:.8}.creds ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:2px;opacity:.85}.creds p{margin-top:6px;opacity:.8}
 </style>
 </head>
 <body>
@@ -122,7 +121,6 @@
 </header>
 
 <div class="top" id="top">
-  <a class="tcr" id="tcr" target="_blank" rel="noopener" hidden></a>
   <div class="wrap">
     <h1 id="title"></h1>
     <div class="meta" id="meta"></div>
@@ -180,6 +178,7 @@
   <div class="wrap">
     <span data-i="disc">نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.</span>
     · <a href="/privacy.html" data-i="privacy">سياسة الخصوصية</a>
+    <details class="creds" id="credBox" hidden><summary data-i="credH">حقوق الصور</summary><p data-i="credP">الصور من ويكيميديا كومنز بتراخيص حرة، وكل الحقوق لأصحابها:</p><ul id="credList"></ul></details>
   </div>
 </footer>
 
@@ -200,7 +199,7 @@
       ex:{badge:'',pts:['وفّر لما تحجز طيران + فندق مع بعض','نفس مكافآت One Key','خيارات دفع مرنة'],cta:'شوف الفنادق على Expedia',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Expedia في نافذة جديدة'},
       helpP:'محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.',helpB:'اسأل نُزُل',
       y1t:'✔ بدون رسوم علينا',y1p:'تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.',y2t:'✔ حجز آمن',y2p:'الدفع والحجز يتمان مباشرة عند الشريك المعتمد.',y3t:'✔ إلغاء مجاني',y3p:'فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.',
-      back:'→ الرجوع للصفحة الرئيسية', privacy:'سياسة الخصوصية',
+      back:'→ الرجوع للصفحة الرئيسية', privacy:'سياسة الخصوصية', credH:'حقوق الصور', credP:'الصور من ويكيميديا كومنز بتراخيص حرة، وكل الحقوق لأصحابها:',
       disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
       waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.',
@@ -218,7 +217,7 @@
       ex:{badge:'',pts:['Save when you book flight + hotel together','Same One Key rewards','Flexible payment options'],cta:'See hotels on Expedia',mob:'📱 On mobile: tap "Continue to website" if you don\'t have the app',sm:'Expedia results open in a new tab'},
       helpP:'Can\'t decide? Send us your search on WhatsApp and we\'ll help you choose, free.',helpB:'Ask Nuzul',
       y1t:'✔ No fees from us',y1p:'You pay the site\'s price; Nuzul adds nothing.',y2t:'✔ Secure booking',y2p:'Payment and booking happen directly with the partner.',y3t:'✔ Free cancellation',y3p:'Turn on "Free cancellation" to see only refundable rooms.',
-      back:'← Back to home', privacy:'Privacy policy',
+      back:'← Back to home', privacy:'Privacy policy', credH:'Photo credits', credP:'Photos from Wikimedia Commons under free licences; all rights belong to their authors:',
       disc:'Nuzul is an independent website. Bookings and payments are made with partners such as Booking.com, Hotels.com and Expedia, and we may earn a commission at no extra cost to you.',
       waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.',
@@ -241,6 +240,52 @@
   };
   // صور حرة من ويكيميديا كومنز: [ملف، المصوّر، الرخصة]
   const IMG = {
+    ad_palace:['Emirates Palace - interior 04.jpg','Davide Mauro','CC BY-SA 4.0',1],
+    ad_sla:['Sheikh Zayed Grand Mosque @ Abu Dhabi (15856602738).jpg','Guilhem Vellut','CC BY 2.0',1],
+    ad_fbab:['Abu Dhabi - Fairmont Bab Al Bahr at night - أبو ظبي - فيرمونت باب البحر في الليل - panoramio.jpg','giggel','CC BY 3.0',1],
+    ad_conrad:['- Abu Dhabi 2013 - panoramio.jpg','Валерий Дед','CC BY 3.0',1],
+    ad_rosewood:['Abu Dhabi Corniche Beach.jpg','Aravind Sivaraj','CC BY-SA 3.0',1],
+    ad_lrm:['Abu Dhabi Corniche 15.jpg','Halamoudi','CC BY-SA 4.0',1],
+    ad_w:['North Grandstand at the Yas Marina circuit in Abu Dhabi.jpg','TravelPhotosNL','CC BY-SA 4.0',1],
+    ad_hiltonyas:['Golf club, Yas island, Abu Dhabi city, UAE.jpg','Tashmetova808','CC BY-SA 4.0',1],
+    ad_saadiyat:['Tranquility at Jumeirah Saadiyat Island.jpg','Tms2007','CC BY-SA 4.0',1],
+    ad_premier:['Sheikh Zayed Grand Mosque in Abu Dhabi - panoramio.jpg','Jaseem Hamza','CC BY 3.0',1],
+    ln_dorch:['The Dorchester Hotel in London Mayfair, England United Kingdom (4579989922).jpg','UggBoy♥UggGirl PHOTO WORLD','CC BY 2.0',1],
+    ln_shard:['The Shard at sunset 2017-10-27.jpg','Colin','CC BY-SA 4.0',1],
+    ln_parkplaza:['Park Plaza (6266283206).jpg','Tony Hisgett','CC BY 2.0',1],
+    ln_metropole:['Hilton london metropole.jpg','SunDawn','CC BY-SA 4.0',1],
+    ln_lancaster:['Lancaster Hotel, London - geograph.org.uk - 4263957.jpg','Roger Cornfoot','CC BY-SA 2.0',1],
+    ln_corinthia:['Corinthia Hotel London - panoramio.jpg','Bohao Zhao','CC BY 3.0',1],
+    ln_mohp:['Mandarin Oriental Hyde Park, London Exteranal.jpg','Jbamsey33','CC BY-SA 4.0',1],
+    ln_langham:['The Langham Hotel by night London.jpg','Fresh On The Net','CC BY 2.0',1],
+    ln_hydepark:['Hyde Park July 2015-1.jpg','Alvesgaspar','CC BY-SA 4.0',1],
+    ln_bankside:['The Anchor, Bankside at night.jpg','Paul the Archivist','CC BY-SA 4.0',1],
+    bk_fs:['Four Seasons Hotel Baku.jpg','Antoloji','CC BY-SA 4.0',1],
+    bk_fairmont:['BAKU AT NIGHT .RED TOWERS.באקו בלילה מגדלים באדום.jpg','Avisadehh','CC0',1],
+    bk_jw:['Баку бульвар.jpg','Consulbk','CC BY-SA 4.0',1],
+    bk_hilton:['Hilton Hotel and Government House, Baku.jpg','Nemoralis','CC BY-SA 4.0',1],
+    bk_hyatt:['Fuente en Baku, Azerbaiyán, 2016-09-26, DD 227-229 HDR.jpg','Diego Delso','CC BY-SA 4.0',1],
+    bk_ritz:['Baku at night.jpg','GNL GAO','CC BY-SA 4.0',1],
+    bk_marriott:['Baku Boulevard Park.jpg','Antoloji','CC BY-SA 4.0',1],
+    bk_hi:['Icheri Sheher, Baku (P1090263).jpg','Matti Blume','CC BY-SA 4.0',1],
+    kl_mo:['KLCC Mandarin Oriental Kuala Lumpur - panoramio.jpg','Jerry Lim','CC BY-SA 3.0',1],
+    kl_fs:['Maxis Tower Four Seasons Place and Oxley Towers 20260905.jpg','DvTor8303','CC0',1],
+    kl_gh:['2016 Kuala Lumpur, Petronas Towers (26).jpg','Marcin Konsek','CC BY-SA 4.0',1],
+    kl_sla:['Kuala Lumpur Skyline at dusk 1.jpg','Walkerssk','CC0',1],
+    kl_ascott:['KLCC Park 1.jpg','Brownc','CC BY-SA 4.0',1],
+    kl_ruma:['KLCC Park Kuala Lumpur.jpg','Philip Nalangan','CC BY 4.0',1],
+    kl_pav:['Pavilion KL outview 2 (211030).jpg','*angys*','CC BY-SA 4.0',1],
+    kl_westin:['Bukit Bintang Junction in 2023.jpg','Renek78','CC0',1],
+    kl_stripes:['Merdeka Square Malaysia.jpg','Anton Zelenov','CC BY-SA 3.0',1],
+    kl_ibis:['Kuala Lumpur Malaysia Masjid-Jamek-03.jpg','CEphoto, Uwe Aranas','CC BY-SA 3.0',1],
+    kl_hie:['The Twins SE Asia 2019 (49171985716).jpg','James Kerwin','CC BY 2.0',1],
+    tz_radisson:['Trabzon,harbour.jpg','Bertramz','CC BY-SA 3.0',1],
+    tz_novotel:['Trabzon-Boztepeden liman.jpg','Kadıoğlu Muhsin','CC BY-SA 4.0',1],
+    tz_zorlu:['Trabzon,Kizlar1.jpg','Bertramz','CC BY-SA 3.0',1],
+    tz_dedeman:['Boztepe, Trabzon - panoramio (1).jpg','Murat Atasoy','CC BY 3.0',1],
+    tz_usta:['Boztepe, Trabzon.jpg','Onur capıt','CC BY-SA 4.0',1],
+    tz_inan:['Uzungöl lake and town.jpg','İhsan Deniz Kılıçoğlu','CC BY-SA 3.0',1],
+    tz_ayder:['Ayder, August 2019 (3).jpg','BSRF','CC BY-SA 4.0',1],
     mk_abraj:['Abraj Al Bait Tower.jpg','King Eliot','CC BY-SA 4.0'],
     mk_jo:['Jabl e Omar Conrad Makkah.jpg','King Eliot','CC BY-SA 4.0'],
     mk_conrad:['Conrad Hotel Makkah 1.jpg','King Eliot','CC BY-SA 4.0'],
@@ -384,6 +429,84 @@
         {n:'Hilton Istanbul Bomonti',ar:'هيلتون إسطنبول بومونتي',g:'taksim',s:5,img:'is_bomonti',area:1},
         {n:'Raffles Istanbul',ar:'رافلز إسطنبول',g:'taksim',s:5,img:'is_zorlu',area:1}
       ]}
+    ,
+    'abu dhabi':{ city:'Abu Dhabi', title:{ar:'🏙️ فنادق مختارة في أبوظبي',en:'🏙️ Hand-picked hotels in Abu Dhabi'}, groups:{
+      city:{ar:'الكورنيش ووسط المدينة',en:'Corniche & city centre',info:{ar:'قريب من الكورنيش والمولات',en:'Near the Corniche & malls'}},
+      canal:{ar:'بين الجسرين',en:'Between the Bridges',info:{ar:'قريب من جامع الشيخ زايد',en:'Near Sheikh Zayed Grand Mosque'}},
+      yas:{ar:'جزيرة ياس',en:'Yas Island',info:{ar:'فيراري وورلد وياس ووترورلد',en:'Ferrari World & Yas Waterworld'}},
+      saadiyat:{ar:'جزيرة السعديات',en:'Saadiyat Island',info:{ar:'شاطئ هادئ ومتحف اللوفر',en:'Quiet beach & the Louvre'}} },
+      list:[
+        {n:'Emirates Palace Mandarin Oriental, Abu Dhabi',ar:'قصر الإمارات ماندارين أورينتال',g:'city',s:5,img:'ad_palace'},
+        {n:'Conrad Abu Dhabi Etihad Towers',ar:'كونراد أبراج الاتحاد',g:'city',s:5,img:'ad_conrad',area:1},
+        {n:'Rosewood Abu Dhabi',ar:'روزوود أبوظبي',g:'city',s:5,img:'ad_rosewood',area:1},
+        {n:'Le Royal Meridien Abu Dhabi',ar:'لو رويال ميريديان أبوظبي',g:'city',s:5,img:'ad_lrm',area:1},
+        {n:'Shangri-La Qaryat Al Beri, Abu Dhabi',ar:'شانغريلا قرية البري',g:'canal',s:5,img:'ad_sla',area:1},
+        {n:'Fairmont Bab Al Bahr',ar:'فيرمونت باب البحر',g:'canal',s:5,img:'ad_fbab'},
+        {n:'Premier Inn Abu Dhabi Capital Centre',ar:'بريمير إن كابيتال سنتر',g:'canal',s:3,v:1,img:'ad_premier',area:1},
+        {n:'W Abu Dhabi - Yas Island',ar:'دبليو أبوظبي جزيرة ياس',g:'yas',s:5,img:'ad_w',area:1},
+        {n:'Hilton Abu Dhabi Yas Island',ar:'هيلتون أبوظبي جزيرة ياس',g:'yas',img:'ad_hiltonyas',area:1},
+        {n:'Saadiyat Rotana Resort and Villas',ar:'منتجع وفلل السعديات روتانا',g:'saadiyat',s:5,img:'ad_saadiyat',area:1}
+      ]},
+    'london':{ city:'London', title:{ar:'🇬🇧 فنادق مختارة في لندن',en:'🇬🇧 Hand-picked hotels in London'}, groups:{
+      hp:{ar:'هايد بارك ومايفير',en:'Hyde Park & Mayfair',info:{ar:'قريب من هارودز والمطاعم العربية',en:'Near Harrods & Arab restaurants'}},
+      edg:{ar:'إدجوار رود',en:'Edgware Road',info:{ar:'شارع العرب والمطاعم الحلال',en:'Arab street & halal food'}},
+      cen:{ar:'وسط لندن والتايمز',en:'Central London & the Thames',info:{ar:'قريب من المعالم والمسارح',en:'Near landmarks & theatres'}} },
+      list:[
+        {n:'The Dorchester - Dorchester Collection',ar:'ذا دورتشستر',g:'hp',s:5,img:'ln_dorch'},
+        {n:'Mandarin Oriental Hyde Park, London',ar:'ماندارين أورينتال هايد بارك',g:'hp',s:5,img:'ln_mohp'},
+        {n:'Royal Lancaster London',ar:'رويال لانكستر لندن',g:'hp',img:'ln_lancaster'},
+        {n:'Hilton London Hyde Park',ar:'هيلتون لندن هايد بارك',g:'hp',img:'ln_hydepark',area:1},
+        {n:'Hilton London Metropole',ar:'هيلتون لندن متروبول',g:'edg',img:'ln_metropole'},
+        {n:'The Langham London',ar:'ذا لانغهام لندن',g:'cen',s:5,img:'ln_langham'},
+        {n:'Corinthia London',ar:'كورينثيا لندن',g:'cen',s:5,img:'ln_corinthia'},
+        {n:'Shangri-La The Shard, London',ar:'شانغريلا ذا شارد',g:'cen',s:5,img:'ln_shard'},
+        {n:'Park Plaza London Westminster Bridge',ar:'بارك بلازا جسر وستمنستر',g:'cen',img:'ln_parkplaza'},
+        {n:'citizenM London Bankside',ar:'سيتيزن إم بانكسايد',g:'cen',v:1,img:'ln_bankside',area:1}
+      ]},
+    'baku':{ city:'Baku', title:{ar:'🇦🇿 فنادق مختارة في باكو',en:'🇦🇿 Hand-picked hotels in Baku'}, groups:{
+      old:{ar:'البلدة القديمة والكورنيش',en:'Old City & Boulevard',info:{ar:'مشي للبوليفارد والبلدة القديمة',en:'Walk to the Boulevard & Old City'}},
+      flame:{ar:'أبراج اللهب',en:'Flame Towers',info:{ar:'إطلالة على المدينة والبحر',en:'City & sea views'}},
+      city:{ar:'وسط المدينة',en:'City centre',info:{ar:'قريب من المطاعم والتسوق',en:'Near dining & shopping'}} },
+      list:[
+        {n:'Four Seasons Hotel Baku',ar:'فور سيزونز باكو',g:'old',s:5,img:'bk_fs'},
+        {n:'JW Marriott Absheron Baku',ar:'جي دبليو ماريوت أبشيرون',g:'old',s:5,img:'bk_jw',area:1},
+        {n:'Hilton Baku',ar:'هيلتون باكو',g:'old',s:5,img:'bk_hilton',area:1},
+        {n:'Baku Marriott Hotel Boulevard',ar:'ماريوت بوليفارد باكو',g:'old',s:5,img:'bk_marriott',area:1},
+        {n:'Fairmont Baku Flame Towers',ar:'فيرمونت أبراج اللهب',g:'flame',s:5,img:'bk_fairmont'},
+        {n:'The Ritz-Carlton Baku',ar:'ريتز كارلتون باكو',g:'city',s:5,img:'bk_ritz',area:1},
+        {n:'Hyatt Regency Baku',ar:'حياة ريجنسي باكو',g:'city',s:5,img:'bk_hyatt',area:1},
+        {n:'Holiday Inn Baku',ar:'هوليداي إن باكو',g:'city',v:1,img:'bk_hi',area:1}
+      ]},
+    'kuala lumpur':{ city:'Kuala Lumpur', title:{ar:'🇲🇾 فنادق مختارة في كوالالمبور',en:'🇲🇾 Hand-picked hotels in Kuala Lumpur'}, groups:{
+      klcc:{ar:'حول البرجين KLCC',en:'Around KLCC',info:{ar:'مشي لبرجي بتروناس وسوريا مول',en:'Walk to Petronas Towers & Suria'}},
+      bb:{ar:'بوكيت بينتانق',en:'Bukit Bintang',info:{ar:'تسوق ومطاعم عربية',en:'Shopping & Arab restaurants'}},
+      city:{ar:'وسط المدينة',en:'City centre',info:{ar:'أسعار أوفر وقريب من المترو',en:'Lower prices, near the metro'}} },
+      list:[
+        {n:'Mandarin Oriental, Kuala Lumpur',ar:'ماندارين أورينتال كوالالمبور',g:'klcc',s:5,img:'kl_mo',area:1},
+        {n:'Four Seasons Hotel Kuala Lumpur',ar:'فور سيزونز كوالالمبور',g:'klcc',s:5,img:'kl_fs'},
+        {n:'Grand Hyatt Kuala Lumpur',ar:'جراند حياة كوالالمبور',g:'klcc',s:5,img:'kl_gh',area:1},
+        {n:'Shangri-La Kuala Lumpur',ar:'شانغريلا كوالالمبور',g:'klcc',s:5,img:'kl_sla',area:1},
+        {n:'The RuMa Hotel and Residences',ar:'ذا روما للفنادق والشقق',g:'klcc',s:5,img:'kl_ruma',area:1},
+        {n:'Ascott Star KLCC Kuala Lumpur',ar:'أسكوت ستار KLCC (شقق فندقية)',g:'klcc',img:'kl_ascott',area:1},
+        {n:'Pavilion Hotel Kuala Lumpur Managed by Banyan Tree',ar:'فندق بافيليون من بانيان تري',g:'bb',s:5,img:'kl_pav',area:1},
+        {n:'The Westin Kuala Lumpur',ar:'ذا وستن كوالالمبور',g:'bb',s:5,img:'kl_westin',area:1},
+        {n:'Hotel Stripes Kuala Lumpur, Autograph Collection',ar:'فندق سترايبس كوالالمبور',g:'city',img:'kl_stripes',area:1},
+        {n:'ibis Kuala Lumpur City Centre',ar:'إيبيس وسط كوالالمبور',g:'city',s:3,v:1,img:'kl_ibis',area:1},
+        {n:'Holiday Inn Express Kuala Lumpur City Centre',ar:'هوليداي إن إكسبريس وسط كوالالمبور',g:'city',v:1,img:'kl_hie',area:1}
+      ]},
+    'trabzon':{ city:'Trabzon', title:{ar:'🇹🇷 فنادق مختارة في طرابزون والبحر الأسود',en:'🇹🇷 Hand-picked hotels in Trabzon & the Black Sea'}, groups:{
+      city:{ar:'مدينة طرابزون',en:'Trabzon city',info:{ar:'قريب من الميدان والبحر',en:'Near the main square & the sea'}},
+      uzun:{ar:'أوزنجول',en:'Uzungöl',info:{ar:'بحيرة وجبال (ساعة ونص من المدينة)',en:'Lake & mountains (1.5h from the city)'}},
+      ayder:{ar:'هضبة أيدر',en:'Ayder Plateau',info:{ar:'طبيعة وينابيع حارة (ريزه)',en:'Nature & hot springs (Rize)'}} },
+      list:[
+        {n:'Zorlu Grand Hotel Trabzon',ar:'زورلو جراند طرابزون',g:'city',s:5,img:'tz_zorlu',area:1},
+        {n:'Radisson Blu Hotel Trabzon',ar:'راديسون بلو طرابزون',g:'city',img:'tz_radisson',area:1},
+        {n:'Novotel Trabzon',ar:'نوفوتيل طرابزون',g:'city',img:'tz_novotel',area:1},
+        {n:'Park Dedeman Trabzon',ar:'بارك ديدمان طرابزون',g:'city',img:'tz_dedeman',area:1},
+        {n:'Usta Park Hotel',ar:'فندق أوستا بارك',g:'city',v:1,img:'tz_usta',area:1},
+        {n:'Inan Kardesler Hotel',ar:'فندق إينان كارداشلار (أوزنجول)',g:'uzun',img:'tz_inan',area:1,c:'Uzungol'},
+        {n:'Ayder Doga Resort',ar:'منتجع أيدر دوغا',g:'ayder',img:'tz_ayder',area:1,c:'Ayder'}
+      ]}
   };
   let HTAB = '';
   const ALIAS = {'mecca':'makkah','مكة':'makkah','مكة المكرمة':'makkah','medina':'madinah','المدينة':'madinah','المدينة المنورة':'madinah','دبي':'dubai','أبوظبي':'abu dhabi','إسطنبول':'istanbul','اسطنبول':'istanbul','طرابزون':'trabzon','لندن':'london','باكو':'baku','كوالالمبور':'kuala lumpur'};
@@ -462,16 +585,15 @@
 
   function imgHtml(k, alt, isArea){
     const im = IMG[k]; if (!im) return '';
-    const L = T[lang], file = 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(im[0].replace(/ /g,'_'));
-    return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="/img/hotels/' + k + '.webp" alt="' + alt.replace(/"/g,'') + '" onerror="this.parentNode.classList.add(\'noimg\')">' +
-      (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') +
-      '<a class="cr" target="_blank" rel="noopener" href="' + file + '">📷 ' + im[1] + ' · ' + im[2] + '</a></div>';
+    const L = T[lang]; credit(im[0], im[1], im[2]);
+    return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="' + (im[3] ? 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(im[0].replace(/ /g,'_')) + '?width=640' : '/img/hotels/' + k + '.webp') + '" alt="' + alt.replace(/"/g,'') + '" onerror="this.parentNode.classList.add(\'noimg\')">' +
+      (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>';
   }
 
   function renderHotels(){
     const L = T[lang], k = key(), H = HG[k], box = $('hs');
     const hideType = F.type && F.type !== 'hotel';
-    if (!H || hideType) { box.hidden = true; $('cardsH').textContent = L.cardsH; return; }
+    if (!H || hideType) { box.hidden = true; CREDITS = {}; $('cardsH').textContent = L.cardsH; return; }
     box.hidden = false;
     $('hsTitle').textContent = H.title[lang];
     $('cardsH').textContent = L.cardsAll(dispName());
@@ -486,12 +608,12 @@
     if (F.stars) list = list.filter(h => h.s && h.s >= +F.stars);
     if (F.budget === 'eco') list = list.filter(cheap);
     if (F.budget === 'lux') list = list.filter(h => !cheap(h));
-    const hl = $('hl'); hl.innerHTML = '';
+    const hl = $('hl'); hl.innerHTML = ''; CREDITS = {};
     if (!list.length) { hl.innerHTML = '<p class="sub">' + L.noH + '</p>'; return; }
     list.forEach(h => {
       const g = H.groups[h.g], c = document.createElement('div'); c.className = 'hc';
       const ef = {hotel: h.n};
-      const bk = NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(H.city, o, ef, 'hotel'), ex = NUZUL.expediaUrl(H.city, o, ef, 'hotel');
+      const bk = NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, 'hotel'), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, 'hotel');
       const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (g.info ? '<span>✨ ' + g.info[lang] + '</span>' : '');
       c.innerHTML = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) +
         '<div class="hx"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
@@ -505,14 +627,32 @@
     });
   }
 
+  // حقوق الصور: تُعرض في أسفل الصفحة بدل ما تكون فوق الصور
+  let CREDITS = {}, HERO_CR = null;
+  function credit(file, who, lic){ CREDITS[file] = [who, lic]; }
+  function renderCredits(){
+    const L = T[lang], ul = $('credList'); if (!ul) return;
+    const items = Object.entries(CREDITS).map(([f, [w, l]]) => [f, w, l]);
+    if (HERO_CR) items.unshift(HERO_CR);
+    $('credBox').hidden = !items.length;
+    ul.innerHTML = '';
+    items.forEach(([f, w, l]) => {
+      const li = document.createElement('li'), a = document.createElement('a');
+      a.href = 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(f.replace(/ /g, '_')); a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = f.replace(/\.(jpe?g|png|webp)$/i, '');
+      li.append(a, document.createTextNode(' — ' + [w, l].filter(Boolean).join(' · ')));
+      ul.append(li);
+    });
+  }
+
   // صورة الوجهة لأي مدينة في العالم (صورة حرة من ويكيبيديا/ويكيميديا)
   const WIKI_NAME = {makkah:'Mecca', madinah:'Medina', 'abu dhabi':'Abu Dhabi', 'kuala lumpur':'Kuala Lumpur'};
   let heroFor = '';
   async function loadHero(){
     const k = key(), name = (k && WIKI_NAME[k]) || S.d;
     if (!name || heroFor === name) return; heroFor = name;
-    const top = $('top'), cr = $('tcr');
-    top.classList.remove('ph'); top.style.backgroundImage = ''; cr.hidden = true;
+    const top = $('top');
+    top.classList.remove('ph'); top.style.backgroundImage = ''; HERO_CR = null;
     const ar = /[؀-ۿ]/.test(name), wiki = ar ? 'ar' : 'en';
     try {
       const q = 'https://' + wiki + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=1280&pilicense=free&titles=' + encodeURIComponent(name);
@@ -524,14 +664,12 @@
       if (heroFor !== name) return;
       top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.35) 0%,rgba(6,47,82,.82) 100%),url("' + src + '")';
       top.classList.add('ph');
-      cr.href = 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(pg.pageimage);
-      cr.textContent = '📷 Wikimedia Commons';
-      cr.hidden = false;
+      const file = decodeURIComponent(pg.pageimage).replace(/_/g, ' ');
+      HERO_CR = [file, '', '']; renderCredits();
       try {
         const m = await (await fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata&titles=File:' + encodeURIComponent(pg.pageimage))).json();
         const md = ((Object.values(m.query.pages)[0].imageinfo || [])[0] || {}).extmetadata || {};
-        const who = ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 40), lic = (md.LicenseShortName || {}).value || '';
-        if (who || lic) cr.textContent = '📷 ' + [who, lic].filter(Boolean).join(' · ');
+        HERO_CR = [file, ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60), (md.LicenseShortName || {}).value || '']; renderCredits();
       } catch(e){}
     } catch(e){}
   }
@@ -545,7 +683,7 @@
     $('title').textContent = L.title(n);
     document.title = (lang === 'ar' ? 'نُزُل — ' : 'Nuzul — ') + L.title(n);
     $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span><span>🛏️ ' + L.rooms(S.rooms) + '</span>';
-    renderFilters(); renderHotels(); renderCards(); loadHero();
+    renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits();
     $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
     $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(L.waMsg(n, S.cin, S.cout, S.adults));
   }
