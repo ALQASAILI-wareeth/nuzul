@@ -51,6 +51,7 @@
     for (let i = 0; i < rooms; i++) per.push(Math.max(1, Math.floor(adults / rooms) + (i < adults % rooms ? 1 : 0)));
     p.set('adults', per.join(','));
     p.set('rooms', rooms);
+    if (f.hotel) p.set('hotelName', f.hotel);
     if (f.type && HC_TYPE[f.type]) p.append('lodging', HC_TYPE[f.type]);
     if (f.stars) for (let s = +f.stars; s <= 5; s++) p.append('star', s + '0');
     if (f.rating8) p.set('guestRating', '40');
