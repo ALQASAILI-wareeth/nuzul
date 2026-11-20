@@ -56,7 +56,7 @@
 
   h3{font-size:clamp(19px,4.4vw,24px);color:var(--navy);font-weight:800;margin:22px 0 4px}
   .note{color:var(--muted);font-size:14px;margin-bottom:12px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
   .pc{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px;position:relative}
   .pc.top1{border-color:var(--teal)}
   .pc .badge{position:absolute;top:-12px;inset-inline-start:16px;background:var(--teal);color:var(--navy);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px}
@@ -142,7 +142,7 @@
 
 <footer>
   <div class="wrap">
-    <span data-i="disc">نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.</span>
+    <span data-i="disc">نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com وHotels.com وExpedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.</span>
     · <a href="/privacy.html" data-i="privacy">سياسة الخصوصية</a>
   </div>
 </footer>
@@ -161,10 +161,11 @@
       cardsH:'قارن على أكثر من موقع', cardsNote:'نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.',
       bk:{badge:'الأكثر خيارات',pts:['أكبر عدد فنادق وشقق في العالم','إلغاء مجاني لمعظم الغرف','الموقع والدعم بالعربي'],cta:'شوف الفنادق على Booking',sm:'تنفتح نتائج Booking في نافذة جديدة'},
       hc:{badge:'',pts:['مكافآت One Key على كل حجز','أسعار خاصة للأعضاء','فنادق ومنتجعات مختارة'],cta:'شوف الفنادق على Hotels.com',sm:'تنفتح نتائج Hotels.com في نافذة جديدة'},
+      ex:{badge:'',pts:['وفّر لما تحجز طيران + فندق مع بعض','نفس مكافآت One Key','خيارات دفع مرنة'],cta:'شوف الفنادق على Expedia',sm:'تنفتح نتائج Expedia في نافذة جديدة'},
       helpP:'محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.',helpB:'اسأل نُزُل',
       y1t:'✔ بدون رسوم علينا',y1p:'تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.',y2t:'✔ حجز آمن',y2p:'الدفع والحجز يتمان مباشرة عند الشريك المعتمد.',y3t:'✔ إلغاء مجاني',y3p:'فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.',
       back:'→ الرجوع للصفحة الرئيسية', privacy:'سياسة الخصوصية',
-      disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
+      disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com وHotels.com وExpedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
       waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
@@ -176,10 +177,11 @@
       cardsH:'Compare across sites', cardsNote:'The same search and filters open on each site. Prices sometimes differ, so compare before you book.',
       bk:{badge:'Most choice',pts:['The largest selection of hotels and apartments','Free cancellation on most rooms','Site and support in Arabic'],cta:'See hotels on Booking',sm:'Booking results open in a new tab'},
       hc:{badge:'',pts:['One Key rewards on every booking','Member-only prices','Hand-picked hotels and resorts'],cta:'See hotels on Hotels.com',sm:'Hotels.com results open in a new tab'},
+      ex:{badge:'',pts:['Save when you book flight + hotel together','Same One Key rewards','Flexible payment options'],cta:'See hotels on Expedia',sm:'Expedia results open in a new tab'},
       helpP:'Can\'t decide? Send us your search on WhatsApp and we\'ll help you choose, free.',helpB:'Ask Nuzul',
       y1t:'✔ No fees from us',y1p:'You pay the site\'s price; Nuzul adds nothing.',y2t:'✔ Secure booking',y2p:'Payment and booking happen directly with the partner.',y3t:'✔ Free cancellation',y3p:'Turn on "Free cancellation" to see only refundable rooms.',
       back:'← Back to home', privacy:'Privacy policy',
-      disc:'Nuzul is an independent website. Bookings and payments are made with partners such as Booking.com and Hotels.com, and we may earn a commission at no extra cost to you.',
+      disc:'Nuzul is an independent website. Bookings and payments are made with partners such as Booking.com, Hotels.com and Expedia, and we may earn a commission at no extra cost to you.',
       waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.'}
   };
@@ -267,6 +269,7 @@
     $('cards').innerHTML = '';
     $('cards').append(card('top1', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingUrl(p, o, F, lang)));
     $('cards').append(card('', '#D32F2F', 'H', 'Hotels.com', L.hc, NUZUL.hotelsUrl(p, o, F, 'compare')));
+    $('cards').append(card('', '#FDDB32;color:#191E3B', '✈', 'Expedia', L.ex, NUZUL.expediaUrl(p, o, F, 'compare')));
   }
 
   function render(){

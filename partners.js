@@ -3,7 +3,8 @@
   // Booking.com (CJ) — ضع رقم الشريك بعد الموافقة
   const AID = '';
   // Expedia Group Creator (Hotels.com / Expedia / Vrbo) عبر Partnerize
-  const EG = { camref: '1011l6vPKX', creativeref: '1011l66481' };
+  const EG = { camref: '1011l6vPKX', creativeref: '1011l66481' };        // Hotels.com
+  const EX = { camref: '1101l6yQPk' };                                    // Expedia.com
 
   // f = {type:'hotel|apartment|resort|villa', stars:3|4|5, budget:'eco|mid|lux', rating8:bool, freeCancel:bool, sort:'best|price|rating', near:bool}
   const BUDGET = { eco: [0, 100], mid: [100, 250], lux: [250, 0] };
@@ -39,7 +40,7 @@
     return 'https://www.booking.com/searchresults.' + bl + '.html?' + p.toString();
   }
 
-  function hotelsUrl(place, o = {}, f = {}, ref = 'site') {
+  function egSearch(host, place, o = {}, f = {}) {
     const p = new URLSearchParams();
     const HC_NAME = { Makkah: 'Mecca', Madinah: 'Medina' };
     p.set('destination', HC_NAME[place] || place);
@@ -61,10 +62,18 @@
     if (f.near) p.set('sort', 'DISTANCE');
     else if (f.sort === 'price') p.set('sort', 'PRICE_LOW_TO_HIGH');
     else if (f.sort === 'rating') p.set('sort', 'REVIEW');
-    const landing = 'https://www.hotels.com/Hotel-Search?' + p.toString();
-    const a = new URLSearchParams({ landingPage: landing, camref: EG.camref, creativeref: EG.creativeref, adref: ref });
+    return 'https://' + host + '/Hotel-Search?' + p.toString();
+  }
+
+  function hotelsUrl(place, o = {}, f = {}, ref = 'site') {
+    const a = new URLSearchParams({ landingPage: egSearch('www.hotels.com', place, o, f), camref: EG.camref, creativeref: EG.creativeref, adref: ref });
     return 'https://www.hotels.com/affiliate?' + a.toString();
   }
 
-  window.NUZUL = { AID, EG, bookingUrl, hotelsUrl };
+  function expediaUrl(place, o = {}, f = {}, ref = 'site') {
+    const a = new URLSearchParams({ landingPage: egSearch('www.expedia.com', place, o, f), camref: EX.camref, adref: ref });
+    return 'https://www.expedia.com/affiliate?' + a.toString();
+  }
+
+  window.NUZUL = { AID, EG, EX, bookingUrl, hotelsUrl, expediaUrl };
 })();
