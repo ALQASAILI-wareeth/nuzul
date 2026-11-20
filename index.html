@@ -181,9 +181,8 @@
       <label for="rooms" data-i="roomsL">الغرف</label>
       <select id="rooms"></select>
     </div>
-    <a class="go off" id="go" href="#" target="_blank" rel="noopener" data-i="searchB">🔍 ابحث</a>
+    <a class="go off" id="go" href="#" data-i="searchB">🔍 ابحث</a>
     <div class="err" id="err"></div>
-    <div class="alt"><span data-i="altL">قارن السعر نفسه على موقع ثاني:</span><a class="off" id="go2" href="#" target="_blank" rel="noopener sponsored">Hotels.com ↗</a></div>
   </form>
 </div>
 
@@ -210,7 +209,7 @@
     <p class="sub" data-i="howSub">ثلاث خطوات بسيطة</p>
     <div class="steps">
       <div class="step"><div class="n">1</div><b data-i="s1t">ابحث</b><p data-i="s1p">اكتب المدينة والتواريخ وعدد الأشخاص.</p></div>
-      <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.</p></div>
+      <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">قارن نفس البحث على Booking وHotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.</p></div>
       <div class="step"><div class="n">3</div><b data-i="s3t">احجز بأمان</b><p data-i="s3p">أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.</p></div>
     </div>
     <div class="why">
@@ -261,7 +260,7 @@
       typesH: 'اختر نوع إقامتك', typesSub: 'اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب',
       howH: 'كيف تحجز معنا؟', howSub: 'ثلاث خطوات بسيطة',
       s1t: 'ابحث', s1p: 'اكتب المدينة والتواريخ وعدد الأشخاص.',
-      s2t: 'قارن واختر', s2p: 'شاهد الفنادق بالصور والتقييمات الحقيقية والأسعار.',
+      s2t: 'قارن واختر', s2p: 'قارن نفس البحث على Booking وHotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.',
       s3t: 'احجز بأمان', s3p: 'أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.',
       w1t: '✔ أسعار شفافة', w1p: 'نفس السعر بدون أي رسوم إضافية علينا.',
       w2t: '✔ إلغاء مجاني', w2p: 'معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.',
@@ -283,7 +282,7 @@
       typesH: 'Choose your type of stay', typesSub: 'Type your destination in the search above, then pick a stay type',
       howH: 'How to book with us', howSub: 'Three simple steps',
       s1t: 'Search', s1p: 'Enter your city, dates and number of guests.',
-      s2t: 'Compare and choose', s2p: 'See hotels with photos, real guest reviews and prices.',
+      s2t: 'Compare and choose', s2p: 'Compare the same search on Booking and Hotels.com, filtered by budget, stars and distance to the Haram.',
       s3t: 'Book securely', s3p: 'Complete your booking and payment with our partners Booking.com or Hotels.com.',
       w1t: '✔ Transparent prices', w1p: 'Same price, with no extra fees from us.',
       w2t: '✔ Free cancellation', w2p: 'Most rooms offer free cancellation before arrival.',
@@ -328,8 +327,8 @@
   const CITIES = RAW.map((r,i) => ({ar:r[0], en:r[1], cAr:r[2], cEn:r[3], f:r[4], r:r[5], g:G[i % G.length]}));
   const REGION_KEYS = ['all','me','eu','as','af','am','oc'];
   const TYPE_DATA = [
-    {ic:'🏨', q:'ht_id=204'}, {ic:'🏢', q:'ht_id=201'}, {ic:'🏝️', q:'ht_id=206'},
-    {ic:'🏡', q:'ht_id=213'}, {ic:'⭐', q:'class=5'},
+    {ic:'🏨', q:'ht_id=204', t:'hotel'}, {ic:'🏢', q:'ht_id=201', t:'apartment'}, {ic:'🏝️', q:'ht_id=206', t:'resort'},
+    {ic:'🏡', q:'ht_id=213', t:'villa'}, {ic:'⭐', q:'class=5', t:'5star'},
   ];
 
   let lang = 'ar';
@@ -385,6 +384,13 @@
   }
   window.nuzulHotelsUrl = hotelsUrl;
 
+  // صفحة المقارنة داخل نُزُل
+  function resultsUrl(text, opts = {}, type = ''){
+    const p = new URLSearchParams({d: toEn(text), n: text.trim(), ci: opts.cin || '', co: opts.cout || '', a: opts.adults || 2, r: opts.rooms || 1});
+    if (type) p.set('t', type);
+    return '/results.html?' + p.toString();
+  }
+
   // init form
   const today = new Date();
   $('cin').min = fmt(today);
@@ -407,9 +413,8 @@
     $('go').classList.toggle('off', !ok);
     $('go').setAttribute('aria-disabled', ok ? 'false' : 'true');
     const o = {cin, cout, adults:$('adults').value, rooms:$('rooms').value};
-    $('go').href = ok ? bookingUrl(toEn(dest), o) : '#';
-    $('go2').href = ok ? hotelsUrl(toEn(dest), o) : '#';
-    $('go2').classList.toggle('off', !ok);
+    $('go').href = ok ? resultsUrl(dest, o) : '#';
+
     return ok;
   }
   $('cin').addEventListener('change', () => {
@@ -446,25 +451,24 @@
     CITIES.filter(c => region === 'all' || c.r === region).forEach(c => {
       const a = document.createElement('a');
       a.className = 'city';
-      a.target = '_blank'; a.rel = 'noopener';
       a.style.background = "url('/img/cities/" + c.en.toLowerCase().replace(/[^a-z0-9]+/g,'-') + ".webp') center/cover no-repeat, linear-gradient(140deg, " + c.g[0] + ', ' + c.g[1] + ')';
-      a.href = bookingUrl(c.en, currentOpts());
+      a.href = resultsUrl(lang === 'ar' ? c.ar : c.en, currentOpts());
       const name = lang === 'ar' ? c.ar : c.en;
       const sub = lang === 'ar' ? (c.cAr + ' · ' + c.en) : c.cEn;
       a.innerHTML = '<div class="flag">' + c.f + '</div><b>' + name + '</b><span>' + sub + '</span>';
-      a.addEventListener('mouseenter', () => a.href = bookingUrl(c.en, currentOpts()));
-      a.addEventListener('touchstart', () => a.href = bookingUrl(c.en, currentOpts()), {passive:true});
+      a.addEventListener('mouseenter', () => a.href = resultsUrl(lang === 'ar' ? c.ar : c.en, currentOpts()));
+      a.addEventListener('touchstart', () => a.href = resultsUrl(lang === 'ar' ? c.ar : c.en, currentOpts()), {passive:true});
       $('grid').append(a);
     });
   }
 
   function renderTypes(){
-    const dest = toEn($('dest').value) || 'Dubai';
+    const destTxt = $('dest').value.trim() || (lang === 'ar' ? 'دبي' : 'Dubai');
     $('typegrid').innerHTML = '';
     TYPE_DATA.forEach((d, i) => {
       const a = document.createElement('a');
-      a.className = 'type'; a.target = '_blank'; a.rel = 'noopener';
-      a.href = bookingUrl(dest, {...currentOpts(), filter:d.q});
+      a.className = 'type';
+      a.href = resultsUrl(destTxt, currentOpts(), d.t);
       a.innerHTML = '<div class="ic">' + d.ic + '</div><b>' + t('types')[i][0] + '</b><span>' + t('types')[i][1] + '</span>';
       $('typegrid').append(a);
     });

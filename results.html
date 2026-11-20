@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نُزُل — قارن أسعار الفنادق</title>
+<meta name="description" content="قارن أسعار الفنادق على Booking.com وHotels.com من مكان واحد، مع فلاتر للميزانية والنجوم ونوع الإقامة والقرب من الحرم.">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://nuzultravel.com/results.html">
+<meta name="theme-color" content="#062F52">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#062F52;--navy2:#0062A8;--sand:#FFB238;--sand2:#FFD27A;--teal:#00C2D1;--bg:#f3f8fb;--card:#fff;--ink:#1d2733;--muted:#5f6b78;--line:#dce7ee;--radius:16px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Tajawal',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 18px}
+  header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:10}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:24px}
+  .logo svg{width:30px;height:30px}
+  .logo small{font-weight:500;font-size:12px;color:var(--sand2);display:block;line-height:1}
+  .lang{border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;font-weight:700;font-size:14px;padding:5px 14px;border-radius:999px}
+
+  .top{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0a93c2 100%);color:#fff;padding:22px 0 26px}
+  .top h1{font-size:clamp(24px,5.5vw,34px);font-weight:800;line-height:1.25}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:15px;opacity:.92}
+  .meta span{display:inline-flex;align-items:center;gap:5px}
+  .edit{margin-top:12px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);color:#fff;font-weight:700;font-size:14px;padding:6px 14px;border-radius:999px}
+  .eform{display:none;margin-top:14px;background:#fff;border-radius:16px;padding:14px;gap:10px;grid-template-columns:minmax(0,2fr) repeat(4,minmax(0,1fr)) auto;align-items:end;color:var(--ink)}
+  .eform.on{display:grid}
+  .eform label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:3px}
+  .eform input,.eform select{width:100%;min-width:0;height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;font:inherit;font-size:16px;background:#fff;color:var(--ink);-webkit-appearance:none;appearance:none}
+  .eform input[type=date]{display:block;line-height:44px;text-align:start}
+  .eform .go{height:44px;padding:0 20px;border:0;border-radius:10px;background:var(--sand);color:var(--navy);font-weight:800}
+  @media(max-width:760px){.eform{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.eform .d,.eform .go{grid-column:1/-1}}
+
+  main{padding:18px 0 10px}
+  .panel{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:16px}
+  .panel h2{font-size:18px;color:var(--navy);font-weight:800;margin-bottom:10px}
+  .frow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-top:1px dashed var(--line)}
+  .frow:first-of-type{border-top:0}
+  .frow > b{font-size:14px;color:var(--muted);min-width:96px}
+  .frow > span{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1.5px solid var(--line);background:#fff;color:var(--navy);font-weight:700;font-size:14px;padding:6px 13px;border-radius:999px}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .chip.gold.on{background:var(--sand);border-color:var(--sand);color:var(--navy)}
+  .near{display:none}
+  .near.show{display:flex}
+
+  h3{font-size:clamp(19px,4.4vw,24px);color:var(--navy);font-weight:800;margin:22px 0 4px}
+  .note{color:var(--muted);font-size:14px;margin-bottom:12px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .pc{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px;position:relative}
+  .pc.top1{border-color:var(--teal)}
+  .pc .badge{position:absolute;top:-12px;inset-inline-start:16px;background:var(--teal);color:var(--navy);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px}
+  .pc .nm{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800}
+  .pc .nm i{font-style:normal;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800}
+  .pc ul{list-style:none;display:grid;gap:4px;font-size:15px}
+  .pc li::before{content:"✔";color:#1a9b5a;font-weight:800;margin-inline-end:7px}
+  .pc .cta{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;height:50px;border-radius:12px;font-weight:800;font-size:17px;color:#fff}
+  .pc .cta:hover{filter:brightness(1.08)}
+  .pc small{color:var(--muted);font-size:12.5px;text-align:center}
+
+  .tip{margin-top:18px;background:#fff8e8;border:1.5px solid var(--sand2);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+  .tip .ic{font-size:24px;line-height:1.2}
+  .tip b{color:var(--navy)}
+  .help{margin-top:14px;background:var(--navy);color:#fff;border-radius:18px;padding:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+  .help p{opacity:.9;font-size:15px}
+  .help a{background:#25D366;color:#fff;font-weight:800;padding:10px 18px;border-radius:12px;display:inline-flex;gap:8px;align-items:center}
+  .why{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+  .why div{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14.5px}
+  .why b{display:block;color:var(--navy)}
+  .back{display:inline-block;margin-top:18px;color:var(--navy2);font-weight:700}
+  footer{margin-top:40px;background:#041f36;color:#c9d3dd;padding:22px 0;font-size:13px}
+  footer a{color:#fff;opacity:.85}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="/">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="3" y="13" width="26" height="17" rx="3.2" fill="#0062A8"/><path d="M16 2.5 1.5 14.5h29L16 2.5Z" fill="#00C2D1"/><rect x="12.8" y="19.5" width="6.4" height="10.5" rx="1.6" fill="#FFB238"/></svg>
+      <div><span data-i="brand">نُزُل</span><small data-i="tagline">احجز إقامتك بثقة</small></div>
+    </a>
+    <button class="lang" id="langBtn" type="button">English</button>
+  </div>
+</header>
+
+<div class="top">
+  <div class="wrap">
+    <h1 id="title"></h1>
+    <div class="meta" id="meta"></div>
+    <button class="edit" id="editBtn" type="button" data-i="edit">✏️ تعديل البحث</button>
+    <form class="eform" id="eform" onsubmit="return false">
+      <div class="d"><label for="e_dest" data-i="destL">الوجهة</label><input id="e_dest" autocomplete="off"></div>
+      <div><label for="e_cin" data-i="cinL">الوصول</label><input id="e_cin" type="date"></div>
+      <div><label for="e_cout" data-i="coutL">المغادرة</label><input id="e_cout" type="date"></div>
+      <div><label for="e_ad" data-i="adultsL">البالغون</label><select id="e_ad"></select></div>
+      <div><label for="e_rm" data-i="roomsL">الغرف</label><select id="e_rm"></select></div>
+      <button class="go" id="e_go" type="button" data-i="update">تحديث</button>
+    </form>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="panel">
+    <h2 data-i="fH">🎯 حدّد اللي يناسبك (اختياري)</h2>
+    <div class="frow near" id="nearRow"><b data-i="fNear">الموقع</b><span id="nearChips"></span></div>
+    <div class="frow"><b data-i="fType">نوع الإقامة</b><span id="typeChips"></span></div>
+    <div class="frow"><b data-i="fBudget">الميزانية/ليلة</b><span id="budgetChips"></span></div>
+    <div class="frow"><b data-i="fStars">النجوم</b><span id="starChips"></span></div>
+    <div class="frow"><b data-i="fMore">مميزات</b><span id="moreChips"></span></div>
+    <div class="frow"><b data-i="fSort">الترتيب</b><span id="sortChips"></span></div>
+  </div>
+
+  <h3 data-i="cardsH">قارن على أكثر من موقع</h3>
+  <p class="note" data-i="cardsNote">نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.</p>
+  <div class="cards" id="cards"></div>
+
+  <div class="tip" id="tip"><div class="ic">💡</div><div id="tipTxt"></div></div>
+
+  <div class="help">
+    <p data-i="helpP">محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.</p>
+    <a id="wa" href="#" target="_blank" rel="noopener"><span>💬</span><span data-i="helpB">اسأل نُزُل</span></a>
+  </div>
+
+  <div class="why">
+    <div><b data-i="y1t">✔ بدون رسوم علينا</b><span data-i="y1p">تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.</span></div>
+    <div><b data-i="y2t">✔ حجز آمن</b><span data-i="y2p">الدفع والحجز يتمان مباشرة عند الشريك المعتمد.</span></div>
+    <div><b data-i="y3t">✔ إلغاء مجاني</b><span data-i="y3p">فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.</span></div>
+  </div>
+
+  <a class="back" href="/" data-i="back">→ الرجوع للصفحة الرئيسية</a>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span data-i="disc">نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.</span>
+    · <a href="/privacy.html" data-i="privacy">سياسة الخصوصية</a>
+  </div>
+</footer>
+
+<script src="partners.js"></script>
+<script>
+(function(){
+  const WA = '971568599446';
+  const T = {
+    ar:{brand:'نُزُل',tagline:'احجز إقامتك بثقة',other:'English',edit:'✏️ تعديل البحث',update:'تحديث',destL:'الوجهة',cinL:'الوصول',coutL:'المغادرة',adultsL:'البالغون',roomsL:'الغرف',
+      title:n=>'فنادق '+n, nights:n=>n===1?'ليلة وحدة':(n===2?'ليلتين':n+' ليالي'), adults:n=>n+' بالغين', rooms:n=>n===1?'غرفة':n+' غرف',
+      fH:'🎯 حدّد اللي يناسبك (اختياري)',fNear:'الموقع',fType:'نوع الإقامة',fBudget:'الميزانية/ليلة',fStars:'النجوم',fMore:'مميزات',fSort:'الترتيب',
+      any:'الكل', types:{hotel:'🏨 فندق',apartment:'🏢 شقة فندقية',resort:'🏝️ منتجع',villa:'🏡 فيلا'},
+      budget:{eco:'💲 أقل من 100$',mid:'💲💲 100–250$',lux:'💎 فوق 250$'}, stars:{3:'3★ فأكثر',4:'4★ فأكثر',5:'5★ فقط'},
+      rating8:'⭐ تقييم 8+', freeCancel:'↩️ إلغاء مجاني', sort:{best:'الأنسب',price:'الأرخص',rating:'الأعلى تقييماً'},
+      cardsH:'قارن على أكثر من موقع', cardsNote:'نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.',
+      bk:{badge:'الأكثر خيارات',pts:['أكبر عدد فنادق وشقق في العالم','إلغاء مجاني لمعظم الغرف','الموقع والدعم بالعربي'],cta:'شوف الفنادق على Booking',sm:'تنفتح نتائج Booking في نافذة جديدة'},
+      hc:{badge:'',pts:['مكافآت One Key على كل حجز','أسعار خاصة للأعضاء','فنادق ومنتجعات مختارة'],cta:'شوف الفنادق على Hotels.com',sm:'تنفتح نتائج Hotels.com في نافذة جديدة'},
+      helpP:'محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.',helpB:'اسأل نُزُل',
+      y1t:'✔ بدون رسوم علينا',y1p:'تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.',y2t:'✔ حجز آمن',y2p:'الدفع والحجز يتمان مباشرة عند الشريك المعتمد.',y3t:'✔ إلغاء مجاني',y3p:'فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.',
+      back:'→ الرجوع للصفحة الرئيسية', privacy:'سياسة الخصوصية',
+      disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
+      waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
+      genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.'},
+    en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
+      title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
+      fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
+      any:'Any', types:{hotel:'🏨 Hotel',apartment:'🏢 Apartment',resort:'🏝️ Resort',villa:'🏡 Villa'},
+      budget:{eco:'💲 Under $100',mid:'💲💲 $100–250',lux:'💎 $250+'}, stars:{3:'3★ & up',4:'4★ & up',5:'5★ only'},
+      rating8:'⭐ Rated 8+', freeCancel:'↩️ Free cancellation', sort:{best:'Best match',price:'Lowest price',rating:'Top rated'},
+      cardsH:'Compare across sites', cardsNote:'The same search and filters open on each site. Prices sometimes differ, so compare before you book.',
+      bk:{badge:'Most choice',pts:['The largest selection of hotels and apartments','Free cancellation on most rooms','Site and support in Arabic'],cta:'See hotels on Booking',sm:'Booking results open in a new tab'},
+      hc:{badge:'',pts:['One Key rewards on every booking','Member-only prices','Hand-picked hotels and resorts'],cta:'See hotels on Hotels.com',sm:'Hotels.com results open in a new tab'},
+      helpP:'Can\'t decide? Send us your search on WhatsApp and we\'ll help you choose, free.',helpB:'Ask Nuzul',
+      y1t:'✔ No fees from us',y1p:'You pay the site\'s price; Nuzul adds nothing.',y2t:'✔ Secure booking',y2p:'Payment and booking happen directly with the partner.',y3t:'✔ Free cancellation',y3p:'Turn on "Free cancellation" to see only refundable rooms.',
+      back:'← Back to home', privacy:'Privacy policy',
+      disc:'Nuzul is an independent website. Bookings and payments are made with partners such as Booking.com and Hotels.com, and we may earn a commission at no extra cost to you.',
+      waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
+      genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.'}
+  };
+  // معلومات الوجهات: اسم عربي، نصيحة، ومَعلم للقرب
+  const DEST = {
+    'makkah':{ar:'مكة المكرمة',near:{q:'Masjid al-Haram, Mecca',ar:'🕋 قريب من الحرم',en:'🕋 Near the Haram'},
+      tip:{ar:'<b>نصيحة مكة:</b> فعّل «قريب من الحرم» عشان ترتّب الفنادق حسب المسافة. أسعار رمضان والعشر الأواخر تتضاعف، فاحجز قبلها بشهرين على الأقل، وتأكد إن الفندق فيه إطلالة أو قريب من بوابة تناسبك.',en:'<b>Makkah tip:</b> turn on "Near the Haram" to sort by distance. Ramadan and the last ten nights can double prices, so book at least two months ahead.'}},
+    'madinah':{ar:'المدينة المنورة',near:{q:'Al-Masjid an-Nabawi, Medina',ar:'🕌 قريب من المسجد النبوي',en:'🕌 Near the Prophet\'s Mosque'},
+      tip:{ar:'<b>نصيحة المدينة:</b> الفنادق في المنطقة المركزية تمشي للمسجد النبوي خلال دقايق. فعّل «قريب من المسجد النبوي» وقارن بين الموقعين.',en:'<b>Madinah tip:</b> central-area hotels are a few minutes\' walk from the mosque. Turn on "Near the Prophet\'s Mosque" and compare both sites.'}},
+    'dubai':{ar:'دبي',tip:{ar:'<b>نصيحة دبي:</b> أسعار ديسمبر ويناير مرتفعة بسبب مهرجان دبي للتسوق والسنة الجديدة. الشقق الفندقية في داون تاون والمارينا تناسب العوائل.',en:'<b>Dubai tip:</b> December–January is peak season (Shopping Festival, New Year). Hotel apartments in Downtown and Marina suit families.'}},
+    'abu dhabi':{ar:'أبوظبي',tip:{ar:'<b>نصيحة أبوظبي:</b> جزيرة ياس قريبة من الملاهي، والكورنيش أنسب للعوائل. وانتبه لعطلة اليوم الوطني، الأسعار ترتفع.',en:'<b>Abu Dhabi tip:</b> Yas Island is near the theme parks; the Corniche suits families. Prices rise around National Day.'}},
+    'istanbul':{ar:'إسطنبول',tip:{ar:'<b>نصيحة إسطنبول:</b> السلطان أحمد قريب من المعالم والمساجد، وتقسيم للتسوق. تأكد إن الفندق قريب من محطة ترام أو مترو.',en:'<b>Istanbul tip:</b> Sultanahmet is close to the landmarks and mosques; Taksim is for shopping. Stay near a tram or metro stop.'}},
+    'trabzon':{ar:'طرابزون',tip:{ar:'<b>نصيحة طرابزون:</b> الأوزنجول والشقق الجبلية مطلوبة في الصيف، فاحجز بدري، والشقق أوفر للعوائل.',en:'<b>Trabzon tip:</b> Uzungöl and mountain apartments sell out in summer. Book early; apartments are better value for families.'}},
+    'london':{ar:'لندن',tip:{ar:'<b>نصيحة لندن:</b> نايتسبريدج وإدجوار رود قريبة من المطاعم العربية والحلال. الفنادق صغيرة نسبياً، فتأكد من مساحة الغرفة.',en:'<b>London tip:</b> Knightsbridge and Edgware Road are near Arab and halal restaurants. Rooms are small, so check the size.'}},
+    'baku':{ar:'باكو',tip:{ar:'<b>نصيحة باكو:</b> المدينة القديمة وشارع النفط أجمل المناطق للسكن، والأسعار مناسبة مقارنة بأوروبا.',en:'<b>Baku tip:</b> the Old City and Neftchilar Avenue are the nicest areas, and prices are good value compared with Europe.'}},
+    'kuala lumpur':{ar:'كوالالمبور',tip:{ar:'<b>نصيحة كوالالمبور:</b> منطقة بوكيت بينتانق قريبة من التسوق والمطاعم العربية، والشقق الفندقية مع مسبح خيار ممتاز للعوائل.',en:'<b>KL tip:</b> Bukit Bintang is near shopping and Arab restaurants; serviced apartments with a pool are great for families.'}}
+  };
+  const ALIAS = {'mecca':'makkah','مكة':'makkah','مكة المكرمة':'makkah','medina':'madinah','المدينة':'madinah','المدينة المنورة':'madinah','دبي':'dubai','أبوظبي':'abu dhabi','إسطنبول':'istanbul','اسطنبول':'istanbul','طرابزون':'trabzon','لندن':'london','باكو':'baku','كوالالمبور':'kuala lumpur'};
+
+  const $ = id => document.getElementById(id);
+  const qs = new URLSearchParams(location.search);
+  const pad = n => String(n).padStart(2,'0');
+  const fmt = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+  const today = new Date();
+
+  let lang = 'ar';
+  try { const s = localStorage.getItem('nuzul_lang'); if (s === 'en' || s === 'ar') lang = s; } catch(e){}
+  if (qs.get('lang') === 'en' || qs.get('lang') === 'ar') lang = qs.get('lang');
+
+  const S = {
+    d: (qs.get('d') || 'Dubai').trim(),
+    n: (qs.get('n') || '').trim(),
+    cin: qs.get('ci') || fmt(addDays(today,1)),
+    cout: qs.get('co') || fmt(addDays(today,4)),
+    adults: Math.min(10, Math.max(1, +qs.get('a') || 2)),
+    rooms: Math.min(5, Math.max(1, +qs.get('r') || 1))
+  };
+  if (S.cout <= S.cin) S.cout = fmt(addDays(new Date(S.cin),1));
+  const tp = qs.get('t') || '';
+  const F = {type: ['hotel','apartment','resort','villa'].includes(tp) ? tp : '', budget:'', stars: tp === '5star' ? '5' : '', rating8:false, freeCancel:false, sort:'best', near:false};
+
+  const key = () => { const k = S.d.toLowerCase(); return DEST[k] ? k : (ALIAS[k] || ALIAS[S.d] || (DEST[k]?k:'')); };
+  const t = k => T[lang][k];
+  const nights = () => Math.max(1, Math.round((new Date(S.cout) - new Date(S.cin)) / 864e5));
+  const dispName = () => { const k = key(); if (lang === 'ar') return S.n && /[؀-ۿ]/.test(S.n) ? S.n : (k && DEST[k].ar) || S.d; return S.d; };
+  const dateTxt = s => new Date(s+'T12:00:00').toLocaleDateString(lang === 'ar' ? 'ar-AE' : 'en-GB', {day:'numeric', month:'short'});
+  const place = () => { const k = key(); return (F.near && k && DEST[k].near) ? DEST[k].near.q : S.d; };
+  const opts = () => ({cin:S.cin, cout:S.cout, adults:S.adults, rooms:S.rooms});
+
+  function chips(el, list, cur, onPick){
+    el.innerHTML = '';
+    list.forEach(([v, label, gold]) => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.className = 'chip' + (gold ? ' gold' : '') + (cur(v) ? ' on' : '');
+      b.textContent = label; b.onclick = () => { onPick(v); render(); };
+      el.append(b);
+    });
+  }
+
+  function renderFilters(){
+    const L = T[lang], k = key();
+    $('nearRow').classList.toggle('show', !!(k && DEST[k].near));
+    if (k && DEST[k].near) chips($('nearChips'), [['1', DEST[k].near[lang], true]], () => F.near, () => { F.near = !F.near; });
+    chips($('typeChips'), [['', L.any], ...Object.entries(L.types)], v => F.type === v, v => F.type = v);
+    chips($('budgetChips'), [['', L.any], ...Object.entries(L.budget)], v => F.budget === v, v => F.budget = v);
+    chips($('starChips'), [['', L.any], ...Object.entries(L.stars)], v => String(F.stars) === v, v => F.stars = v);
+    chips($('moreChips'), [['rating8', L.rating8], ['freeCancel', L.freeCancel]], v => F[v], v => F[v] = !F[v]);
+    chips($('sortChips'), Object.entries(L.sort), v => F.sort === v, v => F.sort = v);
+  }
+
+  function card(cls, color, logo, name, data, href){
+    const a = document.createElement('div');
+    a.className = 'pc' + (cls ? ' ' + cls : '');
+    a.innerHTML = (data.badge ? '<span class="badge">' + data.badge + '</span>' : '') +
+      '<div class="nm"><i style="background:' + color + '">' + logo + '</i>' + name + '</div>' +
+      '<ul>' + data.pts.map(p => '<li>' + p + '</li>').join('') + '</ul>' +
+      '<a class="cta" style="background:' + color + '" target="_blank" rel="noopener sponsored" href="' + href + '">' + data.cta + ' ↗</a>' +
+      '<small>' + data.sm + '</small>';
+    return a;
+  }
+
+  function renderCards(){
+    const L = T[lang], p = place(), o = opts();
+    $('cards').innerHTML = '';
+    $('cards').append(card('top1', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingUrl(p, o, F, lang)));
+    $('cards').append(card('', '#D32F2F', 'H', 'Hotels.com', L.hc, NUZUL.hotelsUrl(p, o, F, 'compare')));
+  }
+
+  function render(){
+    const L = T[lang], k = key();
+    document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-i]').forEach(el => { const v = L[el.dataset.i]; if (typeof v === 'string') el.textContent = v; });
+    $('langBtn').textContent = L.other;
+    const n = dispName();
+    $('title').textContent = L.title(n);
+    document.title = (lang === 'ar' ? 'نُزُل — ' : 'Nuzul — ') + L.title(n);
+    $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span><span>🛏️ ' + L.rooms(S.rooms) + '</span>';
+    renderFilters(); renderCards();
+    $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
+    $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(L.waMsg(n, S.cin, S.cout, S.adults));
+  }
+
+  // edit form
+  for (let i=1;i<=10;i++) $('e_ad').add(new Option(i, i));
+  for (let i=1;i<=5;i++) $('e_rm').add(new Option(i, i));
+  function fillForm(){ $('e_dest').value = lang === 'ar' ? dispName() : S.d; $('e_cin').value = S.cin; $('e_cout').value = S.cout; $('e_ad').value = S.adults; $('e_rm').value = S.rooms; $('e_cin').min = fmt(today); }
+  $('editBtn').onclick = () => { fillForm(); $('eform').classList.toggle('on'); };
+  $('e_go').onclick = () => {
+    const v = $('e_dest').value.trim(); if (!v) return $('e_dest').focus();
+    const raw = v; const k = ALIAS[raw] || raw.toLowerCase();
+    S.d = (DEST[k] && k === 'makkah') ? 'Makkah' : (DEST[k] && k === 'madinah') ? 'Madinah' : (DEST[k] ? k.replace(/\b\w/g, c => c.toUpperCase()) : raw);
+    S.n = raw; S.cin = $('e_cin').value || S.cin; S.cout = $('e_cout').value || S.cout;
+    if (S.cout <= S.cin) S.cout = fmt(addDays(new Date(S.cin),1));
+    S.adults = +$('e_ad').value; S.rooms = +$('e_rm').value; F.near = false;
+    const u = new URLSearchParams({d:S.d, n:S.n, ci:S.cin, co:S.cout, a:S.adults, r:S.rooms});
+    try { history.replaceState(null, '', '?' + u.toString()); } catch(e){}
+    $('eform').classList.remove('on'); render(); window.scrollTo({top:0, behavior:'smooth'});
+  };
+  $('langBtn').onclick = () => { lang = lang === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('nuzul_lang', lang); } catch(e){} render(); };
+  render();
+})();
+</script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "467e088c51954c0e9555402613322308"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
