@@ -28,7 +28,9 @@
   .logo small{font-weight:500;font-size:12px;color:var(--sand2);display:block;line-height:1}
   .lang{border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;font-weight:700;font-size:14px;padding:5px 14px;border-radius:999px}
 
-  .top{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0a93c2 100%);color:#fff;padding:22px 0 26px}
+  .top{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0a93c2 100%);color:#fff;padding:22px 0 26px;position:relative;background-size:cover;background-position:center}
+  .top.ph{padding:70px 0 26px;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+  .top .tcr{position:absolute;bottom:6px;inset-inline-end:8px;font-size:10.5px;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-radius:6px;direction:ltr;text-shadow:none;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .top h1{font-size:clamp(24px,5.5vw,34px);font-weight:800;line-height:1.25}
   .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:15px;opacity:.92}
   .meta span{display:inline-flex;align-items:center;gap:5px}
@@ -66,6 +68,7 @@
   .hc .hx{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
   .hc .hi{position:relative;aspect-ratio:16/9;background:#E6EEF4}
   .hc .hi img{width:100%;height:100%;object-fit:cover;display:block}
+  .hc .hi.noimg{background:linear-gradient(135deg,var(--teal),var(--navy2))}.hc .hi.noimg img,.hc .hi.noimg .cr,.hc .hi.noimg .lab{display:none}
   .hc .hi .lab{position:absolute;top:8px;inset-inline-start:8px;background:rgba(10,37,64,.78);color:#fff;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px}
   .hc .hi .cr{position:absolute;bottom:6px;inset-inline-end:6px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 6px;border-radius:6px;direction:ltr;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .hc .hm .vv{background:#E5F7EE;color:#137A47;font-weight:800}
@@ -118,7 +121,8 @@
   </div>
 </header>
 
-<div class="top">
+<div class="top" id="top">
+  <a class="tcr" id="tcr" target="_blank" rel="noopener" hidden></a>
   <div class="wrap">
     <h1 id="title"></h1>
     <div class="meta" id="meta"></div>
@@ -237,101 +241,148 @@
   };
   // صور حرة من ويكيميديا كومنز: [ملف، المصوّر، الرخصة]
   const IMG = {
-    mk_abraj:['Abraj Al Bait Tower.jpg','King Eliot','CC BY-SA 4.0'], mk_jo:['Jabl e Omar Conrad Makkah.jpg','King Eliot','CC BY-SA 4.0'],
-    mk_conrad:['Conrad Hotel Makkah 1.jpg','King Eliot','CC BY-SA 4.0'], mk_haram:['Masjidul-HaramAerialView (cropped).jpg','Wurzelgnohm','CC0'],
-    md_umb:['Al-Masjid Al-Nabawi 9.JPG','بلال الدويك','CC BY-SA 3.0'], md_gate:['View of Masjid-e-Nabawi Gate 21, 22.jpg','CR Guru PK','CC BY-SA 4.0'],
-    dx_downtown:['Downtown Dubai (15853474986).jpg','Guilhem Vellut','CC BY 2.0'], dx_palace:['The Palace Downtown Dubai - panoramio.jpg','Aidas U.','CC BY 3.0'],
+    mk_abraj:['Abraj Al Bait Tower.jpg','King Eliot','CC BY-SA 4.0'],
+    mk_jo:['Jabl e Omar Conrad Makkah.jpg','King Eliot','CC BY-SA 4.0'],
+    mk_conrad:['Conrad Hotel Makkah 1.jpg','King Eliot','CC BY-SA 4.0'],
+    md_umb:['Al-Masjid Al-Nabawi 9.JPG','بلال الدويك','CC BY-SA 3.0'],
+    md_gate:['View of Masjid-e-Nabawi Gate 21, 22.jpg','CR Guru PK','CC BY-SA 4.0'],
+    dx_downtown:['Downtown Dubai (15853474986).jpg','Guilhem Vellut','CC BY 2.0'],
+    dx_palace:['The Palace Downtown Dubai - panoramio.jpg','Aidas U.','CC BY 3.0'],
     dx_palm:['Vereinigte Arabische Emirate - Atlantis on Palm Jumeirah - أتلانتيس في نخلة جميرا - panoramio.jpg','giggel','CC BY 3.0'],
-    dx_royal:['Atlantis The Royal, Dubai 1.jpg','EditQ','CC0'], dx_zabeel:['Jumeirah Zabeel Saray - panoramio.jpg','Сергей Секачёв','CC BY-SA 3.0'],
-    dx_qasr:['Jumeirah Al Qasr - panoramio (6).jpg','Aidas U.','CC BY 3.0'], dx_marina:['UAE Dubai Marina img1 asv2018-01.jpg','A.Savin','FAL'],
-    dx_jbr:['Dubai Jumeirah Beach.JPG','pe-sa','CC BY 3.0'], is_fs:['Four Seasons Sultanahmet March 2008.JPG','Gryffindor','CC BY-SA 4.0'],
-    is_hagia:['Hagia Sophia Mars 2013.jpg','Arild Vågen','CC BY-SA 3.0'], is_ciragan:['Ciragan Palace 2014.JPG','Wolfgang Moroder','CC BY-SA 3.0'],
-    is_swiss:['Swissôtel the Bosphorus, 2024 (2).jpg','Fatih Demirci','CC0'], is_pera:['Istanbul asv2020-02 img39 Pera Palace Hotel.jpg','A.Savin','FAL'],
-    is_bosph:['Bosphorus Bridge (235499411).jpeg','Alexxx Malev','CC BY-SA 3.0'], is_taksim:['Taksim Square, Istanbul (52152912254).jpg','Ninara','CC BY 2.0']
+    dx_royal:['Atlantis The Royal, Dubai 1.jpg','EditQ','CC0'],
+    dx_zabeel:['Jumeirah Zabeel Saray - panoramio.jpg','Сергей Секачёв','CC BY-SA 3.0'],
+    dx_qasr:['Jumeirah Al Qasr - panoramio (6).jpg','Aidas U.','CC BY 3.0'],
+    dx_marina:['UAE Dubai Marina img1 asv2018-01.jpg','A.Savin','FAL'],
+    dx_jbr:['Dubai Jumeirah Beach.JPG','pe-sa','CC BY 3.0'],
+    dx_palmbeach:['Atlantis, The Palm from Le Royal Méridien Beach Resort and Spa in Dubai 2.jpg','CT Cooper','Public domain'],
+    is_fs:['Four Seasons Sultanahmet March 2008.JPG','Gryffindor','CC BY-SA 4.0'],
+    is_hagia:['Hagia Sophia Mars 2013.jpg','Arild Vågen','CC BY-SA 3.0'],
+    is_ciragan:['Ciragan Palace 2014.JPG','Wolfgang Moroder','CC BY-SA 3.0'],
+    is_swiss:['Swissôtel the Bosphorus, 2024 (2).jpg','Fatih Demirci','CC0'],
+    is_pera:['Istanbul asv2020-02 img39 Pera Palace Hotel.jpg','A.Savin','FAL'],
+    mk_raffles:['Makkah Royal Clock Tower in 2012.jpg','King Eliot','CC BY-SA 4.0'],
+    mk_swiss:['Kaaba, Masjid Al-Haram, Mecca, Saudi Arabia - panoramio.jpg','GusJuned','CC BY-SA 3.0'],
+    mk_pullman:['അബ്രാജ് അൽ-ബൈത്ത് ടവർ.jpg','Yousefmadari','Public domain'],
+    mk_hajar:['Masjidil Haram (Umroh Ramadhan 2023)-17.jpg','Indonesiagood','CC BY 4.0'],
+    mk_maqam:['Abraj al bait closeup.jpg','King Eliot','CC BY-SA 4.0'],
+    mk_jumeirah:['Mosquée Masjid el Haram à la Mecque.jpg','Tab59','Public domain'],
+    mk_hilton:['Masjidil Haram (Umroh Ramadhan 2023)-9.jpg','Indonesiagood','CC BY 4.0'],
+    mk_address:['Masjid ul haram.JPG','Ummat','Public domain'],
+    mk_dtree:['Masjid al-Haram 2022.jpg','مريم محمد الغلبان','CC0'],
+    mk_anjum:['Anjum Hotel Makkah 1.jpg','King Eliot','CC BY-SA 4.0'],
+    mk_manazel:['Al Masjid Al Haram - panoramio.jpg','Tevfik Teker','CC BY 3.0'],
+    mk_sheraton:['Masjid al-Haram, Tawaf 20092012 1130PM (8008466944).jpg','Basheer Olakara','CC BY 2.0'],
+    md_taqwa:['Masjid al-Nabawi 2024 (7).jpg','Radosław Botev','CC BY 3.0 pl'],
+    md_pullman:['Green Dome of Madinah.jpg','King Eliot','CC BY-SA 4.0'],
+    md_anwar:['Al Masjid an Nabawi 3.jpg','Aymanzaid2','CC BY-SA 4.0'],
+    md_iman:['Green Dome, Masjid Al Nabawi.jpg','Wadie Al-Houh','CC0'],
+    md_shahd:['Mosque of the Prophet Muhammad at night.jpg','Wajahat Mahmood','CC BY-SA 2.0'],
+    md_hilton:['Masjid e Nabawi Courtyard Umbrellas.jpg','King Eliot','CC BY-SA 4.0'],
+    md_hijra:['Green Dome of Al-Masjed Al-Nabawi.jpg','آرمین','CC0'],
+    md_saja:['Masjid al-Nabawi 2024 (1).jpg','Radosław Botev','CC BY 3.0 pl'],
+    md_dallah:['Alharam in madinah at night.jpg','Osmanzain','CC BY-SA 4.0'],
+    md_manakha:['Medina City Streets.jpg','Kaliper1','CC BY-SA 4.0'],
+    md_taiba:['Masjid al-Nabawi 2024 (2).jpg','Radosław Botev','CC BY 3.0 pl'],
+    dx_fountain:['Dubai Fountain @ Dubai Mall (15852819596).jpg','Guilhem Vellut','CC BY 2.0'],
+    dx_sofitel:['Hotel Sofitel Dubai The Palm Luxury Apartments.jpg','Vorobyevad','CC BY-SA 4.0'],
+    dx_jbh:['The Ramadan tent at the Jumeirah Beach Hotel (15992680384).jpg','traveljunction','CC BY-SA 2.0'],
+    dx_hilton:['Hilton Jumeirah - panoramio.jpg','Oliver Gerlinde','CC BY-SA 3.0'],
+    dx_citywalk:['City Walk Dubai.jpg','Abrar Alnasheet','CC BY-SA 4.0'],
+    dx_ibn:['Ibn Battuta Mall Persian Court.JPG','Shahroozporia','CC BY-SA 3.0'],
+    dx_jmosque:['Jumeirah Mosque - panoramio (4).jpg','Aidas U.','CC BY 3.0'],
+    is_amira:['Blue Mosque Courtyard Dusk Wikimedia Commons.jpg','Benh LIEU SONG','CC BY-SA 3.0'],
+    is_sirkeci:['Bahnhofsfront-Istanbul-Sirkeci retouched.jpg','Mart','CC BY-SA 2.5'],
+    is_fsb:['Istanbul Bosphorus IMG 7864 1920.jpg','Alexxx1979','CC BY-SA 4.0'],
+    is_shangri:['Uskudar Ferry on Besiktas Dock from Shangri-La Istanbul Bosphorus.jpg','Adil Amiraslanov','CC BY-SA 4.0'],
+    is_ritz:['Dolmabahçe Mosque & The Ritz-Carlton Hotel.JPG','haitham alfalah','CC BY 3.0'],
+    is_cvk:['CVK Park Bosphorus Hotel, 2022.jpg','Basak','CC BY-SA 4.0'],
+    is_marmara:['Taksim - panoramio (6).jpg','qwesy qwesy','CC BY 3.0'],
+    is_bomonti:['Hilton İstanbul Hotel.jpg','Hello40339','CC BY-SA 4.0'],
+    is_zorlu:['Zorlu Center from Zincirlikuyu, Istanbul, 4 August 2026.jpg','FingerWiki','CC BY-SA 4.0']
   };
   // فنادق مختارة (تحقّقت من وجودها على Booking نوفمبر 2026) — g: المنطقة، s: نجوم مؤكدة، img: صورة الفندق نفسه، v: خيار أوفر
   const HG = {
     makkah:{ city:'Mecca', title:{ar:'🕋 فنادق مختارة قرب الحرم',en:'🕋 Hand-picked hotels near the Haram'}, groups:{
-      abraj:{ar:'ملاصقة للحرم (أبراج البيت)',en:'Next to the Haram (Abraj Al Bait)',walk:{ar:'أقل من ٥ دقائق مشي',en:'Under 5 min walk'},img:'mk_abraj'},
-      jo:{ar:'جبل عمر',en:'Jabal Omar',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'},img:'mk_jo'},
-      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'},img:'mk_haram'} },
+      abraj:{ar:'ملاصقة للحرم (أبراج البيت)',en:'Next to the Haram (Abraj Al Bait)',walk:{ar:'أقل من ٥ دقائق مشي',en:'Under 5 min walk'}},
+      jo:{ar:'جبل عمر',en:'Jabal Omar',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'}},
+      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'}} },
       list:[
         {n:'Makkah Clock Royal Tower, A Fairmont Hotel',ar:'فيرمونت مكة برج الساعة',g:'abraj',s:5,img:'mk_abraj'},
-        {n:'Raffles Makkah Palace',ar:'قصر رافلز مكة',g:'abraj',s:5},
-        {n:'Swissotel Makkah',ar:'سويس أوتيل مكة',g:'abraj',s:5},
-        {n:'Zamzam Pullman Makkah',ar:'بولمان زمزم مكة',g:'abraj',s:5},
-        {n:'Mövenpick Hotel & Residences Hajar Tower Makkah',ar:'موفنبيك برج هاجر مكة',g:'abraj',s:5},
-        {n:'Swissotel Al Maqam Makkah',ar:'سويس أوتيل المقام مكة',g:'abraj',s:5},
+        {n:'Raffles Makkah Palace',ar:'قصر رافلز مكة',g:'abraj',s:5,img:'mk_raffles',area:1},
+        {n:'Swissotel Makkah',ar:'سويس أوتيل مكة',g:'abraj',s:5,img:'mk_swiss',area:1},
+        {n:'Zamzam Pullman Makkah',ar:'بولمان زمزم مكة',g:'abraj',s:5,img:'mk_pullman',area:1},
+        {n:'Mövenpick Hotel & Residences Hajar Tower Makkah',ar:'موفنبيك برج هاجر مكة',g:'abraj',s:5,img:'mk_hajar',area:1},
+        {n:'Swissotel Al Maqam Makkah',ar:'سويس أوتيل المقام مكة',g:'abraj',s:5,img:'mk_maqam',area:1},
         {n:'Conrad Jabal Omar Makkah',ar:'كونراد مكة',g:'jo',s:5,img:'mk_conrad'},
-        {n:'Jabal Omar Hyatt Regency Makkah',ar:'حياة ريجنسي جبل عمر مكة',g:'jo',s:5},
-        {n:'Jumeirah Jabal Omar Makkah',ar:'جميرا جبل عمر مكة',g:'jo',s:5},
-        {n:'Hilton Suites Jabal Omar Makkah',ar:'أجنحة هيلتون مكة',g:'jo',s:5},
-        {n:'Address Jabal Omar Makkah',ar:'العنوان جبل عمر مكة',g:'jo',s:5},
-        {n:'DoubleTree by Hilton Jabal Omar Makkah',ar:'دبل تري باي هيلتون جبل عمر مكة',g:'jo'},
-        {n:'Anjum Makkah Hotel',ar:'فندق أنجم مكة',g:'val'},
-        {n:'Manazel Ajyad Hotel',ar:'فندق منازل أجياد (إيلاف أجياد سابقاً)',g:'val'},
-        {n:'Sheraton Makkah Jabal Al Kaaba Hotel',ar:'شيراتون مكة جبل الكعبة',g:'val'}
+        {n:'Jabal Omar Hyatt Regency Makkah',ar:'حياة ريجنسي جبل عمر مكة',g:'jo',s:5,img:'mk_jo',area:1},
+        {n:'Jumeirah Jabal Omar Makkah',ar:'جميرا جبل عمر مكة',g:'jo',s:5,img:'mk_jumeirah',area:1},
+        {n:'Hilton Suites Jabal Omar Makkah',ar:'أجنحة هيلتون مكة',g:'jo',s:5,img:'mk_hilton',area:1},
+        {n:'Address Jabal Omar Makkah',ar:'العنوان جبل عمر مكة',g:'jo',s:5,img:'mk_address',area:1},
+        {n:'DoubleTree by Hilton Jabal Omar Makkah',ar:'دبل تري باي هيلتون جبل عمر مكة',g:'jo',img:'mk_dtree',area:1},
+        {n:'Anjum Makkah Hotel',ar:'فندق أنجم مكة',g:'val',img:'mk_anjum'},
+        {n:'Manazel Ajyad Hotel',ar:'فندق منازل أجياد (إيلاف أجياد سابقاً)',g:'val',img:'mk_manazel',area:1},
+        {n:'Sheraton Makkah Jabal Al Kaaba Hotel',ar:'شيراتون مكة جبل الكعبة',g:'val',img:'mk_sheraton',area:1}
       ]},
     madinah:{ city:'Medina', title:{ar:'🕌 فنادق مختارة قرب المسجد النبوي',en:'🕌 Hand-picked hotels near the Prophet\'s Mosque'}, groups:{
-      near:{ar:'الأقرب للمسجد النبوي',en:'Closest to the mosque',walk:{ar:'أقل من ١٠ دقائق مشي',en:'Under 10 min walk'},img:'md_umb'},
-      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٥ دقيقة مشي',en:'About 15 min walk'},img:'md_gate'} },
+      near:{ar:'الأقرب للمسجد النبوي',en:'Closest to the mosque',walk:{ar:'أقل من ١٠ دقائق مشي',en:'Under 10 min walk'}},
+      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٥ دقيقة مشي',en:'About 15 min walk'}} },
       list:[
-        {n:'Dar Al Taqwa Hotel',ar:'فندق دار التقوى',g:'near'},
-        {n:'Zamzam Pullman Madina',ar:'بولمان زمزم المدينة',g:'near',s:5},
-        {n:'Anwar Al Madinah Mövenpick',ar:'أنوار المدينة موفنبيك',g:'near',s:5},
-        {n:'InterContinental Dar Al Iman Madinah by IHG',ar:'إنتركونتيننتال دار الإيمان',g:'near'},
-        {n:'Sofitel Shahd Al Madinah',ar:'سوفيتيل شهد المدينة',g:'near',s:5},
-        {n:'Madinah Hilton Hotel',ar:'هيلتون المدينة',g:'near',s:5},
-        {n:'InterContinental Dar Al Hijra Madinah by IHG',ar:'إنتركونتيننتال دار الهجرة',g:'near'},
-        {n:'SAJA By Warwick Madinah Hotel',ar:'فندق سجى المدينة',g:'val'},
-        {n:'Dallah Taibah Hotel',ar:'فندق دلة طيبة',g:'val'},
-        {n:'Al Manakha Rotana Madinah',ar:'روتانا المناخة',g:'val'},
-        {n:'Taiba Front Hotel',ar:'فندق طيبة فرونت',g:'val',s:3},
-        {n:'Shaza Regency Plaza Al Madinah',ar:'شذا ريجنسي بلازا المدينة',g:'val',s:3},
-        {n:'Elaf Al Taqwa Hotel',ar:'فندق إيلاف التقوى',g:'val'}
+        {n:'Dar Al Taqwa Hotel',ar:'فندق دار التقوى',g:'near',img:'md_taqwa',area:1},
+        {n:'Zamzam Pullman Madina',ar:'بولمان زمزم المدينة',g:'near',s:5,img:'md_pullman',area:1},
+        {n:'Anwar Al Madinah Mövenpick',ar:'أنوار المدينة موفنبيك',g:'near',s:5,img:'md_anwar',area:1},
+        {n:'InterContinental Dar Al Iman Madinah by IHG',ar:'إنتركونتيننتال دار الإيمان',g:'near',img:'md_iman',area:1},
+        {n:'Sofitel Shahd Al Madinah',ar:'سوفيتيل شهد المدينة',g:'near',s:5,img:'md_shahd',area:1},
+        {n:'Madinah Hilton Hotel',ar:'هيلتون المدينة',g:'near',s:5,img:'md_hilton',area:1},
+        {n:'InterContinental Dar Al Hijra Madinah by IHG',ar:'إنتركونتيننتال دار الهجرة',g:'near',img:'md_hijra',area:1},
+        {n:'SAJA By Warwick Madinah Hotel',ar:'فندق سجى المدينة',g:'val',img:'md_saja',area:1},
+        {n:'Dallah Taibah Hotel',ar:'فندق دلة طيبة',g:'val',img:'md_dallah',area:1},
+        {n:'Al Manakha Rotana Madinah',ar:'روتانا المناخة',g:'val',img:'md_manakha',area:1},
+        {n:'Taiba Front Hotel',ar:'فندق طيبة فرونت',g:'val',s:3,img:'md_taiba',area:1},
+        {n:'Shaza Regency Plaza Al Madinah',ar:'شذا ريجنسي بلازا المدينة',g:'val',s:3,img:'md_gate',area:1},
+        {n:'Elaf Al Taqwa Hotel',ar:'فندق إيلاف التقوى',g:'val',img:'md_umb',area:1}
       ]},
     'dubai':{ city:'Dubai', title:{ar:'🏙️ فنادق مختارة في دبي',en:'🏙️ Hand-picked hotels in Dubai'}, groups:{
-      downtown:{ar:'داون تاون',en:'Downtown',info:{ar:'جنب دبي مول وبرج خليفة والنافورة',en:'Next to Dubai Mall, Burj Khalifa & the Fountain'},img:'dx_downtown'},
-      palm:{ar:'نخلة جميرا',en:'Palm Jumeirah',info:{ar:'منتجعات على البحر وألعاب مائية',en:'Beach resorts & water parks'},img:'dx_palm'},
-      jumeirah:{ar:'جميرا',en:'Jumeirah',info:{ar:'شاطئ هادئ وسوق مدينة جميرا',en:'Quiet beach & Souk Madinat Jumeirah'},img:'dx_qasr'},
-      marina:{ar:'المارينا وجي بي آر',en:'Marina & JBR',info:{ar:'ممشى البحر والمطاعم والشاطئ',en:'Beach walk, restaurants & the beach'},img:'dx_jbr'},
-      city:{ar:'مناطق ثانية',en:'Other areas',info:{ar:'أسعار أوفر وقريب من المترو',en:'Lower prices, near the metro'},img:'dx_marina'} },
+      downtown:{ar:'داون تاون',en:'Downtown',info:{ar:'جنب دبي مول وبرج خليفة والنافورة',en:'Next to Dubai Mall, Burj Khalifa & the Fountain'}},
+      palm:{ar:'نخلة جميرا',en:'Palm Jumeirah',info:{ar:'منتجعات على البحر وألعاب مائية',en:'Beach resorts & water parks'}},
+      jumeirah:{ar:'جميرا',en:'Jumeirah',info:{ar:'شاطئ هادئ وسوق مدينة جميرا',en:'Quiet beach & Souk Madinat Jumeirah'}},
+      marina:{ar:'المارينا وجي بي آر',en:'Marina & JBR',info:{ar:'ممشى البحر والمطاعم والشاطئ',en:'Beach walk, restaurants & the beach'}},
+      city:{ar:'مناطق ثانية',en:'Other areas',info:{ar:'أسعار أوفر وقريب من المترو',en:'Lower prices, near the metro'}} },
       list:[
-        {n:'Address Downtown',ar:'العنوان داون تاون',g:'downtown',s:5},
+        {n:'Address Downtown',ar:'العنوان داون تاون',g:'downtown',s:5,img:'dx_fountain',area:1},
         {n:'Palace Downtown',ar:'بالاس داون تاون',g:'downtown',s:5,img:'dx_palace'},
-        {n:'Rove Downtown',ar:'روڤ داون تاون',g:'downtown',s:3,v:1},
+        {n:'Rove Downtown',ar:'روڤ داون تاون',g:'downtown',s:3,v:1,img:'dx_downtown',area:1},
         {n:'Atlantis, The Palm',ar:'أتلانتس النخلة',g:'palm',s:5,img:'dx_palm'},
         {n:'Atlantis The Royal',ar:'أتلانتس ذا رويال',g:'palm',s:5,img:'dx_royal'},
         {n:'Jumeirah Zabeel Saray',ar:'جميرا زعبيل سراي',g:'palm',s:5,img:'dx_zabeel'},
-        {n:'Sofitel Dubai The Palm',ar:'سوفيتيل دبي النخلة',g:'palm',s:5},
-        {n:'Jumeirah Beach Hotel',ar:'فندق جميرا بيتش',g:'jumeirah',s:5},
+        {n:'Sofitel Dubai The Palm',ar:'سوفيتيل دبي النخلة',g:'palm',s:5,img:'dx_palmbeach',area:1},
+        {n:'Jumeirah Beach Hotel',ar:'فندق جميرا بيتش',g:'jumeirah',s:5,img:'dx_jbh'},
         {n:'Jumeirah Al Qasr',ar:'جميرا القصر',g:'jumeirah',s:5,img:'dx_qasr'},
-        {n:'Address Beach Resort',ar:'العنوان بيتش ريزورت',g:'marina',s:5},
-        {n:'Hilton Dubai Jumeirah',ar:'هيلتون دبي جميرا',g:'marina'},
-        {n:'Rove Dubai Marina',ar:'روڤ دبي مارينا',g:'marina',s:3,v:1},
-        {n:'Rove City Walk',ar:'روڤ سيتي ووك',g:'city',s:3,v:1},
-        {n:'Premier Inn Dubai Ibn Battuta Mall',ar:'بريمير إن ابن بطوطة مول',g:'city',s:3,v:1},
-        {n:'Hyatt Place Dubai Jumeirah',ar:'حياة بليس دبي جميرا',g:'city',v:1}
+        {n:'Address Beach Resort',ar:'العنوان بيتش ريزورت',g:'marina',s:5,img:'dx_jbr',area:1},
+        {n:'Hilton Dubai Jumeirah',ar:'هيلتون دبي جميرا',g:'marina',img:'dx_hilton'},
+        {n:'Rove Dubai Marina',ar:'روڤ دبي مارينا',g:'marina',s:3,v:1,img:'dx_marina',area:1},
+        {n:'Rove City Walk',ar:'روڤ سيتي ووك',g:'city',s:3,v:1,img:'dx_citywalk',area:1},
+        {n:'Premier Inn Dubai Ibn Battuta Mall',ar:'بريمير إن ابن بطوطة مول',g:'city',s:3,v:1,img:'dx_ibn',area:1},
+        {n:'Hyatt Place Dubai Jumeirah',ar:'حياة بليس دبي جميرا',g:'city',v:1,img:'dx_jmosque',area:1}
       ]},
     'istanbul':{ city:'Istanbul', title:{ar:'🕌 فنادق مختارة في إسطنبول',en:'🕌 Hand-picked hotels in Istanbul'}, groups:{
-      old:{ar:'السلطان أحمد',en:'Sultanahmet',info:{ar:'مشي للجامع الأزرق وآيا صوفيا',en:'Walk to the Blue Mosque & Hagia Sophia'},img:'is_hagia'},
-      bos:{ar:'على البوسفور',en:'On the Bosphorus',info:{ar:'إطلالات على البحر وقصور',en:'Sea views & palaces'},img:'is_bosph'},
-      taksim:{ar:'تقسيم ووسط المدينة',en:'Taksim & city centre',info:{ar:'تسوق ومطاعم ومواصلات',en:'Shopping, dining & transport'},img:'is_taksim'} },
+      old:{ar:'السلطان أحمد',en:'Sultanahmet',info:{ar:'مشي للجامع الأزرق وآيا صوفيا',en:'Walk to the Blue Mosque & Hagia Sophia'}},
+      bos:{ar:'على البوسفور',en:'On the Bosphorus',info:{ar:'إطلالات على البحر وقصور',en:'Sea views & palaces'}},
+      taksim:{ar:'تقسيم ووسط المدينة',en:'Taksim & city centre',info:{ar:'تسوق ومطاعم ومواصلات',en:'Shopping, dining & transport'}} },
       list:[
         {n:'Four Seasons Hotel Istanbul at Sultanahmet',ar:'فور سيزونز السلطان أحمد',g:'old',s:5,img:'is_fs'},
-        {n:'Sura Hagia Sophia Hotel',ar:'فندق سورا آيا صوفيا',g:'old'},
-        {n:'Hotel Amira Istanbul',ar:'فندق أميرة إسطنبول',g:'old',v:1},
-        {n:'Sirkeci Mansion',ar:'سركجي مانشن',g:'old',v:1},
+        {n:'Sura Hagia Sophia Hotel',ar:'فندق سورا آيا صوفيا',g:'old',img:'is_hagia',area:1},
+        {n:'Hotel Amira Istanbul',ar:'فندق أميرة إسطنبول',g:'old',v:1,img:'is_amira',area:1},
+        {n:'Sirkeci Mansion',ar:'سركجي مانشن',g:'old',v:1,img:'is_sirkeci',area:1},
         {n:'Ciragan Palace Kempinski Istanbul',ar:'قصر تشيراغان كمبينسكي',g:'bos',s:5,img:'is_ciragan'},
-        {n:'Four Seasons Hotel Istanbul at the Bosphorus',ar:'فور سيزونز البوسفور',g:'bos',s:5},
-        {n:'Shangri-La Bosphorus, Istanbul',ar:'شانغريلا البوسفور',g:'bos',s:5},
-        {n:'The Ritz-Carlton, Istanbul at the Bosphorus',ar:'ريتز كارلتون إسطنبول',g:'bos',s:5},
+        {n:'Four Seasons Hotel Istanbul at the Bosphorus',ar:'فور سيزونز البوسفور',g:'bos',s:5,img:'is_fsb'},
+        {n:'Shangri-La Bosphorus, Istanbul',ar:'شانغريلا البوسفور',g:'bos',s:5,img:'is_shangri',area:1},
+        {n:'The Ritz-Carlton, Istanbul at the Bosphorus',ar:'ريتز كارلتون إسطنبول',g:'bos',s:5,img:'is_ritz'},
         {n:'Swissotel The Bosphorus Istanbul',ar:'سويس أوتيل البوسفور',g:'bos',s:5,img:'is_swiss'},
-        {n:'CVK Park Bosphorus Hotel Istanbul',ar:'سي في كي بارك البوسفور',g:'taksim',s:5},
-        {n:'The Marmara Taksim',ar:'ذا مرمرة تقسيم',g:'taksim',s:5},
+        {n:'CVK Park Bosphorus Hotel Istanbul',ar:'سي في كي بارك البوسفور',g:'taksim',s:5,img:'is_cvk'},
+        {n:'The Marmara Taksim',ar:'ذا مرمرة تقسيم',g:'taksim',s:5,img:'is_marmara'},
         {n:'Pera Palace Hotel',ar:'فندق بيرا بالاس',g:'taksim',s:5,img:'is_pera'},
-        {n:'Hilton Istanbul Bomonti',ar:'هيلتون إسطنبول بومونتي',g:'taksim',s:5},
-        {n:'Raffles Istanbul',ar:'رافلز إسطنبول',g:'taksim',s:5}
+        {n:'Hilton Istanbul Bomonti',ar:'هيلتون إسطنبول بومونتي',g:'taksim',s:5,img:'is_bomonti',area:1},
+        {n:'Raffles Istanbul',ar:'رافلز إسطنبول',g:'taksim',s:5,img:'is_zorlu',area:1}
       ]}
   };
   let HTAB = '';
@@ -412,7 +463,7 @@
   function imgHtml(k, alt, isArea){
     const im = IMG[k]; if (!im) return '';
     const L = T[lang], file = 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(im[0].replace(/ /g,'_'));
-    return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="/img/hotels/' + k + '.webp" alt="' + alt.replace(/"/g,'') + '">' +
+    return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="/img/hotels/' + k + '.webp" alt="' + alt.replace(/"/g,'') + '" onerror="this.parentNode.classList.add(\'noimg\')">' +
       (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') +
       '<a class="cr" target="_blank" rel="noopener" href="' + file + '">📷 ' + im[1] + ' · ' + im[2] + '</a></div>';
   }
@@ -442,7 +493,7 @@
       const ef = {hotel: h.n};
       const bk = NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(H.city, o, ef, 'hotel'), ex = NUZUL.expediaUrl(H.city, o, ef, 'hotel');
       const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (g.info ? '<span>✨ ' + g.info[lang] + '</span>' : '');
-      c.innerHTML = imgHtml(h.img || g.img, (lang === 'ar' ? h.ar : h.n), !h.img) +
+      c.innerHTML = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) +
         '<div class="hx"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
         '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div>' +
         '<div class="hb"><a class="b1" target="_blank" rel="noopener sponsored" href="' + bk + '">Booking</a>' +
@@ -454,6 +505,37 @@
     });
   }
 
+  // صورة الوجهة لأي مدينة في العالم (صورة حرة من ويكيبيديا/ويكيميديا)
+  const WIKI_NAME = {makkah:'Mecca', madinah:'Medina', 'abu dhabi':'Abu Dhabi', 'kuala lumpur':'Kuala Lumpur'};
+  let heroFor = '';
+  async function loadHero(){
+    const k = key(), name = (k && WIKI_NAME[k]) || S.d;
+    if (!name || heroFor === name) return; heroFor = name;
+    const top = $('top'), cr = $('tcr');
+    top.classList.remove('ph'); top.style.backgroundImage = ''; cr.hidden = true;
+    const ar = /[؀-ۿ]/.test(name), wiki = ar ? 'ar' : 'en';
+    try {
+      const q = 'https://' + wiki + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=1280&pilicense=free&titles=' + encodeURIComponent(name);
+      const d = await (await fetch(q)).json();
+      const pg = Object.values((d.query || {}).pages || {})[0] || {};
+      if (!pg.thumbnail || !pg.pageimage || heroFor !== name) return;
+      const src = pg.thumbnail.source;
+      await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
+      if (heroFor !== name) return;
+      top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.35) 0%,rgba(6,47,82,.82) 100%),url("' + src + '")';
+      top.classList.add('ph');
+      cr.href = 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(pg.pageimage);
+      cr.textContent = '📷 Wikimedia Commons';
+      cr.hidden = false;
+      try {
+        const m = await (await fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata&titles=File:' + encodeURIComponent(pg.pageimage))).json();
+        const md = ((Object.values(m.query.pages)[0].imageinfo || [])[0] || {}).extmetadata || {};
+        const who = ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 40), lic = (md.LicenseShortName || {}).value || '';
+        if (who || lic) cr.textContent = '📷 ' + [who, lic].filter(Boolean).join(' · ');
+      } catch(e){}
+    } catch(e){}
+  }
+
   function render(){
     const L = T[lang], k = key();
     document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -463,7 +545,7 @@
     $('title').textContent = L.title(n);
     document.title = (lang === 'ar' ? 'نُزُل — ' : 'Nuzul — ') + L.title(n);
     $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span><span>🛏️ ' + L.rooms(S.rooms) + '</span>';
-    renderFilters(); renderHotels(); renderCards();
+    renderFilters(); renderHotels(); renderCards(); loadHero();
     $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
     $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(L.waMsg(n, S.cin, S.cout, S.adults));
   }
