@@ -67,6 +67,8 @@
   .pc .cta{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;height:50px;border-radius:12px;font-weight:800;font-size:17px;color:#fff}
   .pc .cta:hover{filter:brightness(1.08)}
   .pc small{color:var(--muted);font-size:12.5px;text-align:center}
+  .pc .mob{display:none;background:#f3f8fb;border-radius:10px;padding:7px 10px;font-size:12.5px;color:var(--navy);text-align:center}
+  @media(max-width:860px){.pc .mob{display:block}}
 
   .tip{margin-top:18px;background:#fff8e8;border:1.5px solid var(--sand2);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
   .tip .ic{font-size:24px;line-height:1.2}
@@ -160,8 +162,8 @@
       rating8:'⭐ تقييم 8+', freeCancel:'↩️ إلغاء مجاني', sort:{best:'الأنسب',price:'الأرخص',rating:'الأعلى تقييماً'},
       cardsH:'قارن على أكثر من موقع', cardsNote:'نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.',
       bk:{badge:'الأكثر خيارات',pts:['أكبر عدد فنادق وشقق في العالم','إلغاء مجاني لمعظم الغرف','الموقع والدعم بالعربي'],cta:'شوف الفنادق على Booking',sm:'تنفتح نتائج Booking في نافذة جديدة'},
-      hc:{badge:'',pts:['مكافآت One Key على كل حجز','أسعار خاصة للأعضاء','فنادق ومنتجعات مختارة'],cta:'شوف الفنادق على Hotels.com',sm:'تنفتح نتائج Hotels.com في نافذة جديدة'},
-      ex:{badge:'',pts:['وفّر لما تحجز طيران + فندق مع بعض','نفس مكافآت One Key','خيارات دفع مرنة'],cta:'شوف الفنادق على Expedia',sm:'تنفتح نتائج Expedia في نافذة جديدة'},
+      hc:{badge:'',pts:['مكافآت One Key على كل حجز','أسعار خاصة للأعضاء','فنادق ومنتجعات مختارة'],cta:'شوف الفنادق على Hotels.com',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Hotels.com في نافذة جديدة'},
+      ex:{badge:'',pts:['وفّر لما تحجز طيران + فندق مع بعض','نفس مكافآت One Key','خيارات دفع مرنة'],cta:'شوف الفنادق على Expedia',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Expedia في نافذة جديدة'},
       helpP:'محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.',helpB:'اسأل نُزُل',
       y1t:'✔ بدون رسوم علينا',y1p:'تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.',y2t:'✔ حجز آمن',y2p:'الدفع والحجز يتمان مباشرة عند الشريك المعتمد.',y3t:'✔ إلغاء مجاني',y3p:'فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.',
       back:'→ الرجوع للصفحة الرئيسية', privacy:'سياسة الخصوصية',
@@ -176,8 +178,8 @@
       rating8:'⭐ Rated 8+', freeCancel:'↩️ Free cancellation', sort:{best:'Best match',price:'Lowest price',rating:'Top rated'},
       cardsH:'Compare across sites', cardsNote:'The same search and filters open on each site. Prices sometimes differ, so compare before you book.',
       bk:{badge:'Most choice',pts:['The largest selection of hotels and apartments','Free cancellation on most rooms','Site and support in Arabic'],cta:'See hotels on Booking',sm:'Booking results open in a new tab'},
-      hc:{badge:'',pts:['One Key rewards on every booking','Member-only prices','Hand-picked hotels and resorts'],cta:'See hotels on Hotels.com',sm:'Hotels.com results open in a new tab'},
-      ex:{badge:'',pts:['Save when you book flight + hotel together','Same One Key rewards','Flexible payment options'],cta:'See hotels on Expedia',sm:'Expedia results open in a new tab'},
+      hc:{badge:'',pts:['One Key rewards on every booking','Member-only prices','Hand-picked hotels and resorts'],cta:'See hotels on Hotels.com',mob:'📱 On mobile: tap "Continue to website" if you don\'t have the app',sm:'Hotels.com results open in a new tab'},
+      ex:{badge:'',pts:['Save when you book flight + hotel together','Same One Key rewards','Flexible payment options'],cta:'See hotels on Expedia',mob:'📱 On mobile: tap "Continue to website" if you don\'t have the app',sm:'Expedia results open in a new tab'},
       helpP:'Can\'t decide? Send us your search on WhatsApp and we\'ll help you choose, free.',helpB:'Ask Nuzul',
       y1t:'✔ No fees from us',y1p:'You pay the site\'s price; Nuzul adds nothing.',y2t:'✔ Secure booking',y2p:'Payment and booking happen directly with the partner.',y3t:'✔ Free cancellation',y3p:'Turn on "Free cancellation" to see only refundable rooms.',
       back:'← Back to home', privacy:'Privacy policy',
@@ -260,6 +262,7 @@
       '<div class="nm"><i style="background:' + color + '">' + logo + '</i>' + name + '</div>' +
       '<ul>' + data.pts.map(p => '<li>' + p + '</li>').join('') + '</ul>' +
       '<a class="cta" style="background:' + color + '" target="_blank" rel="noopener sponsored" href="' + href + '">' + data.cta + ' ↗</a>' +
+      (data.mob ? '<div class="mob">' + data.mob + '</div>' : '') +
       '<small>' + data.sm + '</small>';
     return a;
   }
