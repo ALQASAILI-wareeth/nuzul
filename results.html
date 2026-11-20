@@ -62,7 +62,13 @@
   .htabs::-webkit-scrollbar{display:none}
   .htabs .chip{white-space:nowrap;flex:0 0 auto}
   .hl{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-  .hc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .hc{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .hc .hx{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .hc .hi{position:relative;aspect-ratio:16/9;background:#E6EEF4}
+  .hc .hi img{width:100%;height:100%;object-fit:cover;display:block}
+  .hc .hi .lab{position:absolute;top:8px;inset-inline-start:8px;background:rgba(10,37,64,.78);color:#fff;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px}
+  .hc .hi .cr{position:absolute;bottom:6px;inset-inline-end:6px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 6px;border-radius:6px;direction:ltr;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hc .hm .vv{background:#E5F7EE;color:#137A47;font-weight:800}
   .hc .hn{font-size:17px;font-weight:800;line-height:1.35}
   .hc .he{font-size:12.5px;color:var(--muted);direction:ltr;text-align:start}
   .hc .hm{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
@@ -144,7 +150,7 @@
     <p class="sub" data-i="hsSub">اختر الفندق، واضغط على أي موقع عشان تشوف سعره لتواريخك.</p>
     <div class="htabs" id="htabs"></div>
     <div class="hl" id="hl"></div>
-    <p class="hnote" data-i="hsNote">* المسافات ووقت المشي تقريبية وتختلف حسب البوابة والزحمة. السعر النهائي يظهر في موقع الحجز.</p>
+    <p class="hnote" data-i="hsNote">* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.</p>
   </section>
   <h3 id="cardsH">قارن على أكثر من موقع</h3>
   <p class="note" data-i="cardsNote">نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.</p>
@@ -194,9 +200,8 @@
       disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
       waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.',
-      hsTitle:{makkah:'🕋 فنادق مختارة قرب الحرم',madinah:'🕌 فنادق مختارة قرب المسجد النبوي'},
-      hsSub:'اختر الفندق، واضغط على أي موقع عشان تشوف سعره لتواريخك.',hsNote:'* المسافات ووقت المشي تقريبية وتختلف حسب البوابة والزحمة. السعر النهائي يظهر في موقع الحجز.',
-      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
+      hsSub:'اختر الفندق، واضغط على أي موقع عشان تشوف سعره لتواريخك.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
+      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
       title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
       fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
@@ -213,9 +218,8 @@
       disc:'Nuzul is an independent website. Bookings and payments are made with partners such as Booking.com, Hotels.com and Expedia, and we may earn a commission at no extra cost to you.',
       waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.',
-      hsTitle:{makkah:'🕋 Hand-picked hotels near the Haram',madinah:'🕌 Hand-picked hotels near the Prophet\'s Mosque'},
-      hsSub:'Pick a hotel and tap any site to see its price for your dates.',hsNote:'* Distances and walking times are approximate and vary by gate and crowds. The final price shows on the booking site.',
-      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
+      hsSub:'Pick a hotel and tap any site to see its price for your dates.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
+      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
   };
   // معلومات الوجهات: اسم عربي، نصيحة، ومَعلم للقرب
   const DEST = {
@@ -231,20 +235,34 @@
     'baku':{ar:'باكو',tip:{ar:'<b>نصيحة باكو:</b> المدينة القديمة وشارع النفط أجمل المناطق للسكن، والأسعار مناسبة مقارنة بأوروبا.',en:'<b>Baku tip:</b> the Old City and Neftchilar Avenue are the nicest areas, and prices are good value compared with Europe.'}},
     'kuala lumpur':{ar:'كوالالمبور',tip:{ar:'<b>نصيحة كوالالمبور:</b> منطقة بوكيت بينتانق قريبة من التسوق والمطاعم العربية، والشقق الفندقية مع مسبح خيار ممتاز للعوائل.',en:'<b>KL tip:</b> Bukit Bintang is near shopping and Arab restaurants; serviced apartments with a pool are great for families.'}}
   };
-  // فنادق مختارة (تحقّق منها نوفمبر 2026) — g: مجموعة، s: نجوم (لو مؤكدة)
+  // صور حرة من ويكيميديا كومنز: [ملف، المصوّر، الرخصة]
+  const IMG = {
+    mk_abraj:['Abraj Al Bait Tower.jpg','King Eliot','CC BY-SA 4.0'], mk_jo:['Jabl e Omar Conrad Makkah.jpg','King Eliot','CC BY-SA 4.0'],
+    mk_conrad:['Conrad Hotel Makkah 1.jpg','King Eliot','CC BY-SA 4.0'], mk_haram:['Masjidul-HaramAerialView (cropped).jpg','Wurzelgnohm','CC0'],
+    md_umb:['Al-Masjid Al-Nabawi 9.JPG','بلال الدويك','CC BY-SA 3.0'], md_gate:['View of Masjid-e-Nabawi Gate 21, 22.jpg','CR Guru PK','CC BY-SA 4.0'],
+    dx_downtown:['Downtown Dubai (15853474986).jpg','Guilhem Vellut','CC BY 2.0'], dx_palace:['The Palace Downtown Dubai - panoramio.jpg','Aidas U.','CC BY 3.0'],
+    dx_palm:['Vereinigte Arabische Emirate - Atlantis on Palm Jumeirah - أتلانتيس في نخلة جميرا - panoramio.jpg','giggel','CC BY 3.0'],
+    dx_royal:['Atlantis The Royal, Dubai 1.jpg','EditQ','CC0'], dx_zabeel:['Jumeirah Zabeel Saray - panoramio.jpg','Сергей Секачёв','CC BY-SA 3.0'],
+    dx_qasr:['Jumeirah Al Qasr - panoramio (6).jpg','Aidas U.','CC BY 3.0'], dx_marina:['UAE Dubai Marina img1 asv2018-01.jpg','A.Savin','FAL'],
+    dx_jbr:['Dubai Jumeirah Beach.JPG','pe-sa','CC BY 3.0'], is_fs:['Four Seasons Sultanahmet March 2008.JPG','Gryffindor','CC BY-SA 4.0'],
+    is_hagia:['Hagia Sophia Mars 2013.jpg','Arild Vågen','CC BY-SA 3.0'], is_ciragan:['Ciragan Palace 2014.JPG','Wolfgang Moroder','CC BY-SA 3.0'],
+    is_swiss:['Swissôtel the Bosphorus, 2024 (2).jpg','Fatih Demirci','CC0'], is_pera:['Istanbul asv2020-02 img39 Pera Palace Hotel.jpg','A.Savin','FAL'],
+    is_bosph:['Bosphorus Bridge (235499411).jpeg','Alexxx Malev','CC BY-SA 3.0'], is_taksim:['Taksim Square, Istanbul (52152912254).jpg','Ninara','CC BY 2.0']
+  };
+  // فنادق مختارة (تحقّقت من وجودها على Booking نوفمبر 2026) — g: المنطقة، s: نجوم مؤكدة، img: صورة الفندق نفسه، v: خيار أوفر
   const HG = {
-    makkah:{ city:'Mecca', groups:{
-      abraj:{ar:'ملاصقة للحرم (أبراج البيت)',en:'Next to the Haram (Abraj Al Bait)',walk:{ar:'أقل من ٥ دقائق مشي',en:'Under 5 min walk'}},
-      jo:{ar:'جبل عمر',en:'Jabal Omar',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'}},
-      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'}} },
+    makkah:{ city:'Mecca', title:{ar:'🕋 فنادق مختارة قرب الحرم',en:'🕋 Hand-picked hotels near the Haram'}, groups:{
+      abraj:{ar:'ملاصقة للحرم (أبراج البيت)',en:'Next to the Haram (Abraj Al Bait)',walk:{ar:'أقل من ٥ دقائق مشي',en:'Under 5 min walk'},img:'mk_abraj'},
+      jo:{ar:'جبل عمر',en:'Jabal Omar',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'},img:'mk_jo'},
+      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٠ دقائق مشي',en:'About 10 min walk'},img:'mk_haram'} },
       list:[
-        {n:'Makkah Clock Royal Tower, A Fairmont Hotel',ar:'فيرمونت مكة برج الساعة',g:'abraj',s:5},
+        {n:'Makkah Clock Royal Tower, A Fairmont Hotel',ar:'فيرمونت مكة برج الساعة',g:'abraj',s:5,img:'mk_abraj'},
         {n:'Raffles Makkah Palace',ar:'قصر رافلز مكة',g:'abraj',s:5},
         {n:'Swissotel Makkah',ar:'سويس أوتيل مكة',g:'abraj',s:5},
         {n:'Zamzam Pullman Makkah',ar:'بولمان زمزم مكة',g:'abraj',s:5},
         {n:'Mövenpick Hotel & Residences Hajar Tower Makkah',ar:'موفنبيك برج هاجر مكة',g:'abraj',s:5},
         {n:'Swissotel Al Maqam Makkah',ar:'سويس أوتيل المقام مكة',g:'abraj',s:5},
-        {n:'Conrad Jabal Omar Makkah',ar:'كونراد مكة',g:'jo',s:5},
+        {n:'Conrad Jabal Omar Makkah',ar:'كونراد مكة',g:'jo',s:5,img:'mk_conrad'},
         {n:'Jabal Omar Hyatt Regency Makkah',ar:'حياة ريجنسي جبل عمر مكة',g:'jo',s:5},
         {n:'Jumeirah Jabal Omar Makkah',ar:'جميرا جبل عمر مكة',g:'jo',s:5},
         {n:'Hilton Suites Jabal Omar Makkah',ar:'أجنحة هيلتون مكة',g:'jo',s:5},
@@ -254,9 +272,9 @@
         {n:'Manazel Ajyad Hotel',ar:'فندق منازل أجياد (إيلاف أجياد سابقاً)',g:'val'},
         {n:'Sheraton Makkah Jabal Al Kaaba Hotel',ar:'شيراتون مكة جبل الكعبة',g:'val'}
       ]},
-    madinah:{ city:'Medina', groups:{
-      near:{ar:'الأقرب للمسجد النبوي',en:'Closest to the mosque',walk:{ar:'أقل من ١٠ دقائق مشي',en:'Under 10 min walk'}},
-      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٥ دقيقة مشي',en:'About 15 min walk'}} },
+    madinah:{ city:'Medina', title:{ar:'🕌 فنادق مختارة قرب المسجد النبوي',en:'🕌 Hand-picked hotels near the Prophet\'s Mosque'}, groups:{
+      near:{ar:'الأقرب للمسجد النبوي',en:'Closest to the mosque',walk:{ar:'أقل من ١٠ دقائق مشي',en:'Under 10 min walk'},img:'md_umb'},
+      val:{ar:'قيمة ممتازة',en:'Great value',walk:{ar:'حوالي ١٥ دقيقة مشي',en:'About 15 min walk'},img:'md_gate'} },
       list:[
         {n:'Dar Al Taqwa Hotel',ar:'فندق دار التقوى',g:'near'},
         {n:'Zamzam Pullman Madina',ar:'بولمان زمزم المدينة',g:'near',s:5},
@@ -271,6 +289,49 @@
         {n:'Taiba Front Hotel',ar:'فندق طيبة فرونت',g:'val',s:3},
         {n:'Shaza Regency Plaza Al Madinah',ar:'شذا ريجنسي بلازا المدينة',g:'val',s:3},
         {n:'Elaf Al Taqwa Hotel',ar:'فندق إيلاف التقوى',g:'val'}
+      ]},
+    'dubai':{ city:'Dubai', title:{ar:'🏙️ فنادق مختارة في دبي',en:'🏙️ Hand-picked hotels in Dubai'}, groups:{
+      downtown:{ar:'داون تاون',en:'Downtown',info:{ar:'جنب دبي مول وبرج خليفة والنافورة',en:'Next to Dubai Mall, Burj Khalifa & the Fountain'},img:'dx_downtown'},
+      palm:{ar:'نخلة جميرا',en:'Palm Jumeirah',info:{ar:'منتجعات على البحر وألعاب مائية',en:'Beach resorts & water parks'},img:'dx_palm'},
+      jumeirah:{ar:'جميرا',en:'Jumeirah',info:{ar:'شاطئ هادئ وسوق مدينة جميرا',en:'Quiet beach & Souk Madinat Jumeirah'},img:'dx_qasr'},
+      marina:{ar:'المارينا وجي بي آر',en:'Marina & JBR',info:{ar:'ممشى البحر والمطاعم والشاطئ',en:'Beach walk, restaurants & the beach'},img:'dx_jbr'},
+      city:{ar:'مناطق ثانية',en:'Other areas',info:{ar:'أسعار أوفر وقريب من المترو',en:'Lower prices, near the metro'},img:'dx_marina'} },
+      list:[
+        {n:'Address Downtown',ar:'العنوان داون تاون',g:'downtown',s:5},
+        {n:'Palace Downtown',ar:'بالاس داون تاون',g:'downtown',s:5,img:'dx_palace'},
+        {n:'Rove Downtown',ar:'روڤ داون تاون',g:'downtown',s:3,v:1},
+        {n:'Atlantis, The Palm',ar:'أتلانتس النخلة',g:'palm',s:5,img:'dx_palm'},
+        {n:'Atlantis The Royal',ar:'أتلانتس ذا رويال',g:'palm',s:5,img:'dx_royal'},
+        {n:'Jumeirah Zabeel Saray',ar:'جميرا زعبيل سراي',g:'palm',s:5,img:'dx_zabeel'},
+        {n:'Sofitel Dubai The Palm',ar:'سوفيتيل دبي النخلة',g:'palm',s:5},
+        {n:'Jumeirah Beach Hotel',ar:'فندق جميرا بيتش',g:'jumeirah',s:5},
+        {n:'Jumeirah Al Qasr',ar:'جميرا القصر',g:'jumeirah',s:5,img:'dx_qasr'},
+        {n:'Address Beach Resort',ar:'العنوان بيتش ريزورت',g:'marina',s:5},
+        {n:'Hilton Dubai Jumeirah',ar:'هيلتون دبي جميرا',g:'marina'},
+        {n:'Rove Dubai Marina',ar:'روڤ دبي مارينا',g:'marina',s:3,v:1},
+        {n:'Rove City Walk',ar:'روڤ سيتي ووك',g:'city',s:3,v:1},
+        {n:'Premier Inn Dubai Ibn Battuta Mall',ar:'بريمير إن ابن بطوطة مول',g:'city',s:3,v:1},
+        {n:'Hyatt Place Dubai Jumeirah',ar:'حياة بليس دبي جميرا',g:'city',v:1}
+      ]},
+    'istanbul':{ city:'Istanbul', title:{ar:'🕌 فنادق مختارة في إسطنبول',en:'🕌 Hand-picked hotels in Istanbul'}, groups:{
+      old:{ar:'السلطان أحمد',en:'Sultanahmet',info:{ar:'مشي للجامع الأزرق وآيا صوفيا',en:'Walk to the Blue Mosque & Hagia Sophia'},img:'is_hagia'},
+      bos:{ar:'على البوسفور',en:'On the Bosphorus',info:{ar:'إطلالات على البحر وقصور',en:'Sea views & palaces'},img:'is_bosph'},
+      taksim:{ar:'تقسيم ووسط المدينة',en:'Taksim & city centre',info:{ar:'تسوق ومطاعم ومواصلات',en:'Shopping, dining & transport'},img:'is_taksim'} },
+      list:[
+        {n:'Four Seasons Hotel Istanbul at Sultanahmet',ar:'فور سيزونز السلطان أحمد',g:'old',s:5,img:'is_fs'},
+        {n:'Sura Hagia Sophia Hotel',ar:'فندق سورا آيا صوفيا',g:'old'},
+        {n:'Hotel Amira Istanbul',ar:'فندق أميرة إسطنبول',g:'old',v:1},
+        {n:'Sirkeci Mansion',ar:'سركجي مانشن',g:'old',v:1},
+        {n:'Ciragan Palace Kempinski Istanbul',ar:'قصر تشيراغان كمبينسكي',g:'bos',s:5,img:'is_ciragan'},
+        {n:'Four Seasons Hotel Istanbul at the Bosphorus',ar:'فور سيزونز البوسفور',g:'bos',s:5},
+        {n:'Shangri-La Bosphorus, Istanbul',ar:'شانغريلا البوسفور',g:'bos',s:5},
+        {n:'The Ritz-Carlton, Istanbul at the Bosphorus',ar:'ريتز كارلتون إسطنبول',g:'bos',s:5},
+        {n:'Swissotel The Bosphorus Istanbul',ar:'سويس أوتيل البوسفور',g:'bos',s:5,img:'is_swiss'},
+        {n:'CVK Park Bosphorus Hotel Istanbul',ar:'سي في كي بارك البوسفور',g:'taksim',s:5},
+        {n:'The Marmara Taksim',ar:'ذا مرمرة تقسيم',g:'taksim',s:5},
+        {n:'Pera Palace Hotel',ar:'فندق بيرا بالاس',g:'taksim',s:5,img:'is_pera'},
+        {n:'Hilton Istanbul Bomonti',ar:'هيلتون إسطنبول بومونتي',g:'taksim',s:5},
+        {n:'Raffles Istanbul',ar:'رافلز إسطنبول',g:'taksim',s:5}
       ]}
   };
   let HTAB = '';
@@ -348,31 +409,45 @@
     $('cards').append(card('', '#FDDB32;color:#191E3B', '✈', 'Expedia', L.ex, NUZUL.expediaUrl(p, o, F, 'compare')));
   }
 
+  function imgHtml(k, alt, isArea){
+    const im = IMG[k]; if (!im) return '';
+    const L = T[lang], file = 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(im[0].replace(/ /g,'_'));
+    return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="/img/hotels/' + k + '.webp" alt="' + alt.replace(/"/g,'') + '">' +
+      (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') +
+      '<a class="cr" target="_blank" rel="noopener" href="' + file + '">📷 ' + im[1] + ' · ' + im[2] + '</a></div>';
+  }
+
   function renderHotels(){
     const L = T[lang], k = key(), H = HG[k], box = $('hs');
     const hideType = F.type && F.type !== 'hotel';
     if (!H || hideType) { box.hidden = true; $('cardsH').textContent = L.cardsH; return; }
     box.hidden = false;
-    $('hsTitle').textContent = L.hsTitle[k];
+    $('hsTitle').textContent = H.title[lang];
     $('cardsH').textContent = L.cardsAll(dispName());
-    if (HTAB && !H.groups[HTAB]) HTAB = '';
-    chips($('htabs'), [['', L.all], ...Object.entries(H.groups).map(([g, v]) => [g, v[lang]])], v => HTAB === v, v => HTAB = v);
+    const hasV = H.list.some(h => h.v);
+    if (HTAB && !H.groups[HTAB] && !(HTAB === '_v' && hasV)) HTAB = '';
+    const tabs = [['', L.all], ...Object.entries(H.groups).map(([g, v]) => [g, v[lang]])];
+    if (hasV) tabs.push(['_v', L.cheaper]);
+    chips($('htabs'), tabs, v => HTAB === v, v => HTAB = v);
     const o = opts();
-    let list = H.list.filter(h => !HTAB || h.g === HTAB);
+    const cheap = h => h.v || h.g === 'val';
+    let list = H.list.filter(h => !HTAB || (HTAB === '_v' ? cheap(h) : h.g === HTAB));
     if (F.stars) list = list.filter(h => h.s && h.s >= +F.stars);
-    if (F.budget === 'eco') list = list.filter(h => h.g === 'val');
-    if (F.budget === 'lux') list = list.filter(h => h.g !== 'val');
+    if (F.budget === 'eco') list = list.filter(cheap);
+    if (F.budget === 'lux') list = list.filter(h => !cheap(h));
     const hl = $('hl'); hl.innerHTML = '';
     if (!list.length) { hl.innerHTML = '<p class="sub">' + L.noH + '</p>'; return; }
     list.forEach(h => {
       const g = H.groups[h.g], c = document.createElement('div'); c.className = 'hc';
       const ef = {hotel: h.n};
       const bk = NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(H.city, o, ef, 'hotel'), ex = NUZUL.expediaUrl(H.city, o, ef, 'hotel');
-      c.innerHTML = '<div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
-        '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + '<span>📍 ' + g[lang] + '</span><span>' + L.walk + g.walk[lang] + '</span></div>' +
+      const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (g.info ? '<span>✨ ' + g.info[lang] + '</span>' : '');
+      c.innerHTML = imgHtml(h.img || g.img, (lang === 'ar' ? h.ar : h.n), !h.img) +
+        '<div class="hx"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
+        '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div>' +
         '<div class="hb"><a class="b1" target="_blank" rel="noopener sponsored" href="' + bk + '">Booking</a>' +
         '<a class="b2" target="_blank" rel="noopener sponsored" href="' + hc + '">Hotels.com</a>' +
-        '<a class="b3" target="_blank" rel="noopener sponsored" href="' + ex + '">Expedia</a></div>';
+        '<a class="b3" target="_blank" rel="noopener sponsored" href="' + ex + '">Expedia</a></div></div>';
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.n;
       hl.append(c);
