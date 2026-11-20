@@ -68,7 +68,9 @@
   sec.id = 'deals';
   sec.innerHTML = '<div class="wrap"><h2 id="dlH"></h2><p class="sub" id="dlSub"></p><div class="deals" id="dlGrid"></div></div>';
   var search = document.querySelector('.search');
-  if (search && search.parentNode) search.parentNode.insertBefore(sec, search.nextSibling);
+  var destSec = document.getElementById('destinations');
+  if (destSec && destSec.parentNode) destSec.parentNode.insertBefore(sec, destSec.nextSibling);
+  else if (search && search.parentNode) search.parentNode.insertBefore(sec, search.nextSibling);
 
   var fab = document.createElement('a');
   fab.className = 'wa-fab';

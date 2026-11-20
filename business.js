@@ -259,7 +259,7 @@
     '</div>' +
     '<div id="bzOut"></div>' +
     '</div>';
-  var anchor = document.getElementById('destinations');
+  var anchor = document.getElementById('how') || document.getElementById('destinations');
   anchor.parentNode.insertBefore(sec, anchor);
 
   var nav = document.querySelector('header nav');

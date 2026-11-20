@@ -68,8 +68,15 @@
   .f select{-webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235f6b78' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat;background-size:12px 8px;background-position:left 14px center;padding-inline-end:34px}
   .go{height:48px;padding:0 26px;border-radius:12px;background:var(--sand);color:var(--navy);font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
   .go:hover{background:#ffc35c}
-  .go.off{opacity:.6}
+  .go.off{opacity:.85}
   .err{grid-column:1/-1;color:#b3261e;font-size:14px;display:none}
+  .quick{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:13.5px;color:var(--muted)}
+  .quick #quick{display:flex;flex-wrap:wrap;gap:6px}
+  .qc{border:1.5px solid var(--line);background:#fff;color:var(--navy);font:inherit;font-weight:700;font-size:14px;padding:4px 12px;border-radius:999px;cursor:pointer}
+  .qc:hover{border-color:var(--sand)}
+  .trust{text-align:center;color:var(--muted);font-size:13.5px;margin-top:10px}
+  .trust b{color:var(--navy)}
+  .more{display:block;margin:16px auto 0;border:1.5px solid var(--navy);background:#fff;color:var(--navy);font:inherit;font-weight:800;font-size:15px;padding:9px 22px;border-radius:999px;cursor:pointer}
   .alt{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:14px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
   .alt a{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 16px;border-radius:10px;border:1.5px solid var(--navy2);color:var(--navy2);font-weight:700;background:#fff}
   .alt a:hover{background:var(--navy2);color:#fff}
@@ -104,7 +111,7 @@
 
   /* Types */
   .types{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-  @media(max-width:760px){.types{grid-template-columns:repeat(2,1fr)}.type:last-child:nth-child(odd){grid-column:1/-1}}
+  @media(max-width:760px){.types{display:flex;overflow-x:auto;gap:10px;padding-bottom:6px;scrollbar-width:none}.types::-webkit-scrollbar{display:none}.type{flex:0 0 132px;padding:14px 8px}.type .ic{font-size:26px}}
   .type{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px 14px;text-align:center;transition:border-color .2s}
   .type:hover{border-color:var(--sand)}
   .type .ic{font-size:30px}
@@ -153,8 +160,8 @@
 
 <div class="hero" id="top">
   <div class="wrap">
-    <h1 data-h="h1">اعثر على فندقك المثالي<br>بـ<span>أفضل الأسعار</span> حول العالم</h1>
-    <p data-i="heroP">ملايين الفنادق والشقق والمنتجعات، مع إلغاء مجاني لمعظم الحجوزات.</p>
+    <h1 data-h="h1">قارن أسعار الفنادق<br>من <span>مكان واحد</span></h1>
+    <p data-i="heroP">ابحث مرة وحدة، وقارن الأسعار على أشهر مواقع الحجز، بدون أي رسوم إضافية.</p>
   </div>
 </div>
 
@@ -183,7 +190,9 @@
     </div>
     <a class="go off" id="go" href="#" data-i="searchB">🔍 ابحث</a>
     <div class="err" id="err"></div>
+    <div class="quick"><span data-i="quickL">وجهات سريعة:</span><span id="quick"></span></div>
   </form>
+  <p class="trust"><span data-i="trustL">نقارن لك بين:</span> <b>Booking.com</b> · <b>Hotels.com</b> · <b>Expedia</b></p>
 </div>
 
 <section id="destinations">
@@ -209,7 +218,7 @@
     <p class="sub" data-i="howSub">ثلاث خطوات بسيطة</p>
     <div class="steps">
       <div class="step"><div class="n">1</div><b data-i="s1t">ابحث</b><p data-i="s1p">اكتب المدينة والتواريخ وعدد الأشخاص.</p></div>
-      <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">قارن نفس البحث على Booking وHotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.</p></div>
+      <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">قارن نفس البحث على Booking و Hotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.</p></div>
       <div class="step"><div class="n">3</div><b data-i="s3t">احجز بأمان</b><p data-i="s3p">أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.</p></div>
     </div>
     <div class="why">
@@ -236,7 +245,7 @@
       <a href="https://www.pinterest.com/nuzultravel" target="_blank" rel="noopener">Pinterest</a>
       <a href="/privacy.html" data-i="privacy">سياسة الخصوصية</a>
     </div>
-    <p class="disc" data-i="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
+    <p class="disc" data-i="disc">نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر شركائنا مثل Booking.com و Hotels.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.</p>
   </div>
 </footer>
 
@@ -251,33 +260,33 @@
     ar: {
       title: 'نُزُل — احجز فندقك بأفضل سعر', brand: 'نُزُل', tagline: 'احجز إقامتك بثقة', other: 'English',
       nav1: 'الوجهات', nav2: 'أنواع الإقامة', nav3: 'كيف نعمل',
-      h1: 'اعثر على فندقك المثالي<br>بـ<span>أفضل الأسعار</span> حول العالم',
-      heroP: 'ملايين الفنادق والشقق والمنتجعات، مع إلغاء مجاني لمعظم الحجوزات.',
+      h1: 'قارن أسعار الفنادق<br>من <span>مكان واحد</span>',
+      heroP: 'ابحث مرة وحدة، وقارن الأسعار على أشهر مواقع الحجز، بدون أي رسوم إضافية.',
       destL: 'إلى أين تسافر؟', destPh: 'مثال: دبي، إسطنبول، القاهرة', cinL: 'الوصول', coutL: 'المغادرة',
       adultsL: 'البالغون', roomsL: 'الغرف', searchB: '🔍 ابحث',
-      altL: 'قارن السعر نفسه على موقع ثاني:', errDest: 'اكتب المدينة اللي تبي تسافر لها.', errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.',
+      altL: 'قارن السعر نفسه على موقع ثاني:', quickL: 'وجهات سريعة:', trustL: 'نقارن لك بين:', showAll: n=>'عرض كل المدن ('+n+')', showLess: 'عرض أقل', errDest: 'اكتب المدينة اللي تبي تسافر لها.', errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.',
       destH: 'وجهات حول العالم', destSub: 'اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث',
       typesH: 'اختر نوع إقامتك', typesSub: 'اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب',
       howH: 'كيف تحجز معنا؟', howSub: 'ثلاث خطوات بسيطة',
       s1t: 'ابحث', s1p: 'اكتب المدينة والتواريخ وعدد الأشخاص.',
-      s2t: 'قارن واختر', s2p: 'قارن نفس البحث على Booking وHotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.',
+      s2t: 'قارن واختر', s2p: 'قارن نفس البحث على Booking و Hotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.',
       s3t: 'احجز بأمان', s3p: 'أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.',
       w1t: '✔ أسعار شفافة', w1p: 'نفس السعر بدون أي رسوم إضافية علينا.',
       w2t: '✔ إلغاء مجاني', w2p: 'معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.',
       w3t: '✔ دعم على مدار الساعة', w3p: 'خدمة عملاء شريكنا متاحة 24/7 بعدة لغات منها العربية.',
       rights: 'جميع الحقوق محفوظة.', contact: 'تواصل معنا:', follow: 'تابعنا:', privacy: 'سياسة الخصوصية',
-      disc: 'نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر شركائنا مثل Booking.com وHotels.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.',
+      disc: 'نُزُل موقع مستقل يعرض لك خيارات الإقامة. يتم إتمام الحجز والدفع عبر شركائنا مثل Booking.com و Hotels.com، وقد نحصل على عمولة من الحجوزات التي تتم عبر روابطنا دون أي تكلفة إضافية عليك.',
       regions: {all:'🌍 الكل', me:'الشرق الأوسط', eu:'أوروبا', as:'آسيا', af:'أفريقيا', am:'الأمريكتان', oc:'أستراليا والمحيط'},
       types: [['فنادق','خيارات لكل الميزانيات'],['شقق فندقية','مساحة ومطبخ للعائلة'],['منتجعات','استجمام وشواطئ'],['فلل وبيوت','خصوصية تامة'],['فنادق 5 نجوم','فخامة وخدمة راقية']]
     },
     en: {
       title: 'Nuzul — Book your hotel at the best price', brand: 'Nuzul', tagline: 'Book your stay with confidence', other: 'العربية',
       nav1: 'Destinations', nav2: 'Stay types', nav3: 'How it works',
-      h1: 'Find your perfect hotel<br>at the <span>best prices</span> worldwide',
-      heroP: 'Millions of hotels, apartments and resorts, with free cancellation on most bookings.',
+      h1: 'Compare hotel prices<br>in <span>one place</span>',
+      heroP: 'Search once and compare Booking, Hotels.com and Expedia. No extra fees.',
       destL: 'Where are you going?', destPh: 'e.g. Paris, New York, Dubai', cinL: 'Check-in', coutL: 'Check-out',
       adultsL: 'Adults', roomsL: 'Rooms', searchB: '🔍 Search',
-      altL: 'Compare the same stay on another site:', errDest: 'Type the city you want to visit.', errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.',
+      altL: 'Compare the same stay on another site:', quickL: 'Quick picks:', trustL: 'We compare:', showAll: n=>'Show all cities ('+n+')', showLess: 'Show less', errDest: 'Type the city you want to visit.', errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.',
       destH: 'Destinations around the world', destSub: 'Tap any city to see available hotels, or search any city in the world above',
       typesH: 'Choose your type of stay', typesSub: 'Type your destination in the search above, then pick a stay type',
       howH: 'How to book with us', howSub: 'Three simple steps',
@@ -339,6 +348,8 @@
   if (location.hash === '#en') lang = 'en';
   if (location.hash === '#ar') lang = 'ar';
   let region = lang === 'ar' ? 'me' : 'all';
+  let showAllCities = false;
+  const CITY_LIMIT = 8;
 
   const $ = id => document.getElementById(id);
   const t = k => T[lang][k];
@@ -445,10 +456,18 @@
       const b = document.createElement('button');
       b.type = 'button'; b.textContent = t('regions')[k];
       b.className = 'tab' + (k === region ? ' on' : '');
-      b.onclick = () => { region = k; renderCities(); };
+      b.onclick = () => { region = k; showAllCities = false; renderCities(); };
       $('tabs').append(b);
     });
-    CITIES.filter(c => region === 'all' || c.r === region).forEach(c => {
+    const list = CITIES.filter(c => region === 'all' || c.r === region);
+    const old = document.getElementById('moreCities'); if (old) old.remove();
+    if (list.length > CITY_LIMIT) {
+      const m = document.createElement('button'); m.type = 'button'; m.className = 'more'; m.id = 'moreCities';
+      m.textContent = showAllCities ? t('showLess') : t('showAll')(list.length);
+      m.onclick = () => { showAllCities = !showAllCities; renderCities(); if (!showAllCities) document.getElementById('destinations').scrollIntoView({behavior:'smooth'}); };
+      $('grid').after(m);
+    }
+    list.slice(0, showAllCities ? list.length : CITY_LIMIT).forEach(c => {
       const a = document.createElement('a');
       a.className = 'city';
       a.style.background = "url('/img/cities/" + c.en.toLowerCase().replace(/[^a-z0-9]+/g,'-') + ".webp') center/cover no-repeat, linear-gradient(140deg, " + c.g[0] + ', ' + c.g[1] + ')';
@@ -459,6 +478,18 @@
       a.addEventListener('mouseenter', () => a.href = resultsUrl(lang === 'ar' ? c.ar : c.en, currentOpts()));
       a.addEventListener('touchstart', () => a.href = resultsUrl(lang === 'ar' ? c.ar : c.en, currentOpts()), {passive:true});
       $('grid').append(a);
+    });
+  }
+
+  const QUICK = ['Makkah','Madinah','Dubai','Istanbul','London','Baku','Kuala Lumpur'];
+  function renderQuick(){
+    $('quick').innerHTML = '';
+    QUICK.forEach(en => {
+      const c = CITIES.find(x => x.en === en); if (!c) return;
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'qc';
+      b.textContent = lang === 'ar' ? c.ar : c.en;
+      b.onclick = () => { $('dest').value = lang === 'ar' ? c.ar : c.en; update(); renderTypes(); location.href = resultsUrl($('dest').value, currentOpts()); };
+      $('quick').append(b);
     });
   }
 
@@ -478,13 +509,13 @@
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.title = t('title');
-    document.querySelectorAll('[data-i]').forEach(el => { el.textContent = t(el.dataset.i); });
+    document.querySelectorAll('[data-i]').forEach(el => { const v = t(el.dataset.i); if (typeof v === 'string') el.textContent = v; });
     document.querySelectorAll('[data-h]').forEach(el => { el.innerHTML = t(el.dataset.h); });
     document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = t(el.dataset.ph); });
     $('langBtn').textContent = t('other');
     $('cities').innerHTML = '';
     CITIES.forEach(c => $('cities').append(new Option(lang === 'ar' ? (c.ar + ' — ' + c.cAr) : (c.en + ' — ' + c.cEn), lang === 'ar' ? c.ar : c.en)));
-    renderCities(); renderTypes(); update();
+    renderQuick(); renderCities(); renderTypes(); update();
   }
 
   $('langBtn').addEventListener('click', () => {
