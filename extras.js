@@ -13,9 +13,7 @@
     { ic: '🚗', url: 'https://localrent.tpo.lu/cCwSXBeu',
       ar: ['استئجار سيارة', 'سيارات من شركات محلية بأسعار واضحة بدون رسوم مخفية'],
       en: ['Car rental', 'Cars from local companies with clear prices'] },
-    { ic: '🚕', url: 'https://kiwitaxi.tpo.lu/Vqe8Tz4U',
-      ar: ['توصيل من المطار', 'سائق ينتظرك عند الوصول بسعر ثابت محجوز مسبقاً'],
-      en: ['Airport transfers', 'A driver waiting on arrival at a fixed, prepaid price'] },
+    // Kiwitaxi موقوف مؤقتاً: الموقع ما يفتح من شبكات الإمارات (21 نوفمبر 2026). يرجع بشريك توصيل بديل.
     { ic: '🎟️', url: 'https://klook.tpo.lu/OtLpxRKj',
       ar: ['جولات وأنشطة', 'تذاكر المعالم والرحلات والأنشطة في وجهتك'],
       en: ['Tours & activities', 'Tickets for attractions, tours and things to do'] }

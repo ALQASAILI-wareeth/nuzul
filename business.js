@@ -10,7 +10,7 @@
   var LINKS = {
     flightsHome: 'https://aviasales.tpo.lu/XkLo0FCi',
     cars: 'https://localrent.tpo.lu/cCwSXBeu',
-    transfers: 'https://kiwitaxi.tpo.lu/Vqe8Tz4U'
+    transfers: ''  // Kiwitaxi موقوف مؤقتاً (ما يفتح في الإمارات)، يرجع بشريك بديل
   };
 
   var P = window.NuzulParser;
@@ -489,7 +489,7 @@
       if (d.city || d.other) {
         links += '<a class="bz-btn sm" target="_blank" rel="noopener sponsored" href="' + esc(hotelUrl(d)) + '">🏨 ' + esc(T.seeHotels) + '</a>';
         if (d.cars) links += '<a class="bz-btn sm ghost" target="_blank" rel="noopener sponsored" href="' + esc(LINKS.cars) + '">🚗 ' + esc(T.seeCars) + ' (' + fmtN(d.cars) + ')</a>';
-        if (d.transfers) links += '<a class="bz-btn sm ghost" target="_blank" rel="noopener sponsored" href="' + esc(LINKS.transfers) + '">🚕 ' + esc(T.seeTr) + '</a>';
+        if (d.transfers && LINKS.transfers) links += '<a class="bz-btn sm ghost" target="_blank" rel="noopener sponsored" href="' + esc(LINKS.transfers) + '">🚕 ' + esc(T.seeTr) + '</a>';
       }
       card.querySelector('[data-o=links]').innerHTML = links;
     });
