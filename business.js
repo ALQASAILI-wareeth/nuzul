@@ -10,7 +10,7 @@
   var LINKS = {
     flightsHome: 'https://aviasales.tpo.lu/XkLo0FCi',
     cars: 'https://localrent.tpo.lu/cCwSXBeu',
-    transfers: ''  // Kiwitaxi موقوف مؤقتاً (ما يفتح في الإمارات)، يرجع بشريك بديل
+    transfers: 'https://gettransfer.tpo.lu/A2XwzXRT'  // GetTransfer (بدل Kiwitaxi اللي ما يفتح في الإمارات)
   };
 
   var P = window.NuzulParser;
