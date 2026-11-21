@@ -170,8 +170,8 @@ def endcard_layer(cta):
     im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     lg = logo(190)
-    im.alpha_composite(with_shadow(lg, blur=14, alpha=120), ((W - lg.width) // 2, 470))
-    y = 830
+    im.alpha_composite(with_shadow(lg, blur=14, alpha=120), ((W - lg.width) // 2, 610))
+    y = 970
     sz = 76
     while ar_size(cta, font(sz, 'Black'))[0] > 940:
         sz -= 2
@@ -188,19 +188,6 @@ def endcard_layer(cta):
     im.alpha_composite(pill, (int(W / 2 - pill.width / 2), int(y + 22)))
     y = box[3] + 22
     w, h = draw_ar(d, (W / 2, y), 'الرابط في البايو', font(40, 'Bold'), (220, 245, 250))
-    y += h + 56
-    fh = font(44, 'Bold')
-    fl = ImageFont.truetype(FD + 'Tajawal-Bold.ttf', 44)
-    for label, handle, rtl in [('يوتيوب وإنستغرام:', '@nuzul.travel', False), ('تيك توك:', '@nuzul_travel', False),
-                               ('فيسبوك:', 'نُزُل للفنادق والسفر', True), ('بنترست:', 'nuzultravel', False)]:
-        a = text_img(label, fh, (200, 240, 248))
-        b = text_img(handle, fh if rtl else fl, WHITE, rtl=rtl)
-        tot = a.width + 16 + b.width
-        x0 = int(W / 2 - tot / 2)
-        hh = max(a.height, b.height)
-        im.alpha_composite(b, (x0, int(y + hh - b.height)))
-        im.alpha_composite(a, (x0 + b.width + 16, int(y + hh - a.height)))
-        y += hh + 24
     return with_shadow(im, blur=10, alpha=120)
 
 

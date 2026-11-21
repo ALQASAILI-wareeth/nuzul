@@ -54,7 +54,7 @@ def scene(vid, i, s):
     return run(cmd + ['-filter_complex', fc, '-map', '[out]', '-frames:v', str(round(d * 30))] + ENC, out)
 
 
-HOLD = 2.0  # extra seconds the end card stays frozen
+HOLD = -1.0  # extra seconds the end card stays frozen
 TOTAL = 17.0 + HOLD
 
 
