@@ -8,7 +8,9 @@
       providers: [
         { n: 'Airalo', url: 'https://airalo.tpo.lu/3BRI03iF' },
         { n: 'Yesim', url: 'https://yesim.tpo.lu/hCZ76dsc' },
-        { n: 'Saily', url: 'https://saily.tpo.lu/xL6B2qFO' }
+        { n: 'Saily', url: 'https://saily.tpo.lu/xL6B2qFO' },
+        { n: 'GigSky', url: 'https://gigsky.tpo.lu/lDBPe6q3' },
+        { n: 'Drimsim', url: 'https://drimsim.tpo.lu/PWjORAGB' }
       ] },
     { ic: '✈️',
       ar: ['تذاكر طيران', 'قارن أسعار مئات شركات الطيران واحجز الأرخص'],
@@ -23,7 +25,9 @@
       providers: [
         { n: 'Localrent', url: 'https://localrent.tpo.lu/cCwSXBeu' },
         { n: 'GetRentacar', url: 'https://getrentacar.tpo.lu/6Mi1WlvD' },
-        { n: 'EconomyBookings', url: 'https://economybookings.tpo.lu/6gHnUvQh' }
+        { n: 'EconomyBookings', url: 'https://economybookings.tpo.lu/6gHnUvQh' },
+        { n: 'QEEQ', url: 'https://qeeq.tpo.lu/HN4FzDK7' },
+        { n: 'Auto Europe', url: 'https://autoeurope.tpo.lu/9sjsI0TF' }
       ] },
     { ic: '🚕',
       ar: ['توصيل من وإلى المطار', 'سائق ينتظرك في المطار بسعر ثابت محجوز مسبقاً'],
@@ -40,7 +44,22 @@
       providers: [
         { n: 'Klook', url: 'https://klook.tpo.lu/OtLpxRKj' },
         { n: 'Tiqets', url: 'https://tiqets.tpo.lu/6JhmqQ9H' },
-        { n: 'KKday', url: 'https://kkday.tpo.lu/V24a3pmt' }
+        { n: 'KKday', url: 'https://kkday.tpo.lu/V24a3pmt' },
+        { n: 'WeGoTrip', url: 'https://wegotrip.tpo.lu/lAgsr2Uf' },
+        { n: 'Go City', url: 'https://gocity.tpo.lu/ke1Lofin' }
+      ] },
+    { ic: '🛵',
+      ar: ['تأجير دراجات وسكوتر', 'دراجات نارية وسكوتر وهوائية للتنقل بحرية في وجهتك'],
+      en: ['Bike & scooter rental', 'Motorbikes, scooters and bicycles to get around freely'],
+      providers: [
+        { n: 'BikesBooking', url: 'https://bikesbooking.tpo.lu/8tVszIZ4' }
+      ] },
+    { ic: '⏱️',
+      ar: ['تعويض تأخير الرحلات', 'رحلتك تأخرت أو انلغت؟ اطلب تعويض يوصل إلى 600 يورو'],
+      en: ['Flight delay compensation', 'Delayed or cancelled flight? Claim up to €600'],
+      providers: [
+        { n: 'Compensair', url: 'https://compensair.tpo.lu/d7M2PjSw' },
+        { n: 'AirHelp Plus', url: 'https://airhelp.tpo.lu/Q09nuxhT' }
       ] },
     { ic: '🧳',
       ar: ['تخزين الأمتعة', 'خزّن شنطك بأمان في مدينتك قبل تسجيل الدخول أو بعد الخروج من الفندق'],
@@ -67,8 +86,8 @@
     '.extra small{color:var(--muted);font-size:12px;margin-top:4px}' +
     '.extra .pv{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}' +
     '.extra .pv a{flex:1 1 auto;text-align:center;padding:9px 12px;border-radius:10px;background:var(--navy);color:#fff;font-weight:700;font-size:14px;text-decoration:none;transition:opacity .2s}' +
-    '.extra .pv a:nth-child(2){background:var(--navy2)}' +
-    '.extra .pv a:nth-child(3){background:var(--sand);color:var(--navy)}' +
+        '.extra .pv a:nth-child(3n){background:var(--sand);color:var(--navy)}' +
+    '.extra .pv a:nth-child(3n+2){background:var(--navy2)}' +
     '.extra .pv a:hover{opacity:.88}';
   document.head.appendChild(css);
 
