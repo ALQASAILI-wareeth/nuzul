@@ -45,6 +45,16 @@
   main{padding:18px 0 10px}
   .panel{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:16px}
   .panel h2{font-size:18px;color:var(--navy);font-weight:800;margin-bottom:10px}
+  .quick{background:var(--card);border:2px solid var(--teal);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .quick > b{font-size:15px;color:var(--navy);font-weight:800}
+  .quick > span{display:flex;gap:8px;flex:1 1 260px}
+  .quick a{flex:1;text-align:center;padding:11px 6px;border-radius:10px;font-weight:800;font-size:14.5px;color:#fff;white-space:nowrap}
+  .panel h2{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  .panel h2 i{font-style:normal;transition:transform .2s;color:var(--muted)}
+  .panel.shut h2{margin-bottom:0}
+  #fpanel{margin-bottom:14px}
+  .panel.shut h2 i{transform:rotate(90deg)}
+  .panel.shut .frow{display:none!important}
   .frow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-top:1px dashed var(--line)}
   .frow:first-of-type{border-top:0}
   .frow > b{font-size:14px;color:var(--muted);min-width:96px}
@@ -137,8 +147,9 @@
 </div>
 
 <main class="wrap">
-  <div class="panel">
-    <h2 data-i="fH">🎯 حدّد اللي يناسبك (اختياري)</h2>
+  <div class="quick" id="quick"><b data-i="qH">قارن السعر على:</b><span id="quickBtns"></span></div>
+  <div class="panel" id="fpanel">
+    <h2 id="fToggle" role="button" tabindex="0" aria-expanded="true"><span data-i="fH">🎯 حدّد اللي يناسبك (اختياري)</span><i aria-hidden="true">▾</i></h2>
     <div class="frow near" id="nearRow"><b data-i="fNear">الموقع</b><span id="nearChips"></span></div>
     <div class="frow"><b data-i="fType">نوع الإقامة</b><span id="typeChips"></span></div>
     <div class="frow"><b data-i="fBudget">الميزانية/ليلة</b><span id="budgetChips"></span></div>
@@ -189,7 +200,7 @@
   const T = {
     ar:{brand:'نُزُل',tagline:'احجز إقامتك بثقة',other:'English',edit:'✏️ تعديل البحث',update:'تحديث',destL:'الوجهة',cinL:'الوصول',coutL:'المغادرة',adultsL:'البالغون',roomsL:'الغرف',
       title:n=>'فنادق '+n, nights:n=>n===1?'ليلة وحدة':(n===2?'ليلتين':n+' ليالي'), adults:n=>n+' بالغين', rooms:n=>n===1?'غرفة':n+' غرف',
-      fH:'🎯 حدّد اللي يناسبك (اختياري)',fNear:'الموقع',fType:'نوع الإقامة',fBudget:'الميزانية/ليلة',fStars:'النجوم',fMore:'مميزات',fSort:'الترتيب',
+      qH:'قارن السعر على:',fH:'🎯 حدّد اللي يناسبك (اختياري)',fNear:'الموقع',fType:'نوع الإقامة',fBudget:'الميزانية/ليلة',fStars:'النجوم',fMore:'مميزات',fSort:'الترتيب',
       any:'الكل', types:{hotel:'🏨 فندق',apartment:'🏢 شقة فندقية',resort:'🏝️ منتجع',villa:'🏡 فيلا'},
       budget:{eco:'💲 أقل من 100$',mid:'💲💲 100–250$',lux:'💎 فوق 250$'}, stars:{3:'3★ فأكثر',4:'4★ فأكثر',5:'5★ فقط'},
       rating8:'⭐ تقييم 8+', freeCancel:'↩️ إلغاء مجاني', sort:{best:'الأنسب',price:'الأرخص',rating:'الأعلى تقييماً'},
@@ -207,7 +218,7 @@
       cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
       title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
-      fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
+      qH:'Compare prices on:',fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
       any:'Any', types:{hotel:'🏨 Hotel',apartment:'🏢 Apartment',resort:'🏝️ Resort',villa:'🏡 Villa'},
       budget:{eco:'💲 Under $100',mid:'💲💲 $100–250',lux:'💎 $250+'}, stars:{3:'3★ & up',4:'4★ & up',5:'5★ only'},
       rating8:'⭐ Rated 8+', freeCancel:'↩️ Free cancellation', sort:{best:'Best match',price:'Lowest price',rating:'Top rated'},
@@ -725,6 +736,8 @@
     $('cards').append(card('top1', '#D32F2F', 'H', 'Hotels.com', L.hc, NUZUL.hotelsUrl(p, o, F, 'compare')));
     $('cards').append(card('', '#FDDB32;color:#191E3B', '✈', 'Expedia', L.ex, NUZUL.expediaUrl(p, o, F, 'compare')));
     $('cards').append(card('', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingUrl(p, o, F, lang)));
+    var qa = function (bg, name, href) { return '<a target="_blank" rel="noopener sponsored" style="background:' + bg + '" href="' + href + '">' + name + '</a>'; };
+    $('quickBtns').innerHTML = qa('#D32F2F', 'Hotels.com', NUZUL.hotelsUrl(p, o, F, 'quick')) + qa('#FDDB32;color:#191E3B', 'Expedia', NUZUL.expediaUrl(p, o, F, 'quick')) + qa('#003580', 'Booking', NUZUL.bookingUrl(p, o, F, lang));
   }
 
   function imgHtml(k, alt, isArea){
@@ -853,5 +866,12 @@
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "467e088c51954c0e9555402613322308"}'></script><!-- End Cloudflare Web Analytics -->
+<script>
+(function(){var p=document.getElementById('fpanel'),t=document.getElementById('fToggle');if(!p||!t)return;
+function set(shut){p.classList.toggle('shut',shut);t.setAttribute('aria-expanded',String(!shut));}
+set(window.innerWidth<=860);
+t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
+t.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(!p.classList.contains('shut'));}});})();
+</script>
 </body>
 </html>

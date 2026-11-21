@@ -69,25 +69,24 @@
       ] }
   ];
   var TXT = {
-    ar: { h: 'كل ما تحتاجه لرحلتك', sub: 'خدمات سفر موثوقة من شركائنا — قارن بينهم واختر، بنفس السعر بدون أي رسوم إضافية', many: 'قارن بين الخيارات:' },
-    en: { h: 'Everything for your trip', sub: 'Trusted travel services from our partners — compare and choose, at no extra cost', many: 'Compare options:' }
+    ar: { h: 'كل ما تحتاجه لرحلتك', sub: 'اضغط على الخدمة وقارن بين شركائنا، بنفس السعر وبدون أي رسوم إضافية', many: 'قارن بين الخيارات:' },
+    en: { h: 'Everything for your trip', sub: 'Tap a service and compare our partners, at no extra cost', many: 'Compare options:' }
   };
 
   var css = document.createElement('style');
   css.textContent =
-    '.extras{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}' +
-    '@media(max-width:860px){.extras{grid-template-columns:repeat(2,1fr);gap:10px}.extra{padding:14px}.extra b{font-size:16px}.extra span{font-size:13px}}' +
-    '@media(max-width:520px){.extras{grid-template-columns:1fr}}' +
-    '.extra{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:6px;transition:border-color .2s}' +
-    '.extra:hover{border-color:var(--sand)}' +
-    '.extra .ic{font-size:30px}' +
+    '.extras{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}' +
+    '@media(max-width:860px){.extras{grid-template-columns:repeat(2,1fr)}}' +
+    '.xt{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px;font:inherit;font-weight:800;font-size:15px;color:var(--navy);cursor:pointer;text-align:start;min-height:56px;transition:border-color .2s,background .2s}' +
+    '.xt .ic{font-size:24px;flex:0 0 auto}' +
+    '.xt:hover{border-color:var(--sand)}' +
+    '.xt.on{border-color:var(--navy);background:var(--navy);color:#fff}' +
+    '.extra{grid-column:1/-1;background:var(--card);border:1.5px solid var(--navy);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:6px}' +
     '.extra b{color:var(--navy);font-size:18px}' +
-    '.extra span{color:var(--muted);font-size:14px;flex:1}' +
-    '.extra small{color:var(--muted);font-size:12px;margin-top:4px}' +
+    '.extra span{color:var(--muted);font-size:15px}' +
+    '.extra small{color:var(--muted);font-size:13px;margin-top:4px}' +
     '.extra .pv{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}' +
-    '.extra .pv a{flex:1 1 auto;text-align:center;padding:9px 12px;border-radius:10px;background:var(--navy);color:#fff;font-weight:700;font-size:14px;text-decoration:none;transition:opacity .2s}' +
-        '.extra .pv a:nth-child(3n){background:var(--sand);color:var(--navy)}' +
-    '.extra .pv a:nth-child(3n+2){background:var(--navy2)}' +
+    '.extra .pv a{flex:1 1 150px;white-space:nowrap;text-align:center;padding:11px 10px;border-radius:10px;background:var(--navy2);color:#fff;font-weight:700;font-size:15px;text-decoration:none;transition:opacity .2s}' +
     '.extra .pv a:hover{opacity:.88}';
   document.head.appendChild(css);
 
@@ -101,24 +100,38 @@
     return document.documentElement.lang === 'en' ? 'en' : 'ar';
   }
 
+  var open = -1; // رقم الخدمة المفتوحة (-1 = ولا وحدة)
   function render() {
     var l = curLang();
     document.getElementById('exH').textContent = TXT[l].h;
     document.getElementById('exSub').textContent = TXT[l].sub;
     var g = document.getElementById('exGrid');
     g.innerHTML = '';
-    SERVICES.forEach(function (s) {
-      var ps = s.providers.filter(function (p) { return p.url; });
-      if (!ps.length) return;
-      var card = document.createElement('div');
-      card.className = 'extra';
-      var html = '<div class="ic">' + s.ic + '</div><b>' + s[l][0] + '</b><span>' + s[l][1] + '</span>';
-      if (ps.length > 1) html += '<small>' + TXT[l].many + '</small>';
-      html += '<div class="pv">' + ps.map(function (p) {
-        return '<a href="' + p.url + '" target="_blank" rel="noopener sponsored">' + p.n + (l === 'ar' ? ' ←' : ' →') + '</a>';
-      }).join('') + '</div>';
-      card.innerHTML = html;
-      g.appendChild(card);
+    var list = SERVICES.filter(function (s) { return s.providers.some(function (p) { return p.url; }); });
+    var cols = window.innerWidth <= 860 ? 2 : 4;
+    list.forEach(function (s, i) {
+      var t = document.createElement('button');
+      t.type = 'button';
+      t.className = 'xt' + (i === open ? ' on' : '');
+      t.setAttribute('aria-expanded', String(i === open));
+      t.innerHTML = '<span class="ic">' + s.ic + '</span><span>' + s[l][0] + '</span>';
+      t.addEventListener('click', function () { open = (open === i ? -1 : i); render(); });
+      g.appendChild(t);
+      // بطاقة التفاصيل تنحط بعد آخر مربع في نفس الصف
+      var rowEnd = Math.min(list.length - 1, Math.floor(i / cols) * cols + cols - 1);
+      if (open >= 0 && i === rowEnd && Math.floor(open / cols) === Math.floor(i / cols)) {
+        var sv = list[open];
+        var ps = sv.providers.filter(function (p) { return p.url; });
+        var card = document.createElement('div');
+        card.className = 'extra';
+        var html = '<b>' + sv.ic + ' ' + sv[l][0] + '</b><span>' + sv[l][1] + '</span>';
+        if (ps.length > 1) html += '<small>' + TXT[l].many + '</small>';
+        html += '<div class="pv">' + ps.map(function (p) {
+          return '<a href="' + p.url + '" target="_blank" rel="noopener sponsored">' + p.n + (l === 'ar' ? ' ←' : ' →') + '</a>';
+        }).join('') + '</div>';
+        card.innerHTML = html;
+        g.appendChild(card);
+      }
     });
   }
 
