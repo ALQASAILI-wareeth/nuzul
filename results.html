@@ -722,9 +722,9 @@
   function renderCards(){
     const L = T[lang], p = place(), o = opts();
     $('cards').innerHTML = '';
-    $('cards').append(card('top1', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingUrl(p, o, F, lang)));
-    $('cards').append(card('', '#D32F2F', 'H', 'Hotels.com', L.hc, NUZUL.hotelsUrl(p, o, F, 'compare')));
+    $('cards').append(card('top1', '#D32F2F', 'H', 'Hotels.com', L.hc, NUZUL.hotelsUrl(p, o, F, 'compare')));
     $('cards').append(card('', '#FDDB32;color:#191E3B', '✈', 'Expedia', L.ex, NUZUL.expediaUrl(p, o, F, 'compare')));
+    $('cards').append(card('', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingUrl(p, o, F, lang)));
   }
 
   function imgHtml(k, alt, isArea){
@@ -762,9 +762,9 @@
       c.innerHTML = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) +
         '<div class="hx"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
         '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div>' +
-        '<div class="hb"><a class="b1" target="_blank" rel="noopener sponsored" href="' + bk + '">Booking</a>' +
-        '<a class="b2" target="_blank" rel="noopener sponsored" href="' + hc + '">Hotels.com</a>' +
-        '<a class="b3" target="_blank" rel="noopener sponsored" href="' + ex + '">Expedia</a></div></div>';
+        '<div class="hb"><a class="b2" target="_blank" rel="noopener sponsored" href="' + hc + '">Hotels.com</a>' +
+        '<a class="b3" target="_blank" rel="noopener sponsored" href="' + ex + '">Expedia</a>' +
+        '<a class="b1" target="_blank" rel="noopener sponsored" href="' + bk + '">Booking</a></div></div>';
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.n;
       hl.append(c);

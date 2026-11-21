@@ -6,9 +6,9 @@
   var DEALS = [
     {
       img: 'maldives', until: '2026-12-02', color: '#0062A8',
-      url: { kind: 'booking-deals' },
-      ar: { tag: 'الجمعة البيضاء', h: 'خصومات حتى 40٪ على الفنادق', p: 'عروض Booking.com السنوية على الإقامة والطيران والسيارات، لسفرات 2026 و2027.', cta: 'شوف العروض' },
-      en: { tag: 'Black Friday', h: 'Up to 40% off hotels', p: 'Booking.com’s yearly sale on stays, flights and car rentals for trips in 2026 and 2027.', cta: 'See the deals' }
+      url: { kind: 'home' },
+      ar: { tag: 'الجمعة البيضاء', h: 'موسم خصومات الفنادق', p: 'مواقع الحجز تنزّل عروضها السنوية هالأسبوع. قارن السعر قبل ما تحجز، لسفرات 2026 و2027.', cta: 'شوف العروض' },
+      en: { tag: 'Black Friday', h: 'Hotel sale season', p: 'Booking sites run their yearly sales this week. Compare prices before you book, for trips in 2026 and 2027.', cta: 'See the deals' }
     },
     {
       img: 'abu-dhabi', until: '2026-12-03', color: '#0a8f6a',
@@ -21,8 +21,21 @@
       url: { kind: 'search', city: 'Dubai', cin: '2026-12-04', cout: '2026-12-07' },
       ar: { tag: 'مهرجان دبي للتسوق', h: 'تسوّق وألعاب نارية في دبي', p: 'من 4 ديسمبر إلى 17 يناير: خصومات المولات والحفلات والألعاب النارية. اختر فندقك قريب من الفعاليات.', cta: 'فنادق دبي' },
       en: { tag: 'Dubai Shopping Festival', h: 'Shopping and fireworks in Dubai', p: '4 December to 17 January: mall sales, concerts and fireworks. Pick a hotel close to the action.', cta: 'Dubai hotels' }
+    },
+    {
+      img: 'makkah', until: '2027-01-31', color: '#0a8f6a',
+      url: { kind: 'search', city: 'Makkah', cin: '2026-12-17', cout: '2026-12-20' },
+      ar: { tag: 'عمرة الشتاء', h: 'أجواء معتدلة في مكة', p: 'الشتاء أريح وقت للعمرة مع العائلة. قارن أسعار الفنادق القريبة من الحرم واحجز بدري.', cta: 'فنادق مكة' },
+      en: { tag: 'Winter Umrah', h: 'Mild weather in Makkah', p: 'Winter is the most comfortable season for Umrah with family. Compare hotels near the Haram and book early.', cta: 'Makkah hotels' }
+    },
+    {
+      img: 'tbilisi', until: '2027-02-28', color: '#0062A8',
+      url: { kind: 'search', city: 'Tbilisi', cin: '2027-01-07', cout: '2027-01-11' },
+      ar: { tag: 'موسم الثلج', h: 'شتاء جورجيا القريب', p: 'ثلاث ساعات ونص تقريباً من الخليج: تبليسي والجبال الثلجية حولها. وجهة شتوية بأسعار معقولة.', cta: 'فنادق تبليسي' },
+      en: { tag: 'Snow season', h: 'Winter in nearby Georgia', p: 'About three and a half hours from the Gulf: Tbilisi and the snowy mountains around it, at reasonable prices.', cta: 'Tbilisi hotels' }
     }
   ];
+
 
   var TXT = {
     ar: { h: 'عروض هالأسبوع', sub: 'أهم العروض والمواسم القادمة، نحدّثها كل أسبوع', left: function (d) { return d <= 0 ? 'آخر يوم اليوم' : (d === 1 ? 'باقي يوم واحد' : (d === 2 ? 'باقي يومين' : 'باقي ' + d + (d <= 10 ? ' أيام' : ' يوم'))); }, wa: 'تواصل معنا عبر واتساب', waMsg: 'مرحبا نُزُل، أبي مساعدة في حجز رحلتي' },
@@ -30,16 +43,19 @@
   };
 
   function lang() { return document.documentElement.lang === 'en' ? 'en' : 'ar'; }
-  function aid() { try { return (typeof AID !== 'undefined' && AID) ? AID : ''; } catch (e) { return ''; } }
+  // العروض تروح لـ Hotels.com (شراكة فعّالة). Booking يرجع بعد موافقة برنامج العمولة.
+  var EGC = { camref: '1011l6vPKX', creativeref: '1011l66481' };
   function dealUrl(u) {
-    var bl = lang() === 'en' ? 'en-gb' : 'ar';
     var p = new URLSearchParams();
-    if (aid()) p.set('aid', aid());
-    p.set('lang', bl);
-    if (u.kind === 'booking-deals') return 'https://www.booking.com/deals.html?' + p.toString();
-    p.set('ss', u.city); p.set('checkin', u.cin); p.set('checkout', u.cout);
-    p.set('group_adults', '2'); p.set('no_rooms', '1');
-    return 'https://www.booking.com/searchresults.' + bl + '.html?' + p.toString();
+    var landing = 'https://www.hotels.com/';
+    if (u.kind === 'search') {
+      p.set('destination', u.city === 'Makkah' ? 'Mecca' : u.city);
+      p.set('startDate', u.cin); p.set('endDate', u.cout);
+      p.set('adults', '2'); p.set('rooms', '1');
+      landing = 'https://www.hotels.com/Hotel-Search?' + p.toString();
+    }
+    var a = new URLSearchParams({ landingPage: landing, camref: EGC.camref, creativeref: EGC.creativeref, adref: 'deals' });
+    return 'https://www.hotels.com/affiliate?' + a.toString();
   }
   function daysLeft(until) {
     var end = new Date(until + 'T23:59:59+04:00');
@@ -88,7 +104,7 @@
     var shown = 0;
     DEALS.forEach(function (d) {
       var left = daysLeft(d.until);
-      if (left < 0) return;
+      if (left < 0 || shown >= 3) return;
       shown++;
       var a = document.createElement('a');
       a.className = 'deal';
