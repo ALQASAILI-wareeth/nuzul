@@ -202,7 +202,7 @@
     </div>
     <a class="go off" id="go" href="#" data-i="searchB">🔍 ابحث</a>
     <div class="err" id="err"></div>
-    <div class="quick"><span data-i="quickL">وجهات سريعة:</span><span id="quick"></span></div>
+    <div class="quick"><span data-i="quickL">وجهات هالموسم:</span><span id="quick"></span></div>
   </form>
   <p class="trust"><span data-i="trustL">نقارن لك بين:</span> <b>Hotels.com</b> · <b>Expedia</b> · <b>Booking.com</b></p>
 </div>
@@ -284,7 +284,7 @@
       heroP: 'ابحث مرة وحدة، وقارن الأسعار على أشهر مواقع الحجز، بدون أي رسوم إضافية.',
       destL: 'إلى أين تسافر؟', destPh: 'مثال: دبي، إسطنبول، القاهرة', cinL: 'الوصول', coutL: 'المغادرة',
       adultsL: 'البالغون', roomsL: 'الغرف', searchB: '🔍 ابحث',
-      altL: 'قارن السعر نفسه على موقع ثاني:', quickL: 'وجهات سريعة:', trustL: 'نقارن لك بين:', showAll: n=>'عرض كل المدن ('+n+')', showLess: 'عرض أقل', errDest: 'اكتب المدينة اللي تبي تسافر لها.', errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.',
+      altL: 'قارن السعر نفسه على موقع ثاني:', quickL: 'وجهات هالموسم:', trustL: 'نقارن لك بين:', showAll: n=>'عرض كل المدن ('+n+')', showLess: 'عرض أقل', errDest: 'اكتب المدينة اللي تبي تسافر لها.', errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.',
       destH: 'وجهات حول العالم', destSub: 'اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث',
       typesH: 'اختر نوع إقامتك', typesSub: 'اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب',
       howH: 'كيف تحجز معنا؟', howSub: 'ثلاث خطوات بسيطة',
@@ -306,7 +306,7 @@
       heroP: 'Search once and compare Booking, Hotels.com and Expedia. No extra fees.',
       destL: 'Where are you going?', destPh: 'e.g. Paris, New York, Dubai', cinL: 'Check-in', coutL: 'Check-out',
       adultsL: 'Adults', roomsL: 'Rooms', searchB: '🔍 Search',
-      altL: 'Compare the same stay on another site:', quickL: 'Quick picks:', trustL: 'We compare:', showAll: n=>'Show all cities ('+n+')', showLess: 'Show less', errDest: 'Type the city you want to visit.', errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.',
+      altL: 'Compare the same stay on another site:', quickL: 'In season now:', trustL: 'We compare:', showAll: n=>'Show all cities ('+n+')', showLess: 'Show less', errDest: 'Type the city you want to visit.', errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.',
       destH: 'Destinations around the world', destSub: 'Tap any city to see available hotels, or search any city in the world above',
       typesH: 'Choose your type of stay', typesSub: 'Type your destination in the search above, then pick a stay type',
       howH: 'How to book with us', howSub: 'Three simple steps',
@@ -501,7 +501,23 @@
     });
   }
 
-  const QUICK = ['Makkah','Madinah','Dubai','Istanbul','London','Baku','Kuala Lumpur'];
+  // وجهات الموسم: مرتبة حسب مواسم سفر أهل الخليج (الطقس، الإجازات، مواسم العمرة)، مو عشوائية.
+  // الشهر 0 = يناير. عدّل القائمة لما تتوفر عندنا أرقام الضغطات الفعلية.
+  const SEASON = [
+    ['Dubai','Makkah','Madinah','Maldives','Tbilisi','Bangkok','Cairo'],          // يناير: شتاء الخليج، ثلج القوقاز، موسم الجفاف في آسيا
+    ['Makkah','Madinah','Dubai','Maldives','Cairo','Bangkok','Istanbul'],         // فبراير: قبل رمضان وفيه
+    ['Makkah','Madinah','Istanbul','Cairo','Baku','Amman','Tokyo'],               // مارس: رمضان والعيد، بداية الربيع
+    ['Istanbul','Makkah','Madinah','Baku','Tbilisi','Amman','Tokyo'],             // أبريل: الربيع
+    ['Makkah','Madinah','Istanbul','Baku','Tbilisi','London','Kuala Lumpur'],     // مايو: موسم الحج وعيد الأضحى
+    ['Trabzon','Baku','Tbilisi','Istanbul','London','Makkah','Madinah'],          // يونيو: الهروب من الحر
+    ['Trabzon','Interlaken','London','Baku','Kuala Lumpur','Bali','Makkah'],      // يوليو: إجازة الصيف
+    ['Trabzon','Interlaken','London','Baku','Kuala Lumpur','Bali','Makkah'],      // أغسطس: إجازة الصيف
+    ['Istanbul','Baku','London','Makkah','Madinah','Cairo','Kuala Lumpur'],       // سبتمبر: بعد الزحام، أسعار أهدأ
+    ['Istanbul','Makkah','Madinah','Cairo','Baku','Maldives','London'],           // أكتوبر: الخريف
+    ['Dubai','Makkah','Madinah','Abu Dhabi','Istanbul','Cairo','Maldives'],       // نوفمبر: بداية موسم الخليج
+    ['Dubai','Makkah','Madinah','Abu Dhabi','Maldives','Tbilisi','Phuket']        // ديسمبر: عيد الاتحاد، مهرجان دبي، رأس السنة
+  ];
+  const QUICK = SEASON[new Date().getMonth()];
   function renderQuick(){
     $('quick').innerHTML = '';
     QUICK.forEach(en => {
