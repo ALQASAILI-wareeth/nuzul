@@ -13,7 +13,7 @@ os.makedirs(OUT2, exist_ok=True)
 ENC = ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '20', '-pix_fmt', 'yuv420p', '-r', '30',
        '-g', '60', '-profile:v', 'high', '-an', '-movflags', '+faststart']
 FIRST, SHOT, END = 3.8, 3.2, 3.6
-X = 0.4  # crossfade length
+X = 0.25  # crossfade length
 
 
 def cover(cx, zoom_dur, punch=0.0):
@@ -43,19 +43,19 @@ def scene(vid, i, s):
     cmd = ['ffmpeg', '-v', 'error', '-y', '-ss', str(st), '-t', str(d), '-i', f"{FT}/{s['src']}.mp4",
            '-loop', '1', '-framerate', '30', '-t', str(d), '-i', f'{OV}/frame.png',
            '-loop', '1', '-framerate', '30', '-t', str(d), '-i', f'{OV}/{vid}_cap{i}.png']
-    fc = (f"[0:v]{cover(s['cx'], d, 0 if i == 0 else 0.03)}[v0];[1:v]format=rgba[f];[v0][f]overlay=shortest=1[v1];"
-          f"[2:v]format=rgba,fade=in:st=0.35:d=0.4:alpha=1[c];")
+    fc = (f"[0:v]{cover(s['cx'], d, 0.05 if i == 0 else 0.03)}[v0];[1:v]format=rgba[f];[v0][f]overlay=shortest=1[v1];"
+          f"[2:v]format=rgba,fade=in:st=0.12:d=0.25:alpha=1[c];")
     if i == 0:
         cmd += ['-loop', '1', '-framerate', '30', '-t', str(d), '-i', f'{OV}/{vid}_hook.png']
         fc += (f"[3:v]format=rgba[h];[v1][h]overlay=0:0:shortest=1[v2];"
-               f"[v2][c]overlay={slide(0.35)}:shortest=1,format=yuv420p[out]")
+               f"[v2][c]overlay={slide(0.12)}:shortest=1,format=yuv420p[out]")
     else:
-        fc += f"[v1][c]overlay={slide(0.35)}:shortest=1,format=yuv420p[out]"
+        fc += f"[v1][c]overlay={slide(0.12)}:shortest=1,format=yuv420p[out]"
     return run(cmd + ['-filter_complex', fc, '-map', '[out]', '-frames:v', str(round(d * 30))] + ENC, out)
 
 
-HOLD = -1.0  # extra seconds the end card stays frozen
-TOTAL = 17.0 + HOLD
+HOLD = 0.0  # extra seconds the end card stays frozen
+TOTAL = 16.0 + HOLD
 
 
 def endcard(vid, s):

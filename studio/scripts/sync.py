@@ -3,7 +3,7 @@ M='/home/claude/music'
 PICK={'01_nuzul_intro':('c_intro_wayhome',None),'02_dubai':('c_dubai_medina',None),'03_istanbul':('c_ist_goldensand',None),
       '04_switzerland':('c_sw_romantic',None),'05_maldives':('c_mv_tropchill',None)}
 A=json.load(open(f'{M}/analysis_calm.json'))
-TOTAL=17.0; TARGETS=[3.8,7.0,10.2,13.4]; FPS=30
+TOTAL=16.0; TARGETS=[2.6,4.8,7.0,9.2,11.4,13.6]; FPS=30
 out={}
 for vid,(trk,st) in PICK.items():
     y,sr=librosa.load(f'{M}/{trk}.mp3',sr=22050)
@@ -15,7 +15,7 @@ for vid,(trk,st) in PICK.items():
     near=[b for b in beats if abs(b-S)<0.8]; S=max(near,key=strength) if near else S
     cuts=[]
     for tg in TARGETS:
-        cand=[b-S for b in beats if abs((b-S)-tg)<0.45 and (not cuts or (b-S)-cuts[-1]>2.4)]
+        cand=[b-S for b in beats if abs((b-S)-tg)<0.5 and (not cuts or (b-S)-cuts[-1]>1.6)]
         c=max(cand,key=lambda r:strength(r+S)-0.3*abs(r-tg)) if cand else tg
         cuts.append(round(c*FPS)/FPS)
     edges=[0]+cuts+[TOTAL]
