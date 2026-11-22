@@ -13,10 +13,10 @@
 
   var T = {
     ar: {h: 'كمّل من وين وقفت', last: 'آخر بحث', go: 'كمّل بحثك', favH: 'مفضلتك', see: 'شوف السعر', rm: 'حذف من المفضلة',
-      nights: function (n) { return n === 1 ? 'ليلة' : n === 2 ? 'ليلتين' : n + ' ليالي'; }, ad: function (n) { return n + ' بالغين'; },
+      nights: function (n) { return n === 1 ? 'ليلة' : n === 2 ? 'ليلتين' : n + ' ليالي'; }, ad: function (n) { return n === 1 ? 'بالغ واحد' : n + ' بالغين'; },
       a2: '📲 خلّ نُزُل على شاشتك الرئيسية عشان توصله بضغطة.', a2ios: 'اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».', a2b: 'أضف', a2x: 'إغلاق'},
     en: {h: 'Pick up where you left off', last: 'Last search', go: 'Continue', favH: 'Your favourites', see: 'See price', rm: 'Remove from favourites',
-      nights: function (n) { return n + (n === 1 ? ' night' : ' nights'); }, ad: function (n) { return n + ' adults'; },
+      nights: function (n) { return n + (n === 1 ? ' night' : ' nights'); }, ad: function (n) { return n + (n === 1 ? ' adult' : ' adults'); },
       a2: '📲 Keep Nuzul on your home screen for one-tap access.', a2ios: 'Tap Share, then “Add to Home Screen”.', a2b: 'Add', a2x: 'Close'}
   };
 

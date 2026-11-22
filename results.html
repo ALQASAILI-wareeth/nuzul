@@ -204,7 +204,7 @@
 
   <section class="hs" id="hs" hidden>
     <h2 id="hsTitle"></h2>
-    <p class="sub" data-i="hsSub">اضغط على الفندق عشان تقارن سعره لتواريخك على المواقع الثلاثة.</p>
+    <p class="sub" data-i="hsSub">اضغط على الفندق عشان تقارن السعر لتواريخك على المواقع الثلاثة.</p>
     <div class="htabs" id="htabs"></div>
     <div class="hl" id="hl"></div>
     <p class="hnote" data-i="hsNote">* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.</p>
@@ -221,7 +221,7 @@
   </div>
 
   <div class="why">
-    <div><b data-i="y1t">✔ بدون رسوم علينا</b><span data-i="y1p">تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.</span></div>
+    <div><b data-i="y1t">✔ بدون رسوم من عندنا</b><span data-i="y1p">تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.</span></div>
     <div><b data-i="y2t">✔ حجز آمن</b><span data-i="y2p">الدفع والحجز يتمان مباشرة عند الشريك المعتمد.</span></div>
     <div><b data-i="y3t">✔ إلغاء مجاني</b><span data-i="y3p">فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.</span></div>
   </div>
@@ -245,7 +245,7 @@
   const WA = '971504113342';
   const T = {
     ar:{brand:'نُزُل',tagline:'احجز إقامتك بثقة',other:'English',edit:'✏️ تعديل البحث',update:'تحديث',destL:'الوجهة',cinL:'الوصول',coutL:'المغادرة',adultsL:'البالغون',roomsL:'الغرف',
-      title:n=>'فنادق '+n, nights:n=>n===1?'ليلة وحدة':(n===2?'ليلتين':n+' ليالي'), adults:n=>n+' بالغين', rooms:n=>n===1?'غرفة':n+' غرف',
+      title:n=>'فنادق '+n, nights:n=>n===1?'ليلة وحدة':(n===2?'ليلتين':n+' ليالي'), adults:n=>n===1?'بالغ واحد':n+' بالغين', rooms:n=>n===1?'غرفة':(n===2?'غرفتين':n+' غرف'),
       qH:'قارن السعر على:',fH:'🎯 حدّد اللي يناسبك (اختياري)',fNear:'الموقع',fType:'نوع الإقامة',fBudget:'الميزانية/ليلة',fStars:'النجوم',fMore:'مميزات',fSort:'الترتيب',
       any:'الكل', types:{hotel:'🏨 فندق',apartment:'🏢 شقة فندقية',resort:'🏝️ منتجع',villa:'🏡 فيلا'},
       budget:{eco:'💲 أقل من 100$',mid:'💲💲 100–250$',lux:'💎 فوق 250$'}, stars:{3:'3★ فأكثر',4:'4★ فأكثر',5:'5★ فقط'},
@@ -255,13 +255,13 @@
       hc:{badge:'',pts:['مكافآت One Key على كل حجز','أسعار خاصة للأعضاء','فنادق ومنتجعات مختارة'],cta:'شوف الفنادق على Hotels.com',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Hotels.com في نافذة جديدة'},
       ex:{badge:'',pts:['وفّر لما تحجز طيران + فندق مع بعض','نفس مكافآت One Key','خيارات دفع مرنة'],cta:'شوف الفنادق على Expedia',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Expedia في نافذة جديدة'},
       helpP:'محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.',helpB:'اسأل نُزُل',
-      y1t:'✔ بدون رسوم علينا',y1p:'تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.',y2t:'✔ حجز آمن',y2p:'الدفع والحجز يتمان مباشرة عند الشريك المعتمد.',y3t:'✔ إلغاء مجاني',y3p:'فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.',
+      y1t:'✔ بدون رسوم من عندنا',y1p:'تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.',y2t:'✔ حجز آمن',y2p:'الدفع والحجز يتمان مباشرة عند الشريك المعتمد.',y3t:'✔ إلغاء مجاني',y3p:'فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.',
       back:'→ الرجوع للصفحة الرئيسية', privacy:'سياسة الخصوصية', credH:'حقوق الصور', credP:'الصور من ويكيميديا كومنز بتراخيص حرة، وكل الحقوق لأصحابها:',
       disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
       waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.',
-      hsSub:'اضغط على الفندق عشان تقارن سعره لتواريخك على المواقع الثلاثة.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
-      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', cmp:'قارن الأسعار ←', shQ:'شوف سعره لتواريخك على:', shGo:'شوف السعر', shClose:'إغلاق', shNote:'السعر يختلف بين المواقع، فقارن الثلاثة قبل ما تحجز. الحجز والدفع يتمان عند الموقع اللي تختاره. على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك تطبيقهم.', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
+      hsSub:'اضغط على الفندق عشان تقارن السعر لتواريخك على المواقع الثلاثة.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
+      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', cmp:'قارن الأسعار ←', shQ:'شوف السعر لتواريخك على:', shGo:'شوف السعر', shClose:'إغلاق', shNote:'السعر يختلف بين المواقع، فقارن الثلاثة قبل ما تحجز. الحجز والدفع يتمان عند الموقع اللي تختاره. على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك تطبيقهم.', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
       title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
       qH:'Compare prices on:',fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
@@ -279,7 +279,7 @@
       waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.',
       hsSub:'Tap a hotel to compare its price for your dates across the three sites.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
-      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', cmp:'Compare prices →', shQ:'See its price for your dates on:', shGo:'See price', shClose:'Close', shNote:'Prices differ between sites, so check all three before you book. Booking and payment happen on the site you choose. On mobile, pick “Continue to site” if you do not have their app.', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
+      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', cmp:'Compare prices →', shQ:'See the price for your dates on:', shGo:'See price', shClose:'Close', shNote:'Prices differ between sites, so check all three before you book. Booking and payment happen on the site you choose. On mobile, pick “Continue to site” if you do not have their app.', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
   };
   // معلومات الوجهات: اسم عربي، نصيحة، ومَعلم للقرب
   const DEST = {
