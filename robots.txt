@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /media/
 Allow: /
 
 Sitemap: https://nuzultravel.com/sitemap.xml
