@@ -47,7 +47,7 @@ def scene(vid, i, s):
           f"[2:v]format=rgba,fade=in:st=0.35:d=0.4:alpha=1[c];")
     if i == 0:
         cmd += ['-loop', '1', '-framerate', '30', '-t', str(d), '-i', f'{OV}/{vid}_hook.png']
-        fc += (f"[3:v]format=rgba,fade=in:st=0.05:d=0.4:alpha=1[h];[v1][h]overlay={slide(0.05)}:shortest=1[v2];"
+        fc += (f"[3:v]format=rgba[h];[v1][h]overlay=0:0:shortest=1[v2];"
                f"[v2][c]overlay={slide(0.35)}:shortest=1,format=yuv420p[out]")
     else:
         fc += f"[v1][c]overlay={slide(0.35)}:shortest=1,format=yuv420p[out]"
