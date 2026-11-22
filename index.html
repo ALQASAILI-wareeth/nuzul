@@ -10,6 +10,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="نُزُل">
+<meta name="mobile-web-app-capable" content="yes">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="نُزُل">
 <meta property="og:locale" content="ar_AR">
@@ -78,6 +81,7 @@
   .err{grid-column:1/-1;color:#b3261e;font-size:14px;display:none}
   .quick{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:13.5px;color:var(--muted)}
   .quick #quick{display:flex;flex-wrap:wrap;gap:6px}
+  .lang,.qc,#bzEx button{min-height:40px}
   .qc{border:1.5px solid var(--line);background:#fff;color:var(--navy);font:inherit;font-weight:700;font-size:14px;padding:4px 12px;border-radius:999px;cursor:pointer}
   .qc:hover{border-color:var(--sand)}
   .trust{text-align:center;color:var(--muted);font-size:13.5px;margin-top:10px}
@@ -226,8 +230,8 @@
     <p class="sub" data-i="howSub">ثلاث خطوات بسيطة</p>
     <div class="steps">
       <div class="step"><div class="n">1</div><b data-i="s1t">ابحث</b><p data-i="s1p">اكتب المدينة والتواريخ وعدد الأشخاص.</p></div>
-      <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">قارن نفس البحث على Booking و Hotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.</p></div>
-      <div class="step"><div class="n">3</div><b data-i="s3t">احجز بأمان</b><p data-i="s3p">أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.</p></div>
+      <div class="step"><div class="n">2</div><b data-i="s2t">قارن واختر</b><p data-i="s2p">قارن نفس البحث على Hotels.com و Expedia و Booking.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.</p></div>
+      <div class="step"><div class="n">3</div><b data-i="s3t">احجز بأمان</b><p data-i="s3p">أكمل الحجز والدفع مباشرة عند موقع الحجز اللي تختاره.</p></div>
     </div>
     <div class="why">
       <div><b data-i="w1t">✔ أسعار شفافة</b><p data-i="w1p">نفس السعر بدون أي رسوم إضافية علينا.</p></div>
@@ -285,8 +289,8 @@
       typesH: 'اختر نوع إقامتك', typesSub: 'اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب',
       howH: 'كيف تحجز معنا؟', howSub: 'ثلاث خطوات بسيطة',
       s1t: 'ابحث', s1p: 'اكتب المدينة والتواريخ وعدد الأشخاص.',
-      s2t: 'قارن واختر', s2p: 'قارن نفس البحث على Booking و Hotels.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.',
-      s3t: 'احجز بأمان', s3p: 'أكمل الحجز والدفع عبر شركائنا Booking.com أو Hotels.com بحماية كاملة.',
+      s2t: 'قارن واختر', s2p: 'قارن نفس البحث على Hotels.com و Expedia و Booking.com، وفلتر حسب الميزانية والنجوم والقرب من الحرم.',
+      s3t: 'احجز بأمان', s3p: 'أكمل الحجز والدفع مباشرة عند موقع الحجز اللي تختاره.',
       w1t: '✔ أسعار شفافة', w1p: 'نفس السعر بدون أي رسوم إضافية علينا.',
       w2t: '✔ إلغاء مجاني', w2p: 'معظم الغرف تتيح الإلغاء المجاني قبل موعد الوصول.',
       w3t: '✔ دعم على مدار الساعة', w3p: 'خدمة عملاء شريكنا متاحة 24/7 بعدة لغات منها العربية.',
@@ -307,8 +311,8 @@
       typesH: 'Choose your type of stay', typesSub: 'Type your destination in the search above, then pick a stay type',
       howH: 'How to book with us', howSub: 'Three simple steps',
       s1t: 'Search', s1p: 'Enter your city, dates and number of guests.',
-      s2t: 'Compare and choose', s2p: 'Compare the same search on Booking and Hotels.com, filtered by budget, stars and distance to the Haram.',
-      s3t: 'Book securely', s3p: 'Complete your booking and payment with our partners Booking.com or Hotels.com.',
+      s2t: 'Compare and choose', s2p: 'Compare the same search on Hotels.com, Expedia and Booking.com, filtered by budget, stars and distance to the Haram.',
+      s3t: 'Book securely', s3p: 'Complete your booking and payment directly on the booking site you choose.',
       w1t: '✔ Transparent prices', w1p: 'Same price, with no extra fees from us.',
       w2t: '✔ Free cancellation', w2p: 'Most rooms offer free cancellation before arrival.',
       w3t: '✔ 24/7 support', w3p: 'Our partner offers round-the-clock customer service in many languages.',
@@ -549,6 +553,7 @@
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "467e088c51954c0e9555402613322308"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
+<script src="keep.js"></script>
 <script src="extras.js"></script>
 <script src="home.js"></script>
 <script src="business-parser.js"></script>

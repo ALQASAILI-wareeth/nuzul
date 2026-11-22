@@ -11,6 +11,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="نُزُل">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -72,6 +75,7 @@
   .htabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
   .htabs::-webkit-scrollbar{display:none}
   .htabs .chip{white-space:nowrap;flex:0 0 auto}
+  .lang,.edit,.chip{min-height:40px}.panel h2{min-height:44px;margin-bottom:0}.panel:not(.shut) h2{margin-bottom:10px}.back{padding:10px 0}
   .hl{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
   .hc{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
   .hc .hx{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
@@ -85,7 +89,26 @@
   .hc .hm{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
   .hc .hm span{background:#F1F6FA;border-radius:999px;padding:3px 9px}
   .hc .hm .st{background:#FFF4DC;color:#9A6400;font-weight:800}
-  .hc .hb{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:auto}
+  .hc .hb{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:auto;padding:0 14px 14px}
+  .hc .hr{display:flex;align-items:flex-start;gap:8px}.hc .hr > div{flex:1;min-width:0}
+  .hc .fv{flex-shrink:0;width:44px;height:44px;margin:-4px -6px 0 0;border:1px solid var(--line);background:#fff;border-radius:50%;font-size:19px;line-height:1;cursor:pointer;color:#9AA7B4;display:flex;align-items:center;justify-content:center}
+  [dir=rtl] .hc .fv{margin:-4px 0 0 -6px}
+  .hc .fv.on{background:#FFF0F0;border-color:#F3B4B4;color:#D32F2F}
+  .chn{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:var(--radius);padding:14px 16px;margin:14px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .chn > div{flex:1 1 220px}.chn b{display:block;font-size:16px;font-weight:800}.chn span{font-size:13.5px;opacity:.88}
+  .chn nav{display:flex;gap:8px;flex:1 1 220px}.chn nav a{flex:1;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14.5px;color:#fff;white-space:nowrap}
+  .chn .w{background:#1FAF57}.chn .t{background:#229ED9}
+  @media(max-width:560px){
+    .hl{grid-template-columns:1fr;gap:10px}
+    .hc{display:grid;grid-template-columns:118px minmax(0,1fr)}
+    .hc.noi{grid-template-columns:minmax(0,1fr)}
+    .hc .hi{aspect-ratio:auto;min-height:118px;height:100%}
+    .hc .hi .lab{font-size:10.5px;padding:2px 6px;top:6px;inset-inline-start:6px}
+    .hc .hx{padding:10px 12px 8px;gap:6px}
+    .hc .hn{font-size:16px}.hc .hm{font-size:12.5px;gap:5px}
+    .hc .hb{grid-column:1/-1;padding:0 10px 10px;margin-top:0}
+    .hc .hb a{height:44px;font-size:13.5px}
+  }
   .hc .hb a{display:flex;align-items:center;justify-content:center;height:40px;border-radius:10px;font-size:13px;font-weight:800;color:#fff;text-align:center;line-height:1.1;padding:0 4px}
   .hc .hb .b1{background:#003580}.hc .hb .b2{background:#D32F2F}.hc .hb .b3{background:#FDDB32;color:#191E3B}
   .hs .hnote{color:var(--muted);font-size:12.5px;margin-top:10px}
@@ -165,6 +188,7 @@
     <div class="hl" id="hl"></div>
     <p class="hnote" data-i="hsNote">* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.</p>
   </section>
+  <div class="chn"><div><b data-i="chH">🔔 العروض توصلك أول بأول</b><span data-i="chP">عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.</span></div><nav><a class="w" href="https://whatsapp.com/channel/0029Vb8niNp3wtb9Lh3q2l3X" target="_blank" rel="noopener" data-i="chWa">قناة واتساب</a><a class="t" href="https://t.me/nuzul_travel" target="_blank" rel="noopener" data-i="chTg">تيليجرام</a></nav></div>
   <h3 id="cardsH">قارن على أكثر من موقع</h3>
   <p class="note" data-i="cardsNote">نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.</p>
   <div class="cards" id="cards"></div>
@@ -194,6 +218,7 @@
 </footer>
 
 <script src="partners.js"></script>
+<script src="keep.js"></script>
 <script>
 (function(){
   const WA = '971504113342';
@@ -215,7 +240,7 @@
       waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.',
       hsSub:'اختر الفندق، واضغط على أي موقع عشان تشوف سعره لتواريخك.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
-      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
+      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
       title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
       qH:'Compare prices on:',fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
@@ -233,7 +258,7 @@
       waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.',
       hsSub:'Pick a hotel and tap any site to see its price for your dates.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
-      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
+      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
   };
   // معلومات الوجهات: اسم عربي، نصيحة، ومَعلم للقرب
   const DEST = {
@@ -663,7 +688,7 @@
         {n:'The Landmark Bangkok',ar:'ذا لاندمارك بانكوك',g:'suk',img:'bk2_landmark',area:1}
       ]}
   };
-  let HTAB = '';
+  let HTAB = /[?&]fav=1/.test(location.search) ? '_f' : '';
   const ALIAS = {'mecca':'makkah','مكة':'makkah','مكة المكرمة':'makkah','medina':'madinah','المدينة':'madinah','المدينة المنورة':'madinah','دبي':'dubai','أبوظبي':'abu dhabi','إسطنبول':'istanbul','اسطنبول':'istanbul','طرابزون':'trabzon','لندن':'london','باكو':'baku','كوالالمبور':'kuala lumpur','القاهرة':'cairo','تبليسي':'tbilisi','جورجيا':'tbilisi','باتومي':'batumi','المالديف':'maldives','جزر المالديف':'maldives','صلالة':'salalah','بانكوك':'bangkok','تايلاند':'bangkok'};
 
   const $ = id => document.getElementById(id);
@@ -755,13 +780,15 @@
     $('hsTitle').textContent = H.title[lang];
     $('cardsH').textContent = L.cardsAll(dispName());
     const hasV = H.list.some(h => h.v);
-    if (HTAB && !H.groups[HTAB] && !(HTAB === '_v' && hasV)) HTAB = '';
+    const nf = window.NZKEEP ? NZKEEP.favCount(k) : 0;
+    if (HTAB && !H.groups[HTAB] && !(HTAB === '_v' && hasV) && !(HTAB === '_f' && nf)) HTAB = '';
     const tabs = [['', L.all], ...Object.entries(H.groups).map(([g, v]) => [g, v[lang]])];
     if (hasV) tabs.push(['_v', L.cheaper]);
+    if (nf) tabs.push(['_f', L.favTab(nf)]);
     chips($('htabs'), tabs, v => HTAB === v, v => HTAB = v);
     const o = opts();
     const cheap = h => h.v || h.g === 'val';
-    let list = H.list.filter(h => !HTAB || (HTAB === '_v' ? cheap(h) : h.g === HTAB));
+    let list = H.list.filter(h => !HTAB || (HTAB === '_v' ? cheap(h) : HTAB === '_f' ? NZKEEP.isFav(k, h.n) : h.g === HTAB));
     if (F.stars) list = list.filter(h => h.s && h.s >= +F.stars);
     if (F.budget === 'eco') list = list.filter(cheap);
     if (F.budget === 'lux') list = list.filter(h => !cheap(h));
@@ -772,14 +799,19 @@
       const ef = {hotel: h.n};
       const bk = NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, 'hotel'), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, 'hotel');
       const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (g.info ? '<span>✨ ' + g.info[lang] + '</span>' : '');
-      c.innerHTML = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) +
-        '<div class="hx"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
-        '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div>' +
+      const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area); if (!im) c.classList.add('noi');
+      const on = !!(window.NZKEEP && NZKEEP.isFav(k, h.n));
+      c.innerHTML = im +
+        '<div class="hx"><div class="hr"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
+        (window.NZKEEP ? '<button type="button" class="fv' + (on ? ' on' : '') + '" aria-pressed="' + on + '" aria-label="' + (on ? L.favRm : L.favAdd) + '" title="' + (on ? L.favRm : L.favAdd) + '">' + (on ? '♥' : '♡') + '</button>' : '') + '</div>' +
+        '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div></div>' +
         '<div class="hb"><a class="b2" target="_blank" rel="noopener sponsored" href="' + hc + '">Hotels.com</a>' +
         '<a class="b3" target="_blank" rel="noopener sponsored" href="' + ex + '">Expedia</a>' +
-        '<a class="b1" target="_blank" rel="noopener sponsored" href="' + bk + '">Booking</a></div></div>';
+        '<a class="b1" target="_blank" rel="noopener sponsored" href="' + bk + '">Booking</a></div>';
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.n;
+      const fb = c.querySelector('.fv');
+      if (fb) fb.onclick = () => { NZKEEP.toggleFav({city:k, d:S.d, cityAr:DEST[k] ? DEST[k].ar : '', n:h.n, ar:h.ar}); if (HTAB === '_f' && !NZKEEP.favCount(k)) HTAB = ''; renderHotels(); };
       hl.append(c);
     });
   }
@@ -841,6 +873,7 @@
     document.title = (lang === 'ar' ? 'نُزُل — ' : 'Nuzul — ') + L.title(n);
     $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span><span>🛏️ ' + L.rooms(S.rooms) + '</span>';
     renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits();
+    if (window.NZKEEP) NZKEEP.saveSearch(S, (k && DEST[k].ar) || S.n || S.d);
     $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
     $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(L.waMsg(n, S.cin, S.cout, S.adults));
   }

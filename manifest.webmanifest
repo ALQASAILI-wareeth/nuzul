@@ -1,0 +1,16 @@
+{
+  "name": "نُزُل — قارن أسعار الفنادق",
+  "short_name": "نُزُل",
+  "description": "ابحث مرة وحدة وقارن سعر الفندق على أشهر مواقع الحجز، بدون رسوم إضافية.",
+  "start_url": "/?src=home",
+  "scope": "/",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "ar",
+  "background_color": "#062F52",
+  "theme_color": "#062F52",
+  "icons": [
+    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}
