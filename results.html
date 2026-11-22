@@ -107,10 +107,30 @@
     .hc .hx{padding:10px 12px 8px;gap:6px}
     .hc .hn{font-size:16px}.hc .hm{font-size:12.5px;gap:5px}
     .hc .hb{grid-column:1/-1;padding:0 10px 10px;margin-top:0}
-    .hc .hb a{height:44px;font-size:13.5px}
   }
   .hc .hb a{display:flex;align-items:center;justify-content:center;height:40px;border-radius:10px;font-size:13px;font-weight:800;color:#fff;text-align:center;line-height:1.1;padding:0 4px}
-  .hc .hb .b1{background:#003580}.hc .hb .b2{background:#D32F2F}.hc .hb .b3{background:#FDDB32;color:#191E3B}
+  .hc{cursor:pointer;transition:box-shadow .15s,border-color .15s}.hc:hover,.hc:focus-visible{border-color:var(--teal);box-shadow:0 6px 18px rgba(6,47,82,.10);outline:none}
+  .hc .hb{grid-template-columns:1fr}
+  .hc .hb .cmp{height:46px;border:0;border-radius:12px;background:#FFB238;color:#0A2540;font:inherit;font-weight:800;font-size:15.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+  .sh{position:fixed;inset:0;z-index:80;background:rgba(6,30,52,.58);display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .2s}
+  .sh[hidden]{display:none}.sh.on{opacity:1}
+  .shp{background:#fff;width:100%;max-width:520px;border-radius:22px 22px 0 0;max-height:92vh;overflow:auto;-webkit-overflow-scrolling:touch;transform:translateY(100%);transition:transform .25s ease;padding-bottom:calc(14px + env(safe-area-inset-bottom));position:relative}
+  .sh.on .shp{transform:none}
+  .shg{position:sticky;top:0;z-index:2;height:22px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:22px 22px 0 0}.shg i{width:44px;height:5px;border-radius:99px;background:#CBD6E0}
+  .shx{position:absolute;top:10px;inset-inline-end:10px;z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 2px 8px rgba(6,47,82,.18);font-size:20px;color:var(--navy);cursor:pointer}
+  .shi{position:relative;aspect-ratio:16/9;max-height:210px;width:100%;background:#E6EEF4;overflow:hidden}.shi img{width:100%;height:100%;object-fit:cover;display:block}
+  .shi .lab{position:absolute;bottom:8px;inset-inline-start:8px;background:rgba(10,37,64,.78);color:#fff;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px}
+  .shb{padding:12px 16px 4px}.shb h3{font-size:20px;font-weight:800;color:var(--navy);line-height:1.35;margin:0}
+  .shb .he{font-size:13px;color:var(--muted);direction:ltr;text-align:start}
+  .shb .hm{display:flex;flex-wrap:wrap;gap:6px;font-size:13px;margin:8px 0}.shb .hm span{background:#F1F6FA;border-radius:999px;padding:3px 9px}.shb .hm .st{background:#FFF4DC;color:#9A6400;font-weight:800}.shb .hm .vv{background:#E5F7EE;color:#137A47;font-weight:800}
+  .shd{font-size:14px;color:var(--navy);font-weight:700;background:#F1F6FA;border-radius:12px;padding:9px 12px;margin:6px 0 12px}
+  .shq{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:8px}
+  .sha{display:flex;align-items:center;justify-content:space-between;gap:10px;height:58px;border-radius:14px;padding:0 16px;margin-bottom:8px;color:#fff;font-weight:800;font-size:17px}
+  .sha small{font-size:13.5px;font-weight:700;opacity:.95;white-space:nowrap}
+  .sha.b1{background:#003580}.sha.b2{background:#D32F2F}.sha.b3{background:#FDDB32;color:#191E3B}
+  .shn{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:6px}
+  @media(min-width:700px){.sh{align-items:center}.shp{border-radius:22px;padding-bottom:16px}.shg{display:none}}
+  body.shlock{overflow:hidden}
   .hs .hnote{color:var(--muted);font-size:12.5px;margin-top:10px}
   .note{color:var(--muted);font-size:14px;margin-bottom:12px}
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
@@ -183,7 +203,7 @@
 
   <section class="hs" id="hs" hidden>
     <h2 id="hsTitle"></h2>
-    <p class="sub" data-i="hsSub">اختر الفندق، واضغط على أي موقع عشان تشوف سعره لتواريخك.</p>
+    <p class="sub" data-i="hsSub">اضغط على الفندق عشان تقارن سعره لتواريخك على المواقع الثلاثة.</p>
     <div class="htabs" id="htabs"></div>
     <div class="hl" id="hl"></div>
     <p class="hnote" data-i="hsNote">* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.</p>
@@ -209,6 +229,7 @@
   <a class="back" href="/" data-i="back">→ الرجوع للصفحة الرئيسية</a>
 </main>
 
+<div class="sh" id="sh" hidden><div class="shp" id="shp" role="dialog" aria-modal="true" aria-labelledby="shN"></div></div>
 <footer>
   <div class="wrap">
     <span data-i="disc">نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.</span>
@@ -239,8 +260,8 @@
       disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند شركائنا مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
       waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.',
-      hsSub:'اختر الفندق، واضغط على أي موقع عشان تشوف سعره لتواريخك.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
-      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
+      hsSub:'اضغط على الفندق عشان تقارن سعره لتواريخك على المواقع الثلاثة.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
+      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 سعر أوفر', areaPic:'📷 صورة المنطقة', cmp:'قارن الأسعار ←', shQ:'شوف سعره لتواريخك على:', shGo:'شوف السعر', shClose:'إغلاق', shNote:'السعر يختلف بين المواقع، فقارن الثلاثة قبل ما تحجز. الحجز والدفع يتمان عند الموقع اللي تختاره. على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك تطبيقهم.', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
       title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
       qH:'Compare prices on:',fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
@@ -257,8 +278,8 @@
       disc:'Nuzul is an independent website. Bookings and payments are made with partners such as Booking.com, Hotels.com and Expedia, and we may earn a commission at no extra cost to you.',
       waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.',
-      hsSub:'Pick a hotel and tap any site to see its price for your dates.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
-      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
+      hsSub:'Tap a hotel to compare its price for your dates across the three sites.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
+      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', cmp:'Compare prices →', shQ:'See its price for your dates on:', shGo:'See price', shClose:'Close', shNote:'Prices differ between sites, so check all three before you book. Booking and payment happen on the site you choose. On mobile, pick “Continue to site” if you do not have their app.', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
   };
   // معلومات الوجهات: اسم عربي، نصيحة، ومَعلم للقرب
   const DEST = {
@@ -805,16 +826,57 @@
         '<div class="hx"><div class="hr"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
         (window.NZKEEP ? '<button type="button" class="fv' + (on ? ' on' : '') + '" aria-pressed="' + on + '" aria-label="' + (on ? L.favRm : L.favAdd) + '" title="' + (on ? L.favRm : L.favAdd) + '">' + (on ? '♥' : '♡') + '</button>' : '') + '</div>' +
         '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div></div>' +
-        '<div class="hb"><a class="b2" target="_blank" rel="noopener sponsored" href="' + hc + '">Hotels.com</a>' +
-        '<a class="b3" target="_blank" rel="noopener sponsored" href="' + ex + '">Expedia</a>' +
-        '<a class="b1" target="_blank" rel="noopener sponsored" href="' + bk + '">Booking</a></div>';
+        '<div class="hb"><button type="button" class="cmp">' + L.cmp + '</button></div>';
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.n;
+      c.tabIndex = 0; c.setAttribute('role', 'button');
+      const open = () => openSheet(c, {h:h, g:g, extra:extra, im:IMG[h.img] ? c.querySelector('.hi img') : null, hc:hc, ex:ex, bk:bk});
+      c.onclick = e => { if (e.target.closest('.fv')) return; open(); };
+      c.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); open(); } };
       const fb = c.querySelector('.fv');
       if (fb) fb.onclick = () => { NZKEEP.toggleFav({city:k, d:S.d, cityAr:DEST[k] ? DEST[k].ar : '', n:h.n, ar:h.ar}); if (HTAB === '_f' && !NZKEEP.favCount(k)) HTAB = ''; renderHotels(); };
       hl.append(c);
     });
   }
+
+  // لوحة المقارنة: تطلع من تحت فوق نفس الصفحة وفيها الشركاء الثلاثة
+  let shFrom = null;
+  function openSheet(from, d){
+    const L = T[lang], h = d.h, sh = $('sh');
+    shFrom = from;
+    const src = d.im && !d.im.parentNode.classList.contains('noimg') ? d.im.currentSrc || d.im.src : '';
+    const a = (cls, name, href) => '<a class="sha ' + cls + '" target="_blank" rel="noopener sponsored" href="' + href + '"><span>' + name + '</span><small>' + L.shGo + ' ↗</small></a>';
+    $('shp').innerHTML = '<div class="shg" aria-hidden="true"><i></i></div><button type="button" class="shx" id="shx" aria-label="' + L.shClose + '">✕</button>' +
+      (src ? '<div class="shi"><img alt="" src="' + src + '">' + (h.area ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>' : '') +
+      '<div class="shb"><h3 id="shN"></h3>' + (lang === 'ar' ? '<div class="he" id="shE"></div>' : '') +
+      '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + d.g[lang] + '</span>' + d.extra + '</div>' +
+      '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
+      '<div class="shq">' + L.shQ + '</div>' +
+      a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) +
+      '<p class="shn">' + L.shNote + '</p></div>';
+    $('shN').textContent = lang === 'ar' ? h.ar : h.n;
+    if (lang === 'ar') $('shE').textContent = h.n;
+    $('shx').onclick = closeSheet;
+    sh.hidden = false; document.body.classList.add('shlock');
+    requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
+    setTimeout(() => { try { $('shx').focus({preventScroll:true}); } catch(e){} }, 60);
+  }
+  function closeSheet(){
+    const sh = $('sh'); if (sh.hidden) return;
+    sh.classList.remove('on'); document.body.classList.remove('shlock'); $('shp').style.transform = '';
+    setTimeout(() => { sh.hidden = true; }, 230);
+    if (shFrom) { try { shFrom.focus({preventScroll:true}); } catch(e){} shFrom = null; }
+  }
+  (function(){
+    const sh = $('sh'), p = $('shp');
+    sh.addEventListener('click', e => { if (e.target === sh) closeSheet(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+    // سحبة لتحت تسكّر اللوحة
+    let y0 = null, dy = 0;
+    p.addEventListener('touchstart', e => { y0 = p.scrollTop <= 0 ? e.touches[0].clientY : null; dy = 0; }, {passive:true});
+    p.addEventListener('touchmove', e => { if (y0 === null) return; dy = e.touches[0].clientY - y0; if (dy > 0) { p.style.transition = 'none'; p.style.transform = 'translateY(' + dy + 'px)'; } }, {passive:true});
+    p.addEventListener('touchend', () => { if (y0 === null) return; p.style.transition = ''; if (dy > 90) closeSheet(); else p.style.transform = ''; y0 = null; });
+  })();
 
   // حقوق الصور: تُعرض في أسفل الصفحة بدل ما تكون فوق الصور
   let CREDITS = {}, HERO_CR = null;
