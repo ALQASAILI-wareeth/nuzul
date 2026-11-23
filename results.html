@@ -797,10 +797,13 @@
 
   // صور من ويكيبيديا (تراخيص حرة فقط) للفنادق اللي ما لها صورة محفوظة: صورة الفندق، وإلا صورة المنطقة
   const WIKI = {};
+  // صور ما تصلح كصورة وجهة: أعلام وشعارات وخرائط
+  const badPic = f => /علم|شعار|خريطة|flag|coat[ _]of[ _]arms|emblem|logo|seal[ _]of|locator|[ _]map|map[ _]|orthographic|\.svg/i.test(String(f || ''));
+  const tourTitle = t => /[؀-ۿ]/.test(t) ? 'السياحة في ' + t : 'Tourism in ' + t;
   function wikiHtml(h, g, H){
-    const t = [h.w, g && g.w, H.city].filter((x, i, a) => x && a.indexOf(x) === i);
+    const t = [h.w, g && g.w, H.city, H.gen ? tourTitle(H.city) : ''].filter((x, i, a) => x && a.indexOf(x) === i);
     if (!t.length) return '';
-    return '<div class="hi noimg"' + (h.w ? ' data-own="1"' : '') + ' data-w="' + t.map(x => encodeURIComponent(x)).join('|') + '"></div>';
+    return '<div class="hi noimg"' + (h.w ? ' data-own="1"' : '') + ' data-c="' + encodeURIComponent(H.city) + '" data-w="' + t.map(x => encodeURIComponent(x)).join('|') + '"></div>';
   }
   function localPic(b, city){
     if (b.dataset.loc) return; b.dataset.loc = '1';
@@ -808,7 +811,7 @@
     im.onerror = () => { b.innerHTML = ''; b.classList.add('noimg'); };
     im.onload = () => { b.classList.remove('noimg'); const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); };
     b.innerHTML = ''; b.append(im);
-    im.src = '/img/cities/' + String(city).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.webp';
+    im.src = '/img/cities/' + decodeURIComponent(String(city)).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.webp';
   }
   let wikiRun = 0;
   async function fillWiki(){
@@ -825,7 +828,7 @@
         (q.normalized || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         (q.redirects || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         const by = {}; Object.values(q.pages || {}).forEach(p => { by[p.title] = p; });
-        part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage) ? {src: p.thumbnail.source, file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
+        part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage && !badPic(p.pageimage)) ? {src: p.thumbnail.source, file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
       } }
     } catch(e) {}
     if (run !== wikiRun) return;
@@ -833,11 +836,11 @@
     boxes.forEach(b => {
       if (!b.isConnected) return;
       const ts = b.dataset.w.split('|').map(decodeURIComponent), idx = ts.findIndex(t => WIKI[t]);
-      if (idx < 0) { localPic(b, ts[ts.length - 1]); return; }
+      if (idx < 0) { localPic(b, b.dataset.c || ts[ts.length - 1]); return; }
       const w = WIKI[ts[idx]], area = idx > 0 || !b.dataset.own;
       const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = '';
       if (area) im.dataset.area = '1';
-      im.onerror = () => { b.classList.add('noimg'); localPic(b, ts[ts.length - 1]); }; b.classList.remove('noimg');
+      im.onerror = () => { b.classList.add('noimg'); localPic(b, b.dataset.c || ts[ts.length - 1]); }; b.classList.remove('noimg');
       b.innerHTML = ''; b.append(im);
       if (area) { const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); }
       im.src = w.src;
@@ -994,10 +997,15 @@
     top.classList.remove('ph'); top.style.backgroundImage = ''; HERO_CR = null;
     const ar = /[؀-ۿ]/.test(name), wiki = ar ? 'ar' : 'en';
     try {
-      const q = 'https://' + wiki + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=1280&pilicense=free&titles=' + encodeURIComponent(name);
-      const d = await (await fetch(q)).json();
-      const pg = Object.values((d.query || {}).pages || {})[0] || {};
-      if (!pg.thumbnail || !pg.pageimage || heroFor !== name) return;
+      let pg = null;
+      for (const tt of [name, tourTitle(name)]) {
+        const q = 'https://' + wiki + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=1280&pilicense=free&titles=' + encodeURIComponent(tt);
+        const d = await (await fetch(q)).json();
+        const x = Object.values((d.query || {}).pages || {})[0] || {};
+        if (heroFor !== name) return;
+        if (x.thumbnail && x.pageimage && !badPic(x.pageimage)) { pg = x; break; }
+      }
+      if (!pg) return;
       const src = pg.thumbnail.source;
       await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
       if (heroFor !== name) return;
