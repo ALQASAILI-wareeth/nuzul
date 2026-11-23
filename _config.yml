@@ -1,3 +1,4 @@
 exclude:
   - studio
   - README.md
+  - tests
