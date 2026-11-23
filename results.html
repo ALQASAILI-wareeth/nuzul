@@ -995,7 +995,7 @@
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.f ? '' : h.n;
       c.tabIndex = 0; c.setAttribute('role', 'button');
-      const open = () => openSheet(c, {h:h, g:g, extra:extra, im:c.querySelector('.hi img'), hc:hc, ex:ex, bk:bk});
+      const open = () => openSheet(c, {h:h, g:g, city:(h.c || H.city), extra:extra, im:c.querySelector('.hi img'), hc:hc, ex:ex, bk:bk});
       c.onclick = e => { if (e.target.closest('.fv')) return; open(); };
       c.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); open(); } };
       const fb = c.querySelector('.fv');
@@ -1007,6 +1007,15 @@
 
   // لوحة المقارنة: تطلع من تحت فوق نفس الصفحة وفيها الشركاء الثلاثة
   let shFrom = null;
+  // حول الفندق: روابط خرائط لأقرب مطاعم وكوفيهات وحدائق ومساجد (بدون عمولة)
+  function nearHtml(h, city){
+    const ar = lang === 'ar';
+    const items = ar ? [['مطاعم حلال','halal restaurants'],['كوفي','coffee shops'],['حدائق','parks'],['ترفيه للعائلة','family attractions'],['مساجد','mosque'],['صيدلية','pharmacy']]
+                     : [['Halal restaurants','halal restaurants'],['Coffee','coffee shops'],['Parks','parks'],['Family fun','family attractions'],['Mosques','mosque'],['Pharmacy','pharmacy']];
+    const q = t => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t + ' near ' + h.n + (city ? ', ' + city : ''));
+    return '<div class="shnr"><b>' + (ar ? 'حول الفندق' : 'Around the hotel') + '</b><span>' + (ar ? 'بعد ما تحجز، شوف أقرب الأماكن على الخريطة:' : 'After you book, see what is nearby on the map:') + '</span><div>' +
+      items.map(i => '<a target="_blank" rel="noopener" href="' + q(i[1]) + '">' + i[0] + '</a>').join('') + '</div></div>';
+  }
   function openSheet(from, d){
     const L = T[lang], h = d.h, sh = $('sh');
     shFrom = from;
@@ -1019,6 +1028,7 @@
       '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
       '<div class="shq">' + L.shQ + '</div>' +
       a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) +
+      (h.f ? '' : nearHtml(h, d.city)) +
       '<p class="shn">' + L.shNote + '</p></div>';
     $('shN').textContent = lang === 'ar' ? h.ar : h.n;
     if (lang === 'ar') $('shE').textContent = h.f ? '' : h.n;
@@ -1123,6 +1133,11 @@
   // edit form
   for (let i=1;i<=10;i++) $('e_ad').add(new Option(i, i));
   for (let i=1;i<=5;i++) $('e_rm').add(new Option(i, i));
+  $('e_cin').addEventListener('change', () => {
+    const v = $('e_cin').value; if (!v) return;
+    const nx = fmt(addDays(new Date(v), 1));
+    $('e_cout').min = nx; $('e_cout').value = nx;
+  });
   function fillForm(){ $('e_dest').value = lang === 'ar' ? dispName() : S.d; $('e_cin').value = S.cin; $('e_cout').value = S.cout; $('e_ad').value = S.adults; $('e_rm').value = S.rooms; $('e_cin').min = fmt(today); }
   $('editBtn').onclick = () => { fillForm(); $('eform').classList.toggle('on'); };
   $('e_go').onclick = () => {

@@ -154,4 +154,17 @@
     label();
     var lb = D.getElementById('langBtn'); if (lb) lb.addEventListener('click', function () { setTimeout(label, 60); });
   })();
+
+  // ---------- علامات الصح: أيقونة واضحة بدل الرمز الباهت ----------
+  (function () {
+    var CK = '<svg class="nz-ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg>';
+    function fix() {
+      D.querySelectorAll('.why b').forEach(function (b) {
+        var t = b.textContent; if (t.indexOf('✔') < 0) return;
+        b.innerHTML = CK + '<span></span>'; b.lastChild.textContent = t.replace(/✔️?\s*/, '');
+      });
+    }
+    fix();
+    var lb = D.getElementById('langBtn'); if (lb) lb.addEventListener('click', function () { setTimeout(fix, 60); });
+  })();
 })();

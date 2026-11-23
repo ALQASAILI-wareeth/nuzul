@@ -65,3 +65,18 @@ main{margin-top:-22px;position:relative;background:var(--bg);border-radius:24px 
 h2 .nze,h3 .nze{color:var(--teal)}
 .top.ph h1{text-shadow:0 1px 3px rgba(0,20,40,.7),0 2px 16px rgba(0,20,40,.55)}
 .top.ph .meta span{background:rgba(6,40,70,.42);border-color:rgba(255,255,255,.30)}
+
+/* وضوح الكتابة + علامات الصح */
+:root{--muted:#48566a}
+footer{color:#eaf0f6}
+footer a{opacity:1}
+.pc li::before{content:"";display:inline-block;width:16px;height:16px;vertical-align:-2px;margin-inline-end:7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2312a05c' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.500l4.500 4.500L19 7.500'/%3E%3C/svg%3E")}
+.nze.nze-ck{color:#12a05c;width:1.1em;height:1.1em}
+.help p{opacity:1}
+.meta{opacity:1}
+/* حول الفندق */
+.shnr{margin:14px 0 6px;padding:12px 14px;background:#f3f8fb;border-radius:16px}
+.shnr b{display:block;color:var(--navy);font-size:15px}
+.shnr > span{display:block;color:var(--muted);font-size:13px;margin:2px 0 10px}
+.shnr div{display:flex;flex-wrap:wrap;gap:8px}
+.shnr a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:#fff;border:1.5px solid #dce7ee;color:var(--navy);font-weight:700;font-size:14px}

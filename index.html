@@ -450,7 +450,7 @@
     return ok;
   }
   $('cin').addEventListener('change', () => {
-    if ($('cout').value <= $('cin').value) $('cout').value = fmt(addDays(new Date($('cin').value),1));
+    if ($('cin').value) { $('cout').value = fmt(addDays(new Date($('cin').value),1)); $('cout').dispatchEvent(new Event('input', {bubbles:true})); }
     $('cout').min = fmt(addDays(new Date($('cin').value),1));
     update(); renderTypes();
   });

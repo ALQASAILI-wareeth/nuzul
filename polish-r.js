@@ -58,14 +58,15 @@
     mosque: '<path d="M5 21v-7a7 7 0 0114 0v7M3 21h18M12 4v3"/><path d="M10 21v-3a2 2 0 014 0v3"/>',
     palm: '<path d="M12 21c0-5 .500-8 2-11"/><path d="M14 10c-3-3-7-2.500-9 0 3-1 6-.600 9 0zM14 10c1-4 5-5 7-3-3 0-5 1-7 3zM14 10c3 0 5.500 2 6 5-2-2.500-4-3.500-6-5z"/><path d="M5 21h14"/>',
     down: '<path d="M12 4v15M6 13l6 6 6-6"/>',
-    plane: '<path d="M21 3l-7.500 18-3-8-8-3L21 3z"/><path d="M10.500 13L21 3"/>'
+    plane: '<path d="M21 3l-7.500 18-3-8-8-3L21 3z"/><path d="M10.500 13L21 3"/>',
+    check: '<path d="M5 12.500l4.500 4.500L19 7.500" stroke-width="3"/>'
   };
-  var E = { '📍': 'pin', '✨': 'spark', '🎯': 'filter', '🏙': 'city', '💡': 'bulb', '📅': 'cal', '👥': 'users', '🛏': 'bed', '✏': 'pen', '📷': 'cam', '💬': 'chat', '📱': 'phone', '🔔': 'bell', '💲': 'tag', '🏨': 'hotel', '🏢': 'apt', '🏡': 'home', '💎': 'gem', '⭐': 'star', '🚶': 'walk', '🕌': 'mosque', '🏝': 'palm', '👇': 'down', '✈': 'plane' };
+  var E = { '📍': 'pin', '✨': 'spark', '🎯': 'filter', '🏙': 'city', '💡': 'bulb', '📅': 'cal', '👥': 'users', '🛏': 'bed', '✏': 'pen', '📷': 'cam', '💬': 'chat', '📱': 'phone', '🔔': 'bell', '💲': 'tag', '🏨': 'hotel', '🏢': 'apt', '🏡': 'home', '💎': 'gem', '⭐': 'star', '🚶': 'walk', '🕌': 'mosque', '🏝': 'palm', '👇': 'down', '✈': 'plane', '✔': 'check' };
   var RX = new RegExp('(' + Object.keys(E).join('|') + ')\\uFE0F?', 'u');
   var NS = 'http://www.w3.org/2000/svg';
   function icon(n) {
     var s = D.createElementNS(NS, 'svg');
-    s.setAttribute('class', 'nze'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none');
+    s.setAttribute('class', n === 'check' ? 'nze nze-ck' : 'nze'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none');
     s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '1.8'); s.setAttribute('stroke-linecap', 'round');
     s.setAttribute('stroke-linejoin', 'round'); s.setAttribute('aria-hidden', 'true'); s.innerHTML = P[n];
     return s;

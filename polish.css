@@ -122,3 +122,14 @@ footer .nz-more{background:transparent;border:0;color:var(--sand2);font:inherit;
   footer .fl a:active{background:rgba(255,255,255,.16)}
 }
 footer .fl.nz-open .nz-more{order:9}
+
+/* وضوح الكتابة: نص أنصع وتباين أعلى */
+:root{--muted:#48566a}
+.why div p{opacity:1;color:#eef4f9}
+.why div b{display:flex;align-items:center;gap:8px;color:#ffd98a}
+.nz-ck{width:20px;height:20px;flex:0 0 auto;color:#3ddc97}
+footer{color:#eaf0f6}
+footer .disc{opacity:1;color:#d5dee8;font-size:13.5px;line-height:1.8}
+footer .fl a{color:#fff;opacity:1}
+.hero p{opacity:1}
+.f input::placeholder{color:#7a8794}
