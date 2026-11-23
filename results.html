@@ -802,33 +802,42 @@
     if (!t.length) return '';
     return '<div class="hi noimg"' + (h.w ? ' data-own="1"' : '') + ' data-w="' + t.map(x => encodeURIComponent(x)).join('|') + '"></div>';
   }
+  function localPic(b, city){
+    if (b.dataset.loc) return; b.dataset.loc = '1';
+    const im = new Image(); im.alt = ''; im.width = 480; im.height = 400; im.dataset.area = '1';
+    im.onerror = () => { b.innerHTML = ''; b.classList.add('noimg'); };
+    im.onload = () => { b.classList.remove('noimg'); const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); };
+    b.innerHTML = ''; b.append(im);
+    im.src = '/img/cities/' + String(city).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.webp';
+  }
   let wikiRun = 0;
   async function fillWiki(){
     const run = ++wikiRun, boxes = [...document.querySelectorAll('#hl .hi[data-w]')];
     if (!boxes.length) return;
     const need = [...new Set(boxes.flatMap(b => b.dataset.w.split('|').map(decodeURIComponent)))].filter(t => !(t in WIKI));
     try {
-      for (let i = 0; i < need.length; i += 40) {
-        const part = need.slice(i, i + 40);
-        const d = await (await fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=640&pilicense=free&titles=' + encodeURIComponent(part.join('|')))).json();
+      for (const wl of ['en', 'ar']) { const nl = need.filter(t => /[؀-ۿ]/.test(t) === (wl === 'ar'));
+      for (let i = 0; i < nl.length; i += 40) {
+        const part = nl.slice(i, i + 40);
+        const d = await (await fetch('https://' + wl + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=640&pilicense=free&titles=' + encodeURIComponent(part.join('|')))).json();
         const q = d.query || {}, map = {};
         part.forEach(t => map[t] = t);
         (q.normalized || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         (q.redirects || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         const by = {}; Object.values(q.pages || {}).forEach(p => { by[p.title] = p; });
         part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage) ? {src: p.thumbnail.source, file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
-      }
-    } catch(e) { return; }
+      } }
+    } catch(e) {}
     if (run !== wikiRun) return;
     const files = {};
     boxes.forEach(b => {
       if (!b.isConnected) return;
       const ts = b.dataset.w.split('|').map(decodeURIComponent), idx = ts.findIndex(t => WIKI[t]);
-      if (idx < 0) return;
+      if (idx < 0) { localPic(b, ts[ts.length - 1]); return; }
       const w = WIKI[ts[idx]], area = idx > 0 || !b.dataset.own;
       const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = '';
       if (area) im.dataset.area = '1';
-      im.onerror = () => b.classList.add('noimg'); b.classList.remove('noimg');
+      im.onerror = () => { b.classList.add('noimg'); localPic(b, ts[ts.length - 1]); }; b.classList.remove('noimg');
       b.innerHTML = ''; b.append(im);
       if (area) { const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); }
       im.src = w.src;
@@ -852,12 +861,30 @@
     } catch(e) {}
   }
 
+  // أي وجهة ما لها قائمة فنادق مختارة: نعرض «اختيارات جاهزة» بنفس شكل البطاقات
+  function genericH(){
+    const name = (S.d || '').trim(); if (!name) return null;
+    const ar = dispName(), en = /[؀-ۿ]/.test(name) ? name : name;
+    const P = [
+      ['فنادق 5 نجوم', '5-star hotels', {stars:'5'}, 5, 0, 'أفخم فنادق الوجهة', 'The most luxurious stays'],
+      ['فنادق 4 نجوم وأعلى', '4-star hotels & up', {stars:'4'}, 4, 0, 'راحة ممتازة بسعر معقول', 'Great comfort at a fair price'],
+      ['الأعلى تقييماً من النزلاء', 'Top rated by guests', {rating8:true, sort:'rating'}, 0, 0, 'تقييم 8 من 10 وأعلى', 'Rated 8 out of 10 and above'],
+      ['أسعار اقتصادية', 'Budget stays', {budget:'eco', sort:'price'}, 0, 1, 'الأرخص أولاً', 'Cheapest first'],
+      ['شقق فندقية للعوائل', 'Serviced apartments', {type:'apartment'}, 0, 0, 'مساحة أكبر ومطبخ', 'More space and a kitchen'],
+      ['حجز بإلغاء مجاني', 'Free cancellation', {freeCancel:true}, 0, 0, 'تقدر تلغي بدون رسوم', 'Cancel without a fee']
+    ];
+    return { gen: true, city: name, title: {ar: 'اختيارات جاهزة في ' + ar, en: 'Ready-made picks in ' + en},
+      groups: { all: {ar: ar, en: en} },
+      list: P.map(p => { const o = {n: p[1], ar: p[0], g: 'all', f: p[2], info: {ar: p[5], en: p[6]}}; if (p[3]) o.s = p[3]; if (p[4]) o.v = 1; return o; }) };
+  }
+
   function renderHotels(){
-    const L = T[lang], k = key(), H = HG[k], box = $('hs');
+    const L = T[lang], k = key(), H = HG[k] || genericH(), box = $('hs');
     const hideType = F.type && F.type !== 'hotel';
     if (!H || hideType) { box.hidden = true; CREDITS = {}; $('cardsH').textContent = L.cardsH; return; }
     box.hidden = false;
     $('hsTitle').textContent = H.title[lang];
+    { const sb = box.querySelector('.sub'); if (sb) sb.textContent = H.gen ? (lang === 'ar' ? 'اضغط على الخيار عشان تشوفه لتواريخك على المواقع الثلاثة.' : 'Tap a pick to see it for your dates on the three sites.') : L.hsSub; }
     $('cardsH').textContent = L.cardsAll(dispName());
     const hasV = H.list.some(h => h.v);
     const nf = window.NZKEEP ? NZKEEP.favCount(k) : 0;
@@ -866,6 +893,7 @@
     if (hasV) tabs.push(['_v', L.cheaper]);
     if (nf) tabs.push(['_f', L.favTab(nf)]);
     chips($('htabs'), tabs, v => HTAB === v, v => HTAB = v);
+    $('htabs').style.display = tabs.length > 2 ? '' : 'none';
     const o = opts();
     const cheap = h => h.v || h.g === 'val';
     let list = H.list.filter(h => !HTAB || (HTAB === '_v' ? cheap(h) : HTAB === '_f' ? NZKEEP.isFav(k, h.n) : h.g === HTAB));
@@ -876,18 +904,18 @@
     if (!list.length) { hl.innerHTML = '<p class="sub">' + L.noH + '</p>'; return; }
     list.forEach(h => {
       const g = H.groups[h.g], c = document.createElement('div'); c.className = 'hc';
-      const ef = {hotel: h.n};
-      const bk = NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, 'hotel'), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, 'hotel');
-      const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (g.info ? '<span>✨ ' + g.info[lang] + '</span>' : '');
+      const ef = h.f || {hotel: h.n}, rf = h.f ? 'pick' : 'hotel';
+      const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, rf);
+      const gi = h.info || g.info; const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (gi ? '<span>✨ ' + gi[lang] + '</span>' : '');
       const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) || wikiHtml(h, g, H); if (!im) c.classList.add('noi');
       const on = !!(window.NZKEEP && NZKEEP.isFav(k, h.n));
       c.innerHTML = im +
         '<div class="hx"><div class="hr"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
-        (window.NZKEEP ? '<button type="button" class="fv' + (on ? ' on' : '') + '" aria-pressed="' + on + '" aria-label="' + (on ? L.favRm : L.favAdd) + '" title="' + (on ? L.favRm : L.favAdd) + '">' + (on ? '♥' : '♡') + '</button>' : '') + '</div>' +
+        (window.NZKEEP && !h.f ? '<button type="button" class="fv' + (on ? ' on' : '') + '" aria-pressed="' + on + '" aria-label="' + (on ? L.favRm : L.favAdd) + '" title="' + (on ? L.favRm : L.favAdd) + '">' + (on ? '♥' : '♡') + '</button>' : '') + '</div>' +
         '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div></div>' +
         '<div class="hb"><button type="button" class="cmp">' + L.cmp + '</button></div>';
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
-      if (lang === 'ar') c.querySelector('.he').textContent = h.n;
+      if (lang === 'ar') c.querySelector('.he').textContent = h.f ? '' : h.n;
       c.tabIndex = 0; c.setAttribute('role', 'button');
       const open = () => openSheet(c, {h:h, g:g, extra:extra, im:c.querySelector('.hi img'), hc:hc, ex:ex, bk:bk});
       c.onclick = e => { if (e.target.closest('.fv')) return; open(); };
@@ -915,7 +943,7 @@
       a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) +
       '<p class="shn">' + L.shNote + '</p></div>';
     $('shN').textContent = lang === 'ar' ? h.ar : h.n;
-    if (lang === 'ar') $('shE').textContent = h.n;
+    if (lang === 'ar') $('shE').textContent = h.f ? '' : h.n;
     $('shx').onclick = closeSheet;
     sh.hidden = false; document.body.classList.add('shlock');
     requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
