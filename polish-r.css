@@ -1,0 +1,49 @@
+/* صفحة النتائج: طبقة تحسين الشكل فقط (ما تغيّر أي وظيفة) */
+header{box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.top{padding:26px 0 44px}
+.top.ph{padding:84px 0 44px}
+.top h1{letter-spacing:-.2px}
+.meta{gap:8px;margin-top:10px;font-size:14px;opacity:1}
+.meta span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:4px 11px;border-radius:999px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.edit{background:#fff;border-color:#fff;color:var(--navy);padding:6px 16px;box-shadow:0 4px 14px rgba(0,20,40,.18);text-shadow:none}
+.eform{box-shadow:0 12px 30px rgba(0,20,40,.22);border-radius:20px;text-shadow:none}
+.eform input,.eform select{border-radius:12px;background:#f7fafc}
+main{margin-top:-22px;position:relative;background:var(--bg);border-radius:24px 24px 0 0;padding-top:20px}
+
+.panel{border:0;border-radius:20px;box-shadow:0 2px 14px rgba(6,47,82,.07);padding:6px 16px}
+.panel:not(.shut){padding-bottom:12px}
+.panel h2{font-size:16.5px}
+.chip{border-color:#e3ecf2;background:#fff;transition:background .15s,border-color .15s,transform .1s}
+.chip:active{transform:scale(.96)}
+.htabs .chip{box-shadow:0 1px 6px rgba(6,47,82,.05)}
+
+.hs h2{font-size:21px}
+.hl{gap:14px}
+.hc{border:0;border-radius:20px;box-shadow:0 2px 14px rgba(6,47,82,.08);transition:box-shadow .2s,transform .2s}
+.hc:hover,.hc:focus-visible{box-shadow:0 10px 28px rgba(6,47,82,.14);transform:translateY(-2px)}
+.hc:active{transform:scale(.99)}
+.hc .hi .lab{background:rgba(10,37,64,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-weight:500}
+.hc .hn{color:var(--navy)}
+.hc .hm span{background:#f3f7fa}
+.hc .fv{border:0;background:#f3f7fa}
+.hc .hb .cmp{height:44px;border-radius:14px;background:linear-gradient(180deg,#ffbf52,#ffb238);box-shadow:0 4px 12px rgba(255,178,56,.32);font-size:15px}
+.pc{border:0;border-radius:20px;box-shadow:0 2px 14px rgba(6,47,82,.08)}
+.pc.top1{box-shadow:0 0 0 2px var(--teal),0 6px 20px rgba(0,194,209,.16)}
+.pc .cta{border-radius:14px}
+.tip{border:0;border-radius:20px;background:#fff6e0}
+.help{border-radius:20px;background:linear-gradient(135deg,var(--navy),#0a4f86)}
+.help a{border-radius:14px}
+.why div{border:0;border-radius:18px;box-shadow:0 2px 12px rgba(6,47,82,.06)}
+
+/* بطاقة القنوات: أهدأ وتنزل تحت الفنادق */
+.chn.nz-low{background:#fff;color:var(--navy);box-shadow:0 2px 14px rgba(6,47,82,.07);border-radius:20px;margin:18px 0 6px}
+.chn.nz-low span{opacity:.75}
+.chn.nz-low nav a{border-radius:14px}
+
+.sha{border-radius:16px}
+.shp{border-radius:26px 26px 0 0}
+@media(min-width:700px){.shp{border-radius:26px}}
+
+.nz-rv{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+.nz-rv.nz-in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.nz-rv{opacity:1;transform:none;transition:none}.hc,.hc:hover{transition:none;transform:none}}
