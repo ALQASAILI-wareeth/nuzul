@@ -241,6 +241,7 @@
 
 <script src="partners.js"></script>
 <script src="hotels-more.js"></script>
+<script src="hotel-ids.js"></script>
 <script src="keep.js"></script>
 <script src="polish-r.js"></script>
 <script src="ptr.js"></script>
@@ -983,7 +984,7 @@
     list.forEach(h => {
       const g = H.groups[h.g], c = document.createElement('div'); c.className = 'hc';
       const ef = h.f || {hotel: h.n}, rf = h.f ? 'pick' : 'hotel';
-      const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingHotelUrl(h.c || H.city, h.n, o, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, rf);
+      const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingHotelUrl(h.c || H.city, h.n, o, lang), eid = h.f ? 0 : (window.NZ_EID || {})[h.n], hc = eid ? NUZUL.hotelsHotelUrl(eid, o) : NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = eid ? NUZUL.expediaHotelUrl(eid, o) : NUZUL.expediaUrl(h.c || H.city, o, ef, rf);
       const gi = h.info || g.info; const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (gi ? '<span>✨ ' + gi[lang] + '</span>' : '');
       const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) || wikiHtml(h, g, H); if (!im) c.classList.add('noi');
       const on = !!(window.NZKEEP && NZKEEP.isFav(k, h.n));

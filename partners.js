@@ -76,6 +76,24 @@
     return 'https://www.expedia.com/affiliate?' + a.toString();
   }
 
+  // صفحة الفندق مباشرة على Hotels.com / Expedia برقم الفندق عند Expedia (نفس الرقم للموقعين)
+  function egHotel(host, id, o = {}) {
+    const p = new URLSearchParams();
+    if (o.cin) p.set('chkin', o.cin);
+    if (o.cout) p.set('chkout', o.cout);
+    const rooms = Math.max(1, +o.rooms || 1), adults = Math.max(1, +o.adults || 2);
+    for (let i = 0; i < rooms; i++) p.set('rm' + (i + 1), 'a' + Math.max(1, Math.floor(adults / rooms) + (i < adults % rooms ? 1 : 0)));
+    return 'https://' + host + '/h' + id + '.Hotel-Information?' + p.toString();
+  }
+  function hotelsHotelUrl(id, o = {}, ref = 'hotel') {
+    const a = new URLSearchParams({ landingPage: egHotel('www.hotels.com', id, o), camref: EG.camref, creativeref: EG.creativeref, adref: ref });
+    return 'https://www.hotels.com/affiliate?' + a.toString();
+  }
+  function expediaHotelUrl(id, o = {}, ref = 'hotel') {
+    const a = new URLSearchParams({ landingPage: egHotel('www.expedia.com', id, o), camref: EX.camref, adref: ref });
+    return 'https://www.expedia.com/affiliate?' + a.toString();
+  }
+
   // Stay22 (Allez): روابط Booking.com بعمولة. نبنيها يدوياً بدون سكربت Stay22.
   // المرجع: https://dev.stay22.com/docs/allez/parameters
   const S22 = { aid: 'nuzul' };
@@ -99,5 +117,5 @@
     return s22({ address: S22_CITY[place] || place }, o, lang, 'nuzul_city');
   }
 
-  window.NUZUL = { AID, EG, EX, S22, bookingUrl, bookingHotelUrl, bookingCityUrl, hotelsUrl, expediaUrl };
+  window.NUZUL = { AID, EG, EX, S22, bookingUrl, bookingHotelUrl, bookingCityUrl, hotelsUrl, expediaUrl, hotelsHotelUrl, expediaHotelUrl };
 })();
