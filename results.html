@@ -1014,7 +1014,8 @@
                      : [['Halal restaurants','halal restaurants'],['Coffee','coffee shops'],['Parks','parks'],['Family fun','family attractions'],['Mosques','mosque'],['Pharmacy','pharmacy']];
     const q = t => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t + ' near ' + h.n + (city ? ', ' + city : ''));
     return '<div class="shnr"><b>' + (ar ? 'حول الفندق' : 'Around the hotel') + '</b><span>' + (ar ? 'بعد ما تحجز، شوف أقرب الأماكن على الخريطة:' : 'After you book, see what is nearby on the map:') + '</span><div>' +
-      items.map(i => '<a target="_blank" rel="noopener" href="' + q(i[1]) + '">' + i[0] + '</a>').join('') + '</div></div>';
+      items.map(i => '<a target="_blank" rel="noopener" href="' + q(i[1]) + '">' + i[0] + '</a>').join('') +
+      '<a class="tk" target="_blank" rel="noopener sponsored" href="https://tiqets.tpo.lu/6JhmqQ9H">' + (ar ? 'تذاكر المعالم ↗' : 'Attraction tickets ↗') + '</a></div></div>';
   }
   function openSheet(from, d){
     const L = T[lang], h = d.h, sh = $('sh');

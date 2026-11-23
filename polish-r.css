@@ -80,3 +80,4 @@ footer a{opacity:1}
 .shnr > span{display:block;color:var(--muted);font-size:13px;margin:2px 0 10px}
 .shnr div{display:flex;flex-wrap:wrap;gap:8px}
 .shnr a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:#fff;border:1.5px solid #dce7ee;color:var(--navy);font-weight:700;font-size:14px}
+.shnr a.tk{background:#fff4de;border-color:#ffd27a;color:#7a4b00}
