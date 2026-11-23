@@ -162,7 +162,7 @@
   footer a{color:#fff;opacity:.85}
   .creds{margin-top:10px;font-size:12px}.creds summary{cursor:pointer;opacity:.8}.creds ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:2px;opacity:.85}.creds p{margin-top:6px;opacity:.8}
 </style>
-<link rel="stylesheet" href="polish-r.css">
+<link rel="stylesheet" href="polish-r.css?v=20261123j">
 </head>
 <body>
 <header>
@@ -239,12 +239,12 @@
   </div>
 </footer>
 
-<script src="partners.js"></script>
-<script src="hotels-more.js"></script>
-<script src="hotel-ids.js"></script>
-<script src="keep.js"></script>
-<script src="polish-r.js"></script>
-<script src="ptr.js"></script>
+<script src="partners.js?v=20261123j"></script>
+<script src="hotels-more.js?v=20261123j"></script>
+<script src="hotel-ids.js?v=20261123j"></script>
+<script src="keep.js?v=20261123j"></script>
+<script src="polish-r.js?v=20261123j"></script>
+<script src="ptr.js?v=20261123j"></script>
 <script>
 (function(){
   const WA = '971504113342';
@@ -1041,7 +1041,6 @@
       '<div class="shb"><h3 id="shN"></h3>' + (lang === 'ar' ? '<div class="he" id="shE"></div>' : '') +
       '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + d.g[lang] + '</span>' + d.extra + '</div>' +
       '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
-      (h.f ? '' : '<div class="shtip">' + (lang === 'ar' ? 'احجز إقامتك وارجع هنا، نختار لك المطاعم والكوفي وأماكن الترفيه القريبة من فندقك.' : 'Book your stay, then come back here to pick restaurants, cafés and fun places near your hotel.') + '</div>') +
       (h.f ? '' : '<button type="button" class="shpm" id="shpm"><b>' + (lang === 'ar' ? 'احجز إقامتك وارجع لنا' : 'Book your stay, then come back') + '</b><span>' + (lang === 'ar' ? 'جهّزنا لك قائمة بأقرب المطاعم والكوفيهات وأماكن الترفيه حول الفندق.' : 'We have a list of the nearest restaurants, cafés and fun places around the hotel ready for you.') + '</span></button>') +
       '<div class="shq">' + L.shQ + '</div>' +
       a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) +
