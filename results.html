@@ -913,7 +913,7 @@
       const src = pg.thumbnail.source;
       await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
       if (heroFor !== name) return;
-      top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.35) 0%,rgba(6,47,82,.82) 100%),url("' + src + '")';
+      top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("' + src + '")';
       top.classList.add('ph');
       const file = decodeURIComponent(pg.pageimage).replace(/_/g, ' ');
       HERO_CR = [file, '', '']; renderCredits();

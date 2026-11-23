@@ -3,11 +3,17 @@
   'use strict';
   var D = document;
   function lower() {
-    var c = D.querySelector('main .chn'), hs = D.getElementById('hs'), h = D.getElementById('cardsH');
-    if (!c || c.classList.contains('nz-low') || !h) return;
+    var c = D.querySelector('main .chn'), hs = D.getElementById('hs'), h = D.getElementById('cardsH'), cards = D.getElementById('cards');
+    if (!c || !h || !cards) return;
     c.classList.add('nz-low');
-    h.parentNode.insertBefore(c, h);
+    var noList = !hs || hs.hidden;
+    var anchor = noList ? cards.nextSibling : h;
+    if (c.nextSibling !== anchor) h.parentNode.insertBefore(c, anchor);
   }
+  (function () {
+    var hs = D.getElementById('hs');
+    if (hs && 'MutationObserver' in window) new MutationObserver(function () { try { lower(); } catch (e) {} }).observe(hs, { attributes: true, attributeFilter: ['hidden'] });
+  })();
   var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('nz-in'); io.unobserve(e.target); } });
   }, { rootMargin: '0px 0px -6% 0px' }) : null;
