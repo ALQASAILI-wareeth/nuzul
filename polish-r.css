@@ -47,3 +47,19 @@ main{margin-top:-22px;position:relative;background:var(--bg);border-radius:24px 
 .nz-rv{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
 .nz-rv.nz-in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.nz-rv{opacity:1;transform:none;transition:none}.hc,.hc:hover{transition:none;transform:none}}
+
+/* مراجعة 2: زر أخف داخل البطاقة على الجوال + رموز موحّدة */
+@media(max-width:560px){
+  .hc{grid-template-rows:1fr auto}
+  .hc .hi{grid-row:1/3}
+  .hc .hx{padding:10px 12px 6px}
+  .hc .hb{grid-column:2;padding:0 12px 10px;display:flex;justify-content:flex-start}
+  .hc .hb .cmp{height:38px;padding:0 16px;font-size:14px;border-radius:999px;box-shadow:0 3px 8px rgba(255,178,56,.28);width:auto}
+  .hc.noi .hb{grid-column:1}
+}
+.nze{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.17em;flex:0 0 auto;color:var(--navy2)}
+.top .nze,.chip.on .nze,.help .nze,.sha .nze,.hc .lab .nze,.shi .lab .nze,.pc .cta .nze{color:currentColor}
+.hm .nze{color:#5f7890}.vv .nze{color:#137A47}
+.tip .ic .nze{width:26px;height:26px;color:#c98600}
+.edit .nze{color:var(--navy2)}
+h2 .nze,h3 .nze{color:var(--teal)}

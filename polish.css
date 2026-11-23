@@ -99,3 +99,16 @@ html[lang=en] .f select,[dir=ltr] .f select{background-position:right 14px cente
 @media(max-width:760px){
   .hero.has-img.nz-bright{background-position:center,50% 30%}
 }
+
+/* مراجعة 2: وضوح السطر الفرعي + الشارات بسطر واحد */
+.hero.has-img.nz-bright{background:
+  linear-gradient(180deg,rgba(3,36,68,.62) 0%,rgba(3,44,82,.40) 45%,rgba(3,40,74,.50) 100%),
+  var(--hero-img) center 62%/cover no-repeat}
+.hero.nz-bright p{font-weight:500;color:#fff;opacity:1}
+@media(max-width:760px){.hero.has-img.nz-bright{background-position:center,50% 30%}}
+@media(max-width:480px){
+  .nz-badges{flex-wrap:nowrap;gap:5px;overflow-x:auto;scrollbar-width:none;justify-content:flex-start;margin-inline:-4px;padding-inline:4px}
+  .nz-badges::-webkit-scrollbar{display:none}
+  .nz-badges span{padding:5px 8px;font-size:12px;gap:4px;flex:0 0 auto}
+  .nz-badges .nzi{width:15px;height:15px}
+}
