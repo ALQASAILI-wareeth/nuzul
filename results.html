@@ -786,7 +786,7 @@
     $('cards').innerHTML = '';
     $('cards').append(card('top1', '#D32F2F', 'H', 'Hotels.com', L.hc, NUZUL.hotelsUrl(p, o, F, 'compare')));
     $('cards').append(card('', '#FDDB32;color:#191E3B', '✈', 'Expedia', L.ex, NUZUL.expediaUrl(p, o, F, 'compare')));
-    $('cards').append(card('', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingUrl(p, o, F, lang)));
+    $('cards').append(card('', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingCityUrl(p, o, lang)));
   }
 
   function imgHtml(k, alt, isArea){
@@ -983,7 +983,7 @@
     list.forEach(h => {
       const g = H.groups[h.g], c = document.createElement('div'); c.className = 'hc';
       const ef = h.f || {hotel: h.n}, rf = h.f ? 'pick' : 'hotel';
-      const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, rf);
+      const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingHotelUrl(h.c || H.city, h.n, o, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, rf);
       const gi = h.info || g.info; const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (gi ? '<span>✨ ' + gi[lang] + '</span>' : '');
       const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) || wikiHtml(h, g, H); if (!im) c.classList.add('noi');
       const on = !!(window.NZKEEP && NZKEEP.isFav(k, h.n));

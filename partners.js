@@ -76,5 +76,28 @@
     return 'https://www.expedia.com/affiliate?' + a.toString();
   }
 
-  window.NUZUL = { AID, EG, EX, bookingUrl, hotelsUrl, expediaUrl };
+  // Stay22 (Allez): روابط Booking.com بعمولة. نبنيها يدوياً بدون سكربت Stay22.
+  // المرجع: https://dev.stay22.com/docs/allez/parameters
+  const S22 = { aid: 'nuzul' };
+  const S22_CITY = { Makkah: 'Mecca Saudi Arabia', Madinah: 'Medina Saudi Arabia' };
+  function s22(params, o = {}, lang = 'ar', campaign = 'site') {
+    const p = new URLSearchParams({ aid: S22.aid });
+    Object.keys(params).forEach(k => { if (params[k]) p.set(k, params[k]); });
+    if (o.cin) p.set('checkin', o.cin);
+    if (o.cout) p.set('checkout', o.cout);
+    p.set('adults', Math.max(1, +o.adults || 2));
+    p.set('lang', lang === 'ar' ? 'ar' : 'en');
+    p.set('campaign', campaign);
+    return 'https://www.stay22.com/allez/booking?' + p.toString();
+  }
+  // فندق محدد: يفتح صفحة الفندق نفسها على Booking.com
+  function bookingHotelUrl(city, hotel, o = {}, lang = 'ar') {
+    return s22({ address: S22_CITY[city] || city, hotelname: hotel }, o, lang, 'nuzul_hotel');
+  }
+  // مدينة أو وجهة: يفتح نتائج الوجهة بالتواريخ (الفلاتر ما تنتقل عبر Stay22)
+  function bookingCityUrl(place, o = {}, lang = 'ar') {
+    return s22({ address: S22_CITY[place] || place }, o, lang, 'nuzul_city');
+  }
+
+  window.NUZUL = { AID, EG, EX, S22, bookingUrl, bookingHotelUrl, bookingCityUrl, hotelsUrl, expediaUrl };
 })();
