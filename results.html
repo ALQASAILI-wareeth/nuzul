@@ -163,7 +163,7 @@
   footer a{color:#fff;opacity:.85}
   .creds{margin-top:10px;font-size:12px}.creds summary{cursor:pointer;opacity:.8}.creds ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:2px;opacity:.85}.creds p{margin-top:6px;opacity:.8}
 </style>
-<link rel="stylesheet" href="polish-r.css?v=20261123j">
+<link rel="stylesheet" href="polish-r.css?v=20261124a">
 </head>
 <body>
 <header>
@@ -194,6 +194,7 @@
 
 <main class="wrap">
   <div class="chn"><div><b data-i="chH">🔔 العروض توصلك أول بأول</b><span data-i="chP">عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.</span></div><nav><a class="w" href="https://whatsapp.com/channel/0029Vb8niNp3wtb9Lh3q2l3X" target="_blank" rel="noopener" data-i="chWa">قناة واتساب</a><a class="t" href="https://t.me/nuzul_travel" target="_blank" rel="noopener" data-i="chTg">تيليجرام</a></nav></div>
+  <div class="qnote" id="qnote" hidden></div>
   <div class="panel" id="fpanel">
     <h2 id="fToggle" role="button" tabindex="0" aria-expanded="true"><span data-i="fH">🎯 حدّد اللي يناسبك (اختياري)</span><i aria-hidden="true">▾</i></h2>
     <div class="frow near" id="nearRow"><b data-i="fNear">الموقع</b><span id="nearChips"></span></div>
@@ -240,12 +241,13 @@
   </div>
 </footer>
 
-<script src="partners.js?v=20261123j"></script>
-<script src="hotels-more.js?v=20261123j"></script>
-<script src="hotel-ids.js?v=20261123j"></script>
-<script src="keep.js?v=20261123j"></script>
-<script src="polish-r.js?v=20261123j"></script>
-<script src="ptr.js?v=20261123j"></script>
+<script src="search.js?v=20261124a"></script>
+<script src="partners.js?v=20261124a"></script>
+<script src="hotels-more.js?v=20261124a"></script>
+<script src="hotel-ids.js?v=20261124a"></script>
+<script src="keep.js?v=20261124a"></script>
+<script src="polish-r.js?v=20261124a"></script>
+<script src="ptr.js?v=20261124a"></script>
 <script>
 (function(){
   const WA = '971504113342';
@@ -749,6 +751,44 @@
   const F = {type: ['hotel','apartment','resort','villa'].includes(tp) ? tp : '', budget:'', stars: tp === '5star' ? '5' : '', rating8:false, freeCancel:false, sort:'best', near:false};
 
   const key = () => { const k = S.d.toLowerCase(); return DEST[k] ? k : (ALIAS[k] || ALIAS[S.d] || (DEST[k]?k:'')); };
+  // فهم البحث: إملاء مختلف، دولة، اسم فندق، أو خطأ إملائي (اقتراح فقط)
+  const Q = {kind:'', items:[], typed:'', open:'', country:null};
+  const SR = window.NZ_SEARCH;
+  if (SR) { Object.keys(ALIAS).forEach(a => SR.addAlias(a, ALIAS[a])); Object.keys(HG).forEach(k => SR.addHotels(k, HG[k].list)); }
+  function canon(){
+    Q.kind = ''; Q.items = []; Q.open = ''; Q.country = null; Q.typed = S.n || S.d;
+    if (key() || !SR) return;
+    const r = SR.resolve(S.n || S.d) || (S.n && S.n !== S.d ? SR.resolve(S.d) : null);
+    if (!r) { Q.kind = 'none'; return; }
+    if (r.t === 'city') { if (DEST[r.key]) { S.d = r.en; S.n = ''; } else Q.kind = 'none'; return; }
+    if (r.t === 'country') { Q.kind = 'country'; Q.country = r; Q.items = r.cities.filter(c => DEST[c.key]); return; }
+    if (r.t === 'hotel') { if (DEST[r.city.key]) { S.d = r.city.en; S.n = ''; Q.open = r.hotel.n; } else Q.kind = 'none'; return; }
+    if (r.t === 'hotels') { Q.kind = 'hotels'; Q.items = r.list; if (r.city && DEST[r.city.key]) { S.d = r.city.en; S.n = ''; } return; }
+    if (r.t === 'fuzzy') { Q.kind = 'fuzzy'; Q.items = r.list; }
+  }
+  canon();
+  function renderNote(){
+    const box = $('qnote'); if (!box) return;
+    if (!Q.kind) { box.hidden = true; box.innerHTML = ''; return; }
+    const ar = lang === 'ar', base = '&ci=' + S.cin + '&co=' + S.cout + '&a=' + S.adults + '&r=' + S.rooms;
+    const chip = (d, label) => '<a class="qc" href="?d=' + encodeURIComponent(d) + base + '">' + esc(label) + '</a>';
+    const cityChip = c => chip(c.en, ar ? c.ar : c.en);
+    let msg = '', chipsH = '';
+    if (Q.kind === 'country') { msg = ar ? 'في ' + Q.country.ar + ' عندنا قوائم فنادق جاهزة لهذي المدن:' : 'In ' + Q.country.en + ' we have ready hotel lists for:'; chipsH = Q.items.map(cityChip).join(''); }
+    else if (Q.kind === 'fuzzy') { msg = ar ? 'هل تقصد:' : 'Did you mean:'; chipsH = Q.items.map(x => x.t === 'city' ? cityChip(x) : chip(x.en, ar ? x.ar : x.en)).join(''); }
+    else if (Q.kind === 'hotels') { msg = ar ? 'فنادق تطابق بحثك، اختر واحد:' : 'Hotels matching your search:'; chipsH = Q.items.map(h => chip(h.n, ar && h.ar ? h.ar : h.n)).join(''); }
+    else { msg = ar ? 'ما عندنا قائمة فنادق جاهزة لـ «' + Q.typed + '». تقدر تكمل بحثك في مواقع الحجز تحت، أو تختار من وجهاتنا:' : 'We don’t have a ready hotel list for “' + Q.typed + '”. You can continue on the booking sites below, or pick one of our destinations:';
+      chipsH = ['dubai','makkah','istanbul','london','cairo','kuala lumpur'].map(k => SR.cities.find(c => c.key === k)).filter(Boolean).map(cityChip).join(''); }
+    box.innerHTML = '<p></p><div class="qcs">' + chipsH + '</div>';
+    box.querySelector('p').textContent = msg;
+    box.hidden = false;
+  }
+  function openAsked(){
+    if (!Q.open) return; const nm = Q.open; Q.open = '';
+    const k = key(), H = HG[k]; if (!H) return;
+    const i = H.list.findIndex(h => h.n === nm); const c = i >= 0 ? $('hl').children[i] : null;
+    if (c && c.classList.contains('hc') && c.textContent.indexOf(nm) >= 0) setTimeout(() => { c.scrollIntoView({block:'center'}); c.click(); }, 350);
+  }
   const t = k => T[lang][k];
   const nights = () => Math.max(1, Math.round((new Date(S.cout) - new Date(S.cin)) / 864e5));
   const dispName = () => { const k = key(); if (lang === 'ar') { if (k) return (S.n && ALIAS[S.n] === k) ? S.n : (DEST[k].ar || S.d); return S.n && /[؀-ۿ]/.test(S.n) ? S.n : S.d; } return S.d; };
@@ -1151,7 +1191,7 @@
     $('title').textContent = L.title(n);
     document.title = (lang === 'ar' ? 'نُزُل — ' : 'Nuzul — ') + L.title(n);
     $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span><span>🛏️ ' + L.rooms(S.rooms) + '</span>';
-    renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits();
+    renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits(); renderNote(); openAsked();
     if (window.NZKEEP) NZKEEP.saveSearch(S, (k && DEST[k].ar) || S.n || S.d);
     $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
     $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(L.waMsg(n, S.cin, S.cout, S.adults));
@@ -1167,11 +1207,12 @@
   });
   function fillForm(){ $('e_dest').value = lang === 'ar' ? dispName() : S.d; $('e_cin').value = S.cin; $('e_cout').value = S.cout; $('e_ad').value = S.adults; $('e_rm').value = S.rooms; $('e_cin').min = fmt(today); }
   $('editBtn').onclick = () => { fillForm(); $('eform').classList.toggle('on'); };
+  $('e_dest').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('e_go').click(); } });
   $('e_go').onclick = () => {
     const v = clean($('e_dest').value); if (!v) return $('e_dest').focus();
     const raw = v; const k = ALIAS[raw] || raw.toLowerCase();
     S.d = (DEST[k] && k === 'makkah') ? 'Makkah' : (DEST[k] && k === 'madinah') ? 'Madinah' : (DEST[k] ? k.replace(/\b\w/g, c => c.toUpperCase()) : raw);
-    S.n = raw; S.cin = isDate($('e_cin').value) ? $('e_cin').value : S.cin; S.cout = isDate($('e_cout').value) ? $('e_cout').value : S.cout;
+    S.n = raw; canon(); S.cin = isDate($('e_cin').value) ? $('e_cin').value : S.cin; S.cout = isDate($('e_cout').value) ? $('e_cout').value : S.cout;
     if (S.cout <= S.cin) S.cout = fmt(addDays(new Date(S.cin),1));
     S.adults = +$('e_ad').value; S.rooms = +$('e_rm').value; F.near = false;
     const u = new URLSearchParams({d:S.d, n:S.n, ci:S.cin, co:S.cout, a:S.adults, r:S.rooms});

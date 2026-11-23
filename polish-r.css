@@ -88,3 +88,12 @@ footer a{opacity:1}
 .shpm{display:block;width:100%;text-align:start;margin:4px 0 12px;padding:11px 14px;border:0;border-radius:14px;background:#e9f8f1;color:#0b5c3a;font:inherit;cursor:pointer;border-inline-start:4px solid #12a05c}
 .shpm b{display:block;font-size:15px;font-weight:800}
 .shpm span{display:block;font-size:13px;line-height:1.6;color:#22694a}
+
+/* ===== ملاحظة فهم البحث (دولة، هل تقصد، فنادق مطابقة) ===== */
+.qnote{background:#fff6e0;border-radius:20px;padding:14px 16px;margin:0 0 12px}
+.qnote p{margin:0 0 10px;font-weight:700;color:var(--navy,#0d2b45);font-size:15px;line-height:1.7}
+.qcs{display:flex;flex-wrap:wrap;gap:8px}
+.qnote .qc{display:inline-flex;align-items:center;min-height:42px;padding:6px 16px;border-radius:999px;background:#fff;border:1.5px solid var(--sand2,#f0c36a);color:var(--navy,#0d2b45);font-weight:800;font-size:14.5px;text-decoration:none}
+.qnote .qc:hover{background:var(--navy,#0d2b45);color:#fff;border-color:var(--navy,#0d2b45)}
+#credList a{display:inline-block;padding:9px 0}
+footer a{display:inline-block;padding:9px 0}

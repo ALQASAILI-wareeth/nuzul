@@ -151,7 +151,7 @@
   .fl a:hover{opacity:1;color:var(--sand2)}
   .fl b{color:var(--teal);font-weight:700}
 </style>
-<link rel="stylesheet" href="polish.css?v=20261123j">
+<link rel="stylesheet" href="polish.css?v=20261124a">
 </head>
 <body>
 
@@ -271,6 +271,7 @@
   </div>
 </footer>
 
+<script src="search.js?v=20261124a"></script>
 <script>
   // ===== الإعدادات =====
   // ضع هنا رقم الشريك (Affiliate ID) بعد التسجيل في برنامج العمولة
@@ -382,7 +383,9 @@
   function toEn(text){
     const s = text.trim();
     const hit = CITIES.find(c => c.ar === s || c.en.toLowerCase() === s.toLowerCase());
-    return hit ? hit.en : s;
+    if (hit) return hit.en;
+    const r = window.NZ_SEARCH ? NZ_SEARCH.resolve(s) : null;   // إملاء مختلف لنفس المدينة
+    return (r && r.t === 'city') ? r.en : s;
   }
 
   function bookingUrl(place, opts = {}){
@@ -571,10 +574,11 @@
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "467e088c51954c0e9555402613322308"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
-<script src="keep.js?v=20261123j"></script>
-<script src="extras.js?v=20261123j"></script>
-<script src="home.js?v=20261123j"></script>
-<script src="business-parser.js?v=20261123j"></script>
-<script src="business.js?v=20261123j"></script>
-<script src="polish.js?v=20261123j"></script>
-<script src="ptr.js?v=20261123j"></script>
+<script src="search-ui.js?v=20261124a"></script>
+<script src="keep.js?v=20261124a"></script>
+<script src="extras.js?v=20261124a"></script>
+<script src="home.js?v=20261124a"></script>
+<script src="business-parser.js?v=20261124a"></script>
+<script src="business.js?v=20261124a"></script>
+<script src="polish.js?v=20261124a"></script>
+<script src="ptr.js?v=20261124a"></script>

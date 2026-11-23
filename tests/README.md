@@ -21,3 +21,6 @@ Optional: `CHROME=/path/to/chrome`, `OUT=results.txt`. Each script exits with co
 | `security.js` | 16 | Script injection through every URL parameter and the edit-search field, hidden-character and length handling, hostile Wikipedia responses, poisoned localStorage, `rel=noopener` on new-tab links |
 
 Requests to Wikipedia and Cloudflare are simulated or blocked, so results do not depend on the network. The scripts do not test a real phone, Safari, the real Wikipedia API, or a real booking.
+
+## search.js
+Types 48 real-world destination spellings on the home page (Arabic/English variants, countries, hotel names, typos, nonsense) and checks what the results page shows, plus the suggestion list and the Enter key. 51 checks.

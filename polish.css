@@ -133,3 +133,18 @@ footer .disc{opacity:1;color:#d5dee8;font-size:13.5px;line-height:1.8}
 footer .fl a{color:#fff;opacity:1}
 .hero p{opacity:1}
 .f input::placeholder{color:#7a8794}
+
+/* ===== اقتراحات خانة الوجهة ===== */
+.sgw{position:relative}
+.sg{position:absolute;inset-inline:0;top:calc(100% + 6px);z-index:30;background:#fff;border:1.5px solid var(--line,#e3e8ef);border-radius:16px;box-shadow:0 14px 34px rgba(13,43,69,.18);overflow:hidden;max-height:330px;overflow-y:auto}
+.sgi{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;padding:8px 14px;border:0;border-bottom:1px solid #eef2f6;background:#fff;font:inherit;color:var(--navy,#0d2b45);text-align:start;cursor:pointer}
+.sgi:last-child{border-bottom:0}
+.sgi b{font-weight:800;font-size:15.5px}
+.sgi span{font-size:13px;color:var(--muted,#5b6b7b);flex:0 0 auto}
+.sgi:hover,.sgi.on{background:#fff6e0}
+/* ===== راحة اللمس والشاشات الصغيرة ===== */
+.sbox{overflow-x:clip}
+nav a{display:inline-block;padding:12px 0}
+footer a{display:inline-block;padding:9px 0}
+@media(max-width:350px){.nz-date-l,.f input[type=date]{font-size:14px}}
+@media(max-width:350px){.extras{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.xt{min-width:0;padding:10px 8px;gap:6px;font-size:13.5px;overflow-wrap:anywhere}}
