@@ -87,6 +87,21 @@ const H = { 'access-control-allow-origin': '*', 'content-type': 'application/jso
       if (u.startsWith('/results')) { await pg.evaluate(() => document.querySelector('.hc').click()); await sleep(400); }
       miss = miss.concat(await pg.evaluate(() => [...document.querySelectorAll('a[target="_blank"]')].filter(a => !/noopener/.test(a.rel)).map(a => a.href.slice(0, 50)))); }
     ok('every new-tab link has rel=noopener', miss.length === 0, miss.join(', ')); await pg.browserContext().close(); }
+  // 7) سياسة أمان المحتوى (CSP): موجودة، ما تكسر الاستخدام العادي، وتمنع تحميل سكربت خارجي
+  { const viol = []; let present = 0, blocked = 0;
+    for (const u of ['/', '/results.html?d=Dubai', '/results.html?d=Zzzland', '/privacy.html', '/404.html']) {
+      const pg = await page(x => ({ query: { pages: { 1: { title: 'x', pageimage: 'A.jpg', imagerepository: 'shared', thumbnail: { source: 'https://upload.wikimedia.org/a.jpg' }, imageinfo: [{ thumburl: 'https://upload.wikimedia.org/b.jpg', width: 2000, height: 1200, mime: 'image/jpeg', extmetadata: {} }] } } } }));
+      pg.on('console', m => { if (/Content Security Policy|Refused to/i.test(m.text())) viol.push(u + ' :: ' + m.text().slice(0, 140)); });
+      await pg.goto(B + u, { waitUntil: 'networkidle2' }); await sleep(900);
+      if (await pg.evaluate(() => !!document.querySelector('meta[http-equiv="Content-Security-Policy"]'))) present++;
+      await pg.evaluate(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } const c = document.querySelector('.hc'); if (c) c.click(); const l = document.getElementById('langBtn'); if (l) l.click(); }); await sleep(600);
+      const before = viol.length;
+      const got = await pg.evaluate(() => new Promise(res => { let hit = false; document.addEventListener('securitypolicyviolation', () => { hit = true; }); const s = document.createElement('script'); s.src = 'https://evil.example/x.js'; s.onerror = () => setTimeout(() => res(hit), 50); s.onload = () => res(false); document.head.appendChild(s); setTimeout(() => res(hit), 1500); }));
+      if (got) blocked++; viol.length = before;
+      await pg.browserContext().close(); }
+    ok('CSP meta tag present on all 5 page types', present === 5, 'present=' + present);
+    ok('CSP: no violations during normal use', viol.length === 0, viol.slice(0, 3).join(' | '));
+    ok('CSP: a script from a foreign host is blocked', blocked === 5, 'blocked=' + blocked); }
   console.log(out.join('\n')); console.log('total', out.length, 'pass', out.filter(x => x.startsWith('PASS')).length);
   if (process.env.OUT) require('fs').writeFileSync(process.env.OUT, out.join('\n'));
   if (out.some(x => x.startsWith('FAIL'))) process.exitCode = 1;
