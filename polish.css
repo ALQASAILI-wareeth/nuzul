@@ -1,0 +1,101 @@
+/* نُزُل — طبقة التلميع (إضافية فقط) */
+
+/* الواجهة الأولى: صورة وجهة الموسم بدل اللون السادة */
+.hero{padding:34px 0 104px}
+.hero.has-img{background:
+  linear-gradient(180deg,rgba(4,26,46,.72) 0%,rgba(4,30,54,.50) 45%,rgba(4,30,54,.78) 100%),
+  var(--hero-img) center/cover no-repeat;animation:nzHero .9s ease both}
+@keyframes nzHero{from{opacity:.55}to{opacity:1}}
+.hero.has-img.nz-bright{background:
+  linear-gradient(180deg,rgba(3,40,74,.50) 0%,rgba(3,52,92,.22) 42%,rgba(3,40,74,.46) 100%),
+  var(--hero-img) center 62%/cover no-repeat}
+.hero.nz-bright h1,.hero.nz-bright p{text-shadow:0 1px 3px rgba(0,25,50,.75),0 2px 14px rgba(0,25,50,.6)}
+.hero h1{text-shadow:0 2px 14px rgba(0,0,0,.35);letter-spacing:-.2px}
+.hero p{opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.hero::after{height:120px;inset:auto -12% -70px -12%}
+
+/* صندوق البحث: أهدأ وأخف */
+.sbox{border:1px solid rgba(6,47,82,.08);border-radius:24px;box-shadow:0 18px 50px rgba(6,47,82,.16),0 2px 6px rgba(6,47,82,.06);padding:18px 16px 14px}
+.f label{font-size:12.5px;letter-spacing:.1px}
+.f input,.f select{height:50px;border-radius:14px;border-color:#e3ecf2;background-color:#f8fbfd;transition:border-color .15s,box-shadow .15s,background-color .15s}
+.f input:focus,.f select:focus{background-color:#fff;box-shadow:0 0 0 4px rgba(0,98,168,.10)}
+.go{height:52px;border-radius:14px;box-shadow:0 8px 20px rgba(255,178,56,.38);transition:transform .12s,box-shadow .12s,background .15s}
+.go:active{transform:scale(.98);box-shadow:0 4px 10px rgba(255,178,56,.3)}
+.go .nzi{width:20px;height:20px;stroke-width:2.2}
+
+/* التاريخ المقروء فوق خانة التاريخ الأصلية */
+.nz-date{position:relative}
+.nz-date input[type=date]{color:transparent!important}
+.nz-date input[type=date]::-webkit-datetime-edit{color:transparent}
+.nz-date input[type=date]::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;opacity:0;cursor:pointer}
+.nz-date-l{position:absolute;inset:0;display:flex;align-items:center;gap:8px;padding:0 12px;font-size:15.5px;font-weight:700;color:var(--ink);pointer-events:none;white-space:nowrap;overflow:hidden}
+
+/* وجهات الموسم: سطر واحد ينسحب بدل ثلاث أسطر */
+@media(max-width:860px){
+  .quick{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px}
+  .quick::-webkit-scrollbar{display:none}
+  .quick > span:first-child{flex:0 0 auto}
+  .quick #quick{flex-wrap:nowrap}
+  .qc{flex:0 0 auto}
+}
+.qc{background:#f3f8fb;border-color:transparent;transition:background .15s,transform .12s}
+.qc:active{transform:scale(.96)}
+
+/* علامات الطمأنة */
+.trust{margin-top:12px}
+.nz-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:12px}
+.nz-badges span{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #e3ecf2;border-radius:999px;padding:6px 10px;font-size:12.5px;white-space:nowrap;font-weight:700;color:var(--navy)}
+.nz-badges .nzi{width:17px;height:17px;color:#0a8f6a;flex:0 0 auto}
+
+/* الأيقونات الموحّدة */
+.nzi{width:24px;height:24px;display:block}
+.xt .ic.nzic{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:#eaf4fb;color:var(--navy2)}
+.xt.on .ic.nzic{background:rgba(255,255,255,.14);color:var(--sand2)}
+.xt{border-color:#e3ecf2;border-radius:16px;transition:transform .12s,border-color .15s,box-shadow .15s}
+.xt:active{transform:scale(.98)}
+.extra > b{display:flex;align-items:center;gap:8px}
+.extra > b .nzi{color:var(--navy2)}
+.type .ic.nzic{display:flex;align-items:center;justify-content:center;width:48px;height:48px;margin:0 auto;border-radius:14px;background:#fff4de;color:#b86e00}
+.type .ic.nzic .nzi{width:26px;height:26px}
+.type{border-color:#e3ecf2}
+
+/* عناوين الأقسام ومسافاتها */
+section{padding:38px 0 6px}
+h2{letter-spacing:-.2px}
+.sub{font-size:15px}
+
+/* العروض: شريط ينسحب بالإصبع على الجوال */
+@media(max-width:860px){
+  .deals{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -18px;padding:2px 18px 12px;scrollbar-width:none}
+  .deals::-webkit-scrollbar{display:none}
+  .deal{flex:0 0 82%;scroll-snap-align:center}
+  .deal .ph{height:150px}
+}
+.deal,.city,.type,.step{box-shadow:0 1px 2px rgba(6,47,82,.04)}
+.city{border-radius:18px}
+
+/* قسم الشركات المطوي */
+.nz-fold{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:58px;padding:14px 18px;border:1.5px solid #e3ecf2;border-radius:16px;background:#fff;color:var(--navy);font:inherit;font-weight:800;font-size:16px;text-align:start;cursor:pointer}
+.nz-fold i{flex:0 0 auto;width:10px;height:10px;border-inline-end:2.5px solid var(--navy);border-bottom:2.5px solid var(--navy);transform:rotate(45deg);transition:transform .2s;margin-inline-end:4px}
+.nz-folded > .wrap > :not(.nz-fold){display:none}
+.nz-folded.open > .wrap > :not(.nz-fold){display:revert}
+.nz-folded.open .nz-fold{margin-bottom:16px}
+.nz-folded.open .nz-fold i{transform:rotate(-135deg)}
+.nz-folded{padding-top:22px}
+
+/* الحركة الهادئة */
+.nz-rv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
+.nz-rv.nz-in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.nz-rv{opacity:1;transform:none;transition:none}.hero.has-img{animation:none}}
+
+/* زر الواتساب: أصغر ويختفي وقت النزول */
+.wa-fab{width:50px!important;height:50px!important;bottom:16px!important;transition:transform .25s ease,opacity .25s ease!important}
+.wa-fab svg{width:26px!important;height:26px!important}
+.wa-fab.nz-hide{transform:translateY(90px);opacity:0;pointer-events:none}
+
+.nz-date-l::before{content:"";flex:0 0 18px;height:18px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230062A8' stroke-width='1.8' stroke-linecap='round'%3E%3Crect x='4' y='5.500' width='16' height='15' rx='2.500'/%3E%3Cpath d='M4 10h16M8.500 3.500v4M15.500 3.500v4'/%3E%3C/svg%3E") center/contain no-repeat}
+.f select{background-position:left 14px center;background-size:12px 8px}
+html[lang=en] .f select,[dir=ltr] .f select{background-position:right 14px center}
+@media(max-width:760px){
+  .hero.has-img.nz-bright{background-position:center,50% 30%}
+}
