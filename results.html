@@ -802,6 +802,7 @@
   const badPic = f => /علم|شعار|خريطة|flag|coat[ _]of[ _]arms|emblem|logo|seal[ _]of|locator|[ _]map|map[ _]|orthographic|\.svg/i.test(String(f || ''));
   const tourTitle = t => /[؀-ۿ]/.test(t) ? 'السياحة في ' + t : 'Tourism in ' + t;
   function wikiHtml(h, g, H){
+    if (H.gen && NOPIC[H.city]) return '';
     const t = [h.w, g && g.w, H.city, H.gen ? tourTitle(H.city) : ''].filter((x, i, a) => x && a.indexOf(x) === i);
     if (!t.length) return '';
     return '<div class="hi noimg"' + (h.w ? ' data-own="1"' : '') + (H.gen ? ' data-gen="1"' : '') + ' data-c="' + encodeURIComponent(H.city) + '" data-w="' + t.map(x => encodeURIComponent(x)).join('|') + '"></div>';
@@ -815,7 +816,16 @@
     im.src = '/img/cities/' + decodeURIComponent(String(city)).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.webp';
   }
   // تنويع الصور في «الاختيارات الجاهزة»: صور مختلفة من صفحة السياحة/الوجهة بدل تكرار نفس الصورة
-  const GAL = {};
+  const GAL = {}, NOPIC = {};
+  // بحث ما له أي صورة (مثل اسم فندق أو سلسلة): نشيل خانة الصورة ونخلي العنوان عام
+  function collapse(b){
+    const c = b.closest('.hc'); if (c) c.classList.add('noi'); b.remove();
+  }
+  function settle(city){
+    const left = document.querySelectorAll('#hl .hi[data-gen]');
+    if (!left.length && city) { NOPIC[city] = 1; const t = $('hsTitle'); if (t) t.textContent = genTitle(city)[lang]; }
+  }
+  const genTitle = city => NOPIC[city] ? {ar: 'اختيارات جاهزة لبحثك', en: 'Ready-made picks for your search'} : null;
   async function gallery(title){
     if (title in GAL) return GAL[title];
     const wl = /[؀-ۿ]/.test(title) ? 'ar' : 'en', out = [];
@@ -832,23 +842,24 @@
     return (GAL[title] = out);
   }
   async function variety(run){
-    const boxes = [...document.querySelectorAll('#hl .hi[data-gen]')]; if (boxes.length < 2) return;
+    const boxes = [...document.querySelectorAll('#hl .hi[data-gen]')]; if (!boxes.length) return;
     const city = decodeURIComponent(boxes[0].dataset.c || ''); if (!city) return;
     let pics = await gallery(tourTitle(city));
     if (pics.length < 3) pics = pics.concat(await gallery(city));
-    if (run !== wikiRun || !pics.length) return;
+    if (run !== wikiRun) return;
     const used = new Set(); const first = boxes[0].querySelector('img'), firstOk = first && !boxes[0].classList.contains('noimg'); if (firstOk) used.add(first.src);
     let n = 0;
     boxes.slice(firstOk ? 1 : 0).forEach(b => {
       if (!b.isConnected) return;
       let p = null; while (n < pics.length) { const c = pics[n++]; if (!used.has(c.src)) { p = c; break; } }
-      if (!p) return; used.add(p.src);
+      if (!p) { if (b.classList.contains('noimg') || !b.querySelector('img')) collapse(b); return; } used.add(p.src);
       const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = ''; im.dataset.area = '1';
-      im.onerror = () => { if (im.parentNode === b) { b.innerHTML = ''; b.classList.add('noimg'); } };
+      im.onerror = () => { if (im.parentNode === b) { collapse(b); settle(city); } };
       b.innerHTML = ''; b.classList.remove('noimg'); b.append(im);
       const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s);
       im.src = p.src; credit(p.file, p.who, p.lic);
     });
+    settle(city);
     renderCredits();
   }
   let wikiRun = 0;
@@ -874,11 +885,11 @@
     boxes.forEach(b => {
       if (!b.isConnected) return;
       const ts = b.dataset.w.split('|').map(decodeURIComponent), idx = ts.findIndex(t => WIKI[t]);
-      if (idx < 0) { localPic(b, b.dataset.c || ts[ts.length - 1]); return; }
+      if (idx < 0) { if (!b.dataset.gen) localPic(b, b.dataset.c || ts[ts.length - 1]); return; }
       const w = WIKI[ts[idx]], area = idx > 0 || !b.dataset.own;
       const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = '';
       if (area) im.dataset.area = '1';
-      im.onerror = () => { b.classList.add('noimg'); localPic(b, b.dataset.c || ts[ts.length - 1]); }; b.classList.remove('noimg');
+      im.onerror = () => { b.classList.add('noimg'); if (b.dataset.gen) { if (im.parentNode === b) { collapse(b); settle(decodeURIComponent(b.dataset.c || '')); } } else localPic(b, b.dataset.c || ts[ts.length - 1]); }; b.classList.remove('noimg');
       b.innerHTML = ''; b.append(im);
       if (area) { const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); }
       im.src = w.src;
@@ -925,7 +936,7 @@
     const hideType = F.type && F.type !== 'hotel';
     if (!H || hideType) { box.hidden = true; CREDITS = {}; $('cardsH').textContent = L.cardsH; return; }
     box.hidden = false;
-    $('hsTitle').textContent = H.title[lang];
+    $('hsTitle').textContent = (H.gen && genTitle(H.city) || H.title)[lang];
     { const sb = box.querySelector('.sub'); if (sb) sb.textContent = H.gen ? (lang === 'ar' ? 'اضغط على الخيار عشان تشوفه لتواريخك على المواقع الثلاثة.' : 'Tap a pick to see it for your dates on the three sites.') : L.hsSub; }
     $('cardsH').textContent = L.cardsAll(dispName());
     const hasV = H.list.some(h => h.v);
