@@ -142,6 +142,7 @@
       window.addEventListener('pageshow', renderHome);
     }
     setTimeout(maybeA2hs, 4000);
+    var lb2 = document.getElementById('langBtn'); if (lb2) lb2.addEventListener('click', function () { setTimeout(function () { var o = document.getElementById('nza'); if (o) { o.remove(); maybeA2hs(); } }, 80); });
   }
 
   window.NZKEEP = {saveSearch: saveSearch, isFav: isFav, toggleFav: toggleFav, favCount: favCount, favs: favs};

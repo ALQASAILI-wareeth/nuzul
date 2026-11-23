@@ -243,6 +243,7 @@
 <script src="hotels-more.js"></script>
 <script src="keep.js"></script>
 <script src="polish-r.js"></script>
+<script src="ptr.js"></script>
 <script>
 (function(){
   const WA = '971504113342';
@@ -803,15 +804,52 @@
   function wikiHtml(h, g, H){
     const t = [h.w, g && g.w, H.city, H.gen ? tourTitle(H.city) : ''].filter((x, i, a) => x && a.indexOf(x) === i);
     if (!t.length) return '';
-    return '<div class="hi noimg"' + (h.w ? ' data-own="1"' : '') + ' data-c="' + encodeURIComponent(H.city) + '" data-w="' + t.map(x => encodeURIComponent(x)).join('|') + '"></div>';
+    return '<div class="hi noimg"' + (h.w ? ' data-own="1"' : '') + (H.gen ? ' data-gen="1"' : '') + ' data-c="' + encodeURIComponent(H.city) + '" data-w="' + t.map(x => encodeURIComponent(x)).join('|') + '"></div>';
   }
   function localPic(b, city){
     if (b.dataset.loc) return; b.dataset.loc = '1';
     const im = new Image(); im.alt = ''; im.width = 480; im.height = 400; im.dataset.area = '1';
-    im.onerror = () => { b.innerHTML = ''; b.classList.add('noimg'); };
-    im.onload = () => { b.classList.remove('noimg'); const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); };
+    im.onerror = () => { if (im.parentNode === b) { b.innerHTML = ''; b.classList.add('noimg'); } };
+    im.onload = () => { if (im.parentNode !== b) return; b.classList.remove('noimg'); const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); };
     b.innerHTML = ''; b.append(im);
     im.src = '/img/cities/' + decodeURIComponent(String(city)).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.webp';
+  }
+  // تنويع الصور في «الاختيارات الجاهزة»: صور مختلفة من صفحة السياحة/الوجهة بدل تكرار نفس الصورة
+  const GAL = {};
+  async function gallery(title){
+    if (title in GAL) return GAL[title];
+    const wl = /[؀-ۿ]/.test(title) ? 'ar' : 'en', out = [];
+    try {
+      const d = await (await fetch('https://' + wl + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&generator=images&gimlimit=50&prop=imageinfo&iiprop=url|size|mime|extmetadata&iiurlwidth=640&titles=' + encodeURIComponent(title))).json();
+      Object.values((d.query || {}).pages || {}).forEach(p => {
+        const ii = (p.imageinfo || [])[0]; if (!ii || p.imagerepository !== 'shared' || !ii.thumburl) return;
+        if (ii.mime !== 'image/jpeg' || ii.width < 700 || badPic(p.title)) return;
+        const r = ii.width / ii.height; if (r < 0.6 || r > 2.3) return;
+        const md = ii.extmetadata || {};
+        out.push({wide: r >= 1.2, src: ii.thumburl, file: String(p.title).replace(/^[^:]+:/, ''), who: ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60), lic: (md.LicenseShortName || {}).value || ''});
+      });
+    } catch(e) {}
+    return (GAL[title] = out);
+  }
+  async function variety(run){
+    const boxes = [...document.querySelectorAll('#hl .hi[data-gen]')]; if (boxes.length < 2) return;
+    const city = decodeURIComponent(boxes[0].dataset.c || ''); if (!city) return;
+    let pics = await gallery(tourTitle(city));
+    if (pics.length < 3) pics = pics.concat(await gallery(city));
+    if (run !== wikiRun || !pics.length) return;
+    const used = new Set(); const first = boxes[0].querySelector('img'), firstOk = first && !boxes[0].classList.contains('noimg'); if (firstOk) used.add(first.src);
+    let n = 0;
+    boxes.slice(firstOk ? 1 : 0).forEach(b => {
+      if (!b.isConnected) return;
+      let p = null; while (n < pics.length) { const c = pics[n++]; if (!used.has(c.src)) { p = c; break; } }
+      if (!p) return; used.add(p.src);
+      const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = ''; im.dataset.area = '1';
+      im.onerror = () => { if (im.parentNode === b) { b.innerHTML = ''; b.classList.add('noimg'); } };
+      b.innerHTML = ''; b.classList.remove('noimg'); b.append(im);
+      const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s);
+      im.src = p.src; credit(p.file, p.who, p.lic);
+    });
+    renderCredits();
   }
   let wikiRun = 0;
   async function fillWiki(){
@@ -847,6 +885,7 @@
       if (!(w.file in CREDITS)) { credit(w.file, w.who || '', w.lic || ''); if (!w.who) files[w.raw] = w; }
     });
     renderCredits();
+    variety(run);
     const fl = Object.keys(files);
     if (!fl.length) return;
     try {
@@ -1005,7 +1044,16 @@
         if (heroFor !== name) return;
         if (x.thumbnail && x.pageimage && !badPic(x.pageimage)) { pg = x; break; }
       }
-      if (!pg) return;
+      if (!pg) {
+        let g = await gallery(tourTitle(name)); if (!g.length) g = await gallery(name);
+        const w = g.find(x => x.wide) || g[0];
+        if (!w || heroFor !== name) return;
+        await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = w.src; });
+        if (heroFor !== name) return;
+        top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("' + w.src + '")';
+        top.classList.add('ph'); HERO_CR = [w.file, w.who, w.lic]; renderCredits();
+        return;
+      }
       const src = pg.thumbnail.source;
       await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
       if (heroFor !== name) return;
