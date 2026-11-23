@@ -85,3 +85,8 @@ footer a{opacity:1}
 .shnr.back b{font-size:17px}
 @keyframes nzPulse{0%,100%{box-shadow:0 0 0 2px #ffd27a}50%{box-shadow:0 0 0 7px rgba(255,210,122,.45)}}
 @media(prefers-reduced-motion:reduce){.shnr.back{animation:none}}
+.shtip{display:flex;gap:8px;align-items:flex-start;background:#eaf7f1;color:#0c5c3c;border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:700;line-height:1.6;margin:0 0 12px}
+.shtip::before{content:"";flex:0 0 18px;height:18px;margin-top:2px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230c8a58' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s7-6.2 7-11.5a7 7 0 10-14 0C5 14.800 12 21 12 21z'/%3E%3Ccircle cx='12' cy='9.500' r='2.500'/%3E%3C/svg%3E")}
+.shpm{display:block;width:100%;text-align:start;margin:4px 0 12px;padding:11px 14px;border:0;border-radius:14px;background:#e9f8f1;color:#0b5c3a;font:inherit;cursor:pointer;border-inline-start:4px solid #12a05c}
+.shpm b{display:block;font-size:15px;font-weight:800}
+.shpm span{display:block;font-size:13px;line-height:1.6;color:#22694a}

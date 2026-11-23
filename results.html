@@ -1041,6 +1041,8 @@
       '<div class="shb"><h3 id="shN"></h3>' + (lang === 'ar' ? '<div class="he" id="shE"></div>' : '') +
       '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + d.g[lang] + '</span>' + d.extra + '</div>' +
       '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
+      (h.f ? '' : '<div class="shtip">' + (lang === 'ar' ? 'احجز إقامتك وارجع هنا، نختار لك المطاعم والكوفي وأماكن الترفيه القريبة من فندقك.' : 'Book your stay, then come back here to pick restaurants, cafés and fun places near your hotel.') + '</div>') +
+      (h.f ? '' : '<button type="button" class="shpm" id="shpm"><b>' + (lang === 'ar' ? 'احجز إقامتك وارجع لنا' : 'Book your stay, then come back') + '</b><span>' + (lang === 'ar' ? 'جهّزنا لك قائمة بأقرب المطاعم والكوفيهات وأماكن الترفيه حول الفندق.' : 'We have a list of the nearest restaurants, cafés and fun places around the hotel ready for you.') + '</span></button>') +
       '<div class="shq">' + L.shQ + '</div>' +
       a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) +
       (h.f ? '' : nearHtml(h, d.city)) +
@@ -1049,6 +1051,7 @@
     if (lang === 'ar') $('shE').textContent = h.f ? '' : h.n;
     $('shx').onclick = closeSheet;
     sh.dataset.went = '';
+    { const pm = $('shpm'); if (pm) pm.onclick = () => { const nr = $('shp').querySelector('.shnr'); if (nr) nr.scrollIntoView({behavior:'smooth', block:'center'}); }; }
     $('shp').querySelectorAll('.sha').forEach(x => x.addEventListener('click', () => { sh.dataset.went = '1'; }));
     sh.hidden = false; document.body.classList.add('shlock');
     requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
