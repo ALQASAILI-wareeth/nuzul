@@ -1018,6 +1018,19 @@
       items.map(i => '<a target="_blank" rel="noopener" href="' + q(i[1]) + '">' + i[0] + '</a>').join('') +
       '<a class="tk" target="_blank" rel="noopener sponsored" href="https://tiqets.tpo.lu/6JhmqQ9H">' + (ar ? 'تذاكر المعالم ↗' : 'Attraction tickets ↗') + '</a></div></div>';
   }
+  // لما الزائر يرجع من موقع الحجز: نبرز له قسم «حول الفندق»
+  function backFromBooking(){
+    const sh = $('sh'); if (!sh || sh.hidden || sh.dataset.went !== '1') return;
+    const nr = $('shp').querySelector('.shnr'); if (!nr || nr.classList.contains('back')) return;
+    nr.classList.add('back');
+    const b = nr.querySelector('b'), sp = nr.querySelector('span');
+    if (b) b.textContent = lang === 'ar' ? 'رجعت من الحجز؟' : 'Back from booking?';
+    if (sp) sp.textContent = lang === 'ar' ? 'هذي أقرب الأماكن حول فندقك، اضغط وتفتح لك على الخريطة:' : 'Here is what is around your hotel. Tap to open the map:';
+    setTimeout(() => { try { nr.scrollIntoView({behavior:'smooth', block:'center'}); } catch(e){} }, 250);
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) backFromBooking(); });
+  window.addEventListener('pageshow', backFromBooking);
+  window.addEventListener('focus', backFromBooking);
   function openSheet(from, d){
     const L = T[lang], h = d.h, sh = $('sh');
     shFrom = from;
@@ -1035,6 +1048,8 @@
     $('shN').textContent = lang === 'ar' ? h.ar : h.n;
     if (lang === 'ar') $('shE').textContent = h.f ? '' : h.n;
     $('shx').onclick = closeSheet;
+    sh.dataset.went = '';
+    $('shp').querySelectorAll('.sha').forEach(x => x.addEventListener('click', () => { sh.dataset.went = '1'; }));
     sh.hidden = false; document.body.classList.add('shlock');
     requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
     setTimeout(() => { try { $('shx').focus({preventScroll:true}); } catch(e){} }, 60);
