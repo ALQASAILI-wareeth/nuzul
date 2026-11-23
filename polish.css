@@ -112,3 +112,13 @@ html[lang=en] .f select,[dir=ltr] .f select{background-position:right 14px cente
   .nz-badges span{padding:5px 8px;font-size:12px;gap:4px;flex:0 0 auto}
   .nz-badges .nzi{width:15px;height:15px}
 }
+
+/* أسفل الصفحة: روابط تواصل مرتبة */
+footer .fl .nz-extra{display:none}
+footer .fl.nz-open .nz-extra{display:inline-flex}
+footer .nz-more{background:transparent;border:0;color:var(--sand2);font:inherit;font-weight:700;font-size:14px;min-height:40px;padding:0 10px;cursor:pointer}
+@media(max-width:700px){
+  footer .fl a{border:0;background:rgba(255,255,255,.08);padding:0 13px;font-size:13.5px}
+  footer .fl a:active{background:rgba(255,255,255,.16)}
+}
+footer .fl.nz-open .nz-more{order:9}

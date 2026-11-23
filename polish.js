@@ -130,4 +130,28 @@
   new MutationObserver(function () { syncDates(); drawBadges(); }).observe(R, { attributes: true, attributeFilter: ['lang'] });
   ['change', 'input'].forEach(function (ev) { D.addEventListener(ev, syncDates, true); });
   setInterval(syncDates, 600);
+
+  // ---------- ترتيب روابط التواصل أسفل الصفحة ----------
+  (function () {
+    var fls = D.querySelectorAll('footer .fl'); if (fls.length < 2) return;
+    var fl = fls[1], links = [].slice.call(fl.querySelectorAll('a'));
+    var MAIN = ['instagram.com', 'tiktok.com', 'snapchat.com', 'whatsapp.com/channel', 't.me/'];
+    var main = [], rest = [], priv = null;
+    links.forEach(function (a) {
+      var h = a.getAttribute('href') || '';
+      if (h.indexOf('privacy') >= 0) { priv = a; return; }
+      var i = -1; MAIN.forEach(function (m, k) { if (h.indexOf(m) >= 0) i = k; });
+      if (i >= 0) main[i] = a; else rest.push(a);
+    });
+    if (!rest.length) return;
+    main.forEach(function (a) { if (a) fl.appendChild(a); });
+    var btn = D.createElement('button'); btn.type = 'button'; btn.className = 'nz-more'; btn.setAttribute('aria-expanded', 'false');
+    fl.appendChild(btn);
+    rest.forEach(function (a) { a.classList.add('nz-extra'); fl.appendChild(a); });
+    if (priv) { priv.classList.add('nz-priv'); fls[0].appendChild(priv); }
+    function label() { var open = fl.classList.contains('nz-open'); btn.textContent = lang() === 'ar' ? (open ? 'أقل' : 'المزيد +') : (open ? 'Less' : 'More +'); }
+    btn.addEventListener('click', function () { fl.classList.toggle('nz-open'); btn.setAttribute('aria-expanded', fl.classList.contains('nz-open')); label(); });
+    label();
+    var lb = D.getElementById('langBtn'); if (lb) lb.addEventListener('click', function () { setTimeout(label, 60); });
+  })();
 })();
