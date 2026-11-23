@@ -69,8 +69,8 @@
       ] }
   ];
   var TXT = {
-    ar: { h: 'كل ما تحتاجه لرحلتك', sub: 'اضغط على الخدمة وقارن بين شركائنا، بنفس السعر وبدون أي رسوم إضافية', many: 'قارن بين الخيارات:' },
-    en: { h: 'Everything for your trip', sub: 'Tap a service and compare our partners, at no extra cost', many: 'Compare options:' }
+    ar: { h: 'كل ما تحتاجه لرحلتك', sub: 'اضغط على الخدمة وقارن بين الخيارات، بنفس السعر وبدون أي رسوم إضافية', many: 'قارن بين الخيارات:' },
+    en: { h: 'Everything for your trip', sub: 'Tap a service and compare the options, at no extra cost', many: 'Compare options:' }
   };
 
   var css = document.createElement('style');
