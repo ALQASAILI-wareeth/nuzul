@@ -729,11 +729,17 @@
   try { const s = localStorage.getItem('nuzul_lang'); if (s === 'en' || s === 'ar') lang = s; } catch(e){}
   if (qs.get('lang') === 'en' || qs.get('lang') === 'ar') lang = qs.get('lang');
 
+  // أمان: أي نص يدخل في HTML يمر على esc، وأي نص من الرابط يتنظف من الرموز المخفية ويُقص
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
+  const clean = s => String(s == null ? '' : s).replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g, '').replace(/\s+/g, ' ').trim().slice(0, 80);
+  const isDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(new Date(s + 'T12:00:00'));
+  // صور خارجية: نقبل فقط خوادم ويكيميديا عبر https
+  const safeImg = u => { try { const x = new URL(u); return (x.protocol === 'https:' && x.hostname === 'upload.wikimedia.org') ? x.href.replace(/["'()\\\s]/g, encodeURIComponent) : ''; } catch(e) { return ''; } };
   const S = {
-    d: (qs.get('d') || 'Dubai').trim(),
-    n: (qs.get('n') || '').trim(),
-    cin: qs.get('ci') || fmt(addDays(today,1)),
-    cout: qs.get('co') || fmt(addDays(today,4)),
+    d: clean(qs.get('d')) || 'Dubai',
+    n: clean(qs.get('n')),
+    cin: isDate(qs.get('ci')) ? qs.get('ci') : fmt(addDays(today,1)),
+    cout: isDate(qs.get('co')) ? qs.get('co') : fmt(addDays(today,4)),
     adults: Math.min(10, Math.max(1, +qs.get('a') || 2)),
     rooms: Math.min(5, Math.max(1, +qs.get('r') || 1))
   };
@@ -744,7 +750,7 @@
   const key = () => { const k = S.d.toLowerCase(); return DEST[k] ? k : (ALIAS[k] || ALIAS[S.d] || (DEST[k]?k:'')); };
   const t = k => T[lang][k];
   const nights = () => Math.max(1, Math.round((new Date(S.cout) - new Date(S.cin)) / 864e5));
-  const dispName = () => { const k = key(); if (lang === 'ar') return S.n && /[؀-ۿ]/.test(S.n) ? S.n : (k && DEST[k].ar) || S.d; return S.d; };
+  const dispName = () => { const k = key(); if (lang === 'ar') { if (k) return (S.n && ALIAS[S.n] === k) ? S.n : (DEST[k].ar || S.d); return S.n && /[؀-ۿ]/.test(S.n) ? S.n : S.d; } return S.d; };
   const dateTxt = s => new Date(s+'T12:00:00').toLocaleDateString(lang === 'ar' ? 'ar-AE' : 'en-GB', {day:'numeric', month:'short'});
   const place = () => { const k = key(); return (F.near && k && DEST[k].near) ? DEST[k].near.q : S.d; };
   const opts = () => ({cin:S.cin, cout:S.cout, adults:S.adults, rooms:S.rooms});
@@ -774,9 +780,9 @@
     const a = document.createElement('div');
     a.className = 'pc' + (cls ? ' ' + cls : '');
     a.innerHTML = (data.badge ? '<span class="badge">' + data.badge + '</span>' : '') +
-      '<div class="nm"><i style="background:' + color + '">' + logo + '</i>' + name + '</div>' +
+      '<div class="nm"><i style="background:' + esc(color) + '">' + esc(logo) + '</i>' + esc(name) + '</div>' +
       '<ul>' + data.pts.map(p => '<li>' + p + '</li>').join('') + '</ul>' +
-      '<a class="cta" style="background:' + color + '" target="_blank" rel="noopener sponsored" href="' + href + '">' + data.cta + ' ↗</a>' +
+      '<a class="cta" style="background:' + esc(color) + '" target="_blank" rel="noopener sponsored" href="' + esc(href) + '">' + data.cta + ' ↗</a>' +
       (data.mob ? '<div class="mob">' + data.mob + '</div>' : '') +
       '<small>' + data.sm + '</small>';
     return a;
@@ -793,7 +799,7 @@
   function imgHtml(k, alt, isArea){
     const im = IMG[k]; if (!im) return '';
     const L = T[lang]; credit(im[0], im[1], im[2]);
-    return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="' + (im[3] ? 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(im[0].replace(/ /g,'_')) + '?width=640' : '/img/hotels/' + k + '.webp') + '" alt="' + alt.replace(/"/g,'') + '" onerror="this.parentNode.classList.add(\'noimg\')">' +
+    return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="' + (im[3] ? 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(im[0].replace(/ /g,'_')) + '?width=640' : '/img/hotels/' + k + '.webp') + '" alt="' + esc(alt) + '" onerror="this.parentNode.classList.add(\'noimg\')">' +
       (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>';
   }
 
@@ -837,7 +843,8 @@
         if (ii.mime !== 'image/jpeg' || ii.width < 700 || badPic(p.title)) return;
         const r = ii.width / ii.height; if (r < 0.6 || r > 2.3) return;
         const md = ii.extmetadata || {};
-        out.push({wide: r >= 1.2, src: ii.thumburl, file: String(p.title).replace(/^[^:]+:/, ''), who: ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60), lic: (md.LicenseShortName || {}).value || ''});
+        const su = safeImg(ii.thumburl); if (!su) return;
+        out.push({wide: r >= 1.2, src: su, file: String(p.title).replace(/^[^:]+:/, ''), who: ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60), lic: (md.LicenseShortName || {}).value || ''});
       });
     } catch(e) {}
     return (GAL[title] = out);
@@ -902,7 +909,7 @@
         (q.normalized || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         (q.redirects || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         const by = {}; Object.values(q.pages || {}).forEach(p => { by[p.title] = p; });
-        part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage && !badPic(p.pageimage)) ? {src: p.thumbnail.source, file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
+        part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage && !badPic(p.pageimage) && safeImg(p.thumbnail.source)) ? {src: safeImg(p.thumbnail.source), file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
       } }
     } catch(e) {}
     if (run !== wikiRun) return;
@@ -985,13 +992,13 @@
       const g = H.groups[h.g], c = document.createElement('div'); c.className = 'hc';
       const ef = h.f || {hotel: h.n}, rf = h.f ? 'pick' : 'hotel';
       const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingHotelUrl(h.c || H.city, h.n, o, lang), eid = h.f ? 0 : (window.NZ_EID || {})[h.n], hc = eid ? NUZUL.hotelsHotelUrl(eid, o) : NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = eid ? NUZUL.expediaHotelUrl(eid, o) : NUZUL.expediaUrl(h.c || H.city, o, ef, rf);
-      const gi = h.info || g.info; const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (gi ? '<span>✨ ' + gi[lang] + '</span>' : '');
+      const gi = h.info || g.info; const extra = g.walk ? '<span>' + L.walk + esc(g.walk[lang]) + '</span>' : (gi ? '<span>✨ ' + esc(gi[lang]) + '</span>' : '');
       const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) || wikiHtml(h, g, H); if (!im) c.classList.add('noi');
       const on = !!(window.NZKEEP && NZKEEP.isFav(k, h.n));
       c.innerHTML = im +
         '<div class="hx"><div class="hr"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
         (window.NZKEEP && !h.f ? '<button type="button" class="fv' + (on ? ' on' : '') + '" aria-pressed="' + on + '" aria-label="' + (on ? L.favRm : L.favAdd) + '" title="' + (on ? L.favRm : L.favAdd) + '">' + (on ? '♥' : '♡') + '</button>' : '') + '</div>' +
-        '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + g[lang] + '</span>' + extra + '</div></div>' +
+        '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + esc(g[lang]) + '</span>' + extra + '</div></div>' +
         '<div class="hb"><button type="button" class="cmp">' + L.cmp + '</button></div>';
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.f ? '' : h.n;
@@ -1015,7 +1022,7 @@
                      : [['Halal restaurants','halal restaurants'],['Coffee','coffee shops'],['Parks','parks'],['Family fun','family attractions'],['Mosques','mosque'],['Pharmacy','pharmacy']];
     const q = t => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t + ' near ' + h.n + (city ? ', ' + city : ''));
     return '<div class="shnr"><b>' + (ar ? 'حول الفندق' : 'Around the hotel') + '</b><span>' + (ar ? 'بعد ما تحجز، شوف أقرب الأماكن على الخريطة:' : 'After you book, see what is nearby on the map:') + '</span><div>' +
-      items.map(i => '<a target="_blank" rel="noopener" href="' + q(i[1]) + '">' + i[0] + '</a>').join('') +
+      items.map(i => '<a target="_blank" rel="noopener" href="' + esc(q(i[1])) + '">' + esc(i[0]) + '</a>').join('') +
       '<a class="tk" target="_blank" rel="noopener sponsored" href="https://tiqets.tpo.lu/6JhmqQ9H">' + (ar ? 'تذاكر المعالم ↗' : 'Attraction tickets ↗') + '</a></div></div>';
   }
   // لما الزائر يرجع من موقع الحجز: نبرز له قسم «حول الفندق»
@@ -1035,11 +1042,11 @@
     const L = T[lang], h = d.h, sh = $('sh');
     shFrom = from;
     const src = d.im && !d.im.parentNode.classList.contains('noimg') ? d.im.currentSrc || d.im.src : '';
-    const a = (cls, name, href) => '<a class="sha ' + cls + '" target="_blank" rel="noopener sponsored" href="' + href + '"><span>' + name + '</span><small>' + L.shGo + ' ↗</small></a>';
+    const a = (cls, name, href) => '<a class="sha ' + cls + '" target="_blank" rel="noopener sponsored" href="' + esc(href) + '"><span>' + esc(name) + '</span><small>' + L.shGo + ' ↗</small></a>';
     $('shp').innerHTML = '<div class="shg" aria-hidden="true"><i></i></div><button type="button" class="shx" id="shx" aria-label="' + L.shClose + '">✕</button>' +
-      (src ? '<div class="shi"><img alt="" src="' + src + '">' + ((h.area || (d.im && d.im.dataset.area)) ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>' : '') +
+      (src ? '<div class="shi"><img alt="" src="' + esc(src) + '">' + ((h.area || (d.im && d.im.dataset.area)) ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>' : '') +
       '<div class="shb"><h3 id="shN"></h3>' + (lang === 'ar' ? '<div class="he" id="shE"></div>' : '') +
-      '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + d.g[lang] + '</span>' + d.extra + '</div>' +
+      '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + esc(d.g[lang]) + '</span>' + d.extra + '</div>' +
       '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
       (h.f ? '' : '<button type="button" class="shpm" id="shpm"><b>' + (lang === 'ar' ? 'احجز إقامتك وارجع لنا' : 'Book your stay, then come back') + '</b><span>' + (lang === 'ar' ? 'جهّزنا لك قائمة بأقرب المطاعم والكوفيهات وأماكن الترفيه حول الفندق.' : 'We have a list of the nearest restaurants, cafés and fun places around the hotel ready for you.') + '</span></button>') +
       '<div class="shq">' + L.shQ + '</div>' +
@@ -1107,7 +1114,7 @@
         const d = await (await fetch(q)).json();
         const x = Object.values((d.query || {}).pages || {})[0] || {};
         if (heroFor !== name) return;
-        if (x.thumbnail && x.pageimage && !badPic(x.pageimage)) { pg = x; break; }
+        if (x.thumbnail && x.pageimage && !badPic(x.pageimage) && safeImg(x.thumbnail.source)) { pg = x; break; }
       }
       if (!pg) {
         let g = await gallery(tourTitle(name)); if (!g.length) g = await gallery(name);
@@ -1119,7 +1126,7 @@
         top.classList.add('ph'); HERO_CR = [w.file, w.who, w.lic]; renderCredits();
         return;
       }
-      const src = pg.thumbnail.source;
+      const src = safeImg(pg.thumbnail.source); if (!src) return;
       await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
       if (heroFor !== name) return;
       top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("' + src + '")';
@@ -1160,10 +1167,10 @@
   function fillForm(){ $('e_dest').value = lang === 'ar' ? dispName() : S.d; $('e_cin').value = S.cin; $('e_cout').value = S.cout; $('e_ad').value = S.adults; $('e_rm').value = S.rooms; $('e_cin').min = fmt(today); }
   $('editBtn').onclick = () => { fillForm(); $('eform').classList.toggle('on'); };
   $('e_go').onclick = () => {
-    const v = $('e_dest').value.trim(); if (!v) return $('e_dest').focus();
+    const v = clean($('e_dest').value); if (!v) return $('e_dest').focus();
     const raw = v; const k = ALIAS[raw] || raw.toLowerCase();
     S.d = (DEST[k] && k === 'makkah') ? 'Makkah' : (DEST[k] && k === 'madinah') ? 'Madinah' : (DEST[k] ? k.replace(/\b\w/g, c => c.toUpperCase()) : raw);
-    S.n = raw; S.cin = $('e_cin').value || S.cin; S.cout = $('e_cout').value || S.cout;
+    S.n = raw; S.cin = isDate($('e_cin').value) ? $('e_cin').value : S.cin; S.cout = isDate($('e_cout').value) ? $('e_cout').value : S.cout;
     if (S.cout <= S.cin) S.cout = fmt(addDays(new Date(S.cin),1));
     S.adults = +$('e_ad').value; S.rooms = +$('e_rm').value; F.near = false;
     const u = new URLSearchParams({d:S.d, n:S.n, ci:S.cin, co:S.cout, a:S.adults, r:S.rooms});
