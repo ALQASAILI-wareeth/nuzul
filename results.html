@@ -862,6 +862,30 @@
     settle(city);
     renderCredits();
   }
+  // القوائم المختارة: الفنادق اللي تتشارك نفس «صورة المنطقة» تاخذ صور مختلفة من صفحة المنطقة ثم المدينة
+  async function varietyAreas(run){
+    const boxes = [...document.querySelectorAll('#hl .hi[data-t]:not([data-gen])')]; if (boxes.length < 2) return;
+    const by = {}; boxes.forEach(b => (by[b.dataset.t] = by[b.dataset.t] || []).push(b));
+    const used = new Set([...document.querySelectorAll('#hl .hi img')].map(i => i.src));
+    const city = decodeURIComponent(boxes[0].dataset.c || '');
+    for (const t of Object.keys(by)) {
+      const grp = by[t]; if (grp.length < 2) continue;
+      let pics = (await gallery(t)).filter(p => p.wide);
+      if (pics.length < grp.length && city && city !== t) pics = pics.concat((await gallery(city)).filter(p => p.wide));
+      if (run !== wikiRun) return;
+      let n = 0;
+      grp.slice(1).forEach(b => {
+        if (!b.isConnected) return;
+        let p = null; while (n < pics.length) { const c = pics[n++]; if (!used.has(c.src)) { p = c; break; } }
+        if (!p) return; used.add(p.src);
+        const old = b.querySelector('img'); if (!old) return;
+        const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = ''; im.dataset.area = '1';
+        im.onerror = () => { if (im.parentNode === b) b.replaceChild(old, im); };
+        b.replaceChild(im, old); im.src = p.src; credit(p.file, p.who, p.lic);
+      });
+    }
+    renderCredits();
+  }
   let wikiRun = 0;
   async function fillWiki(){
     const run = ++wikiRun, boxes = [...document.querySelectorAll('#hl .hi[data-w]')];
@@ -888,7 +912,7 @@
       if (idx < 0) { if (!b.dataset.gen) localPic(b, b.dataset.c || ts[ts.length - 1]); return; }
       const w = WIKI[ts[idx]], area = idx > 0 || !b.dataset.own;
       const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = '';
-      if (area) im.dataset.area = '1';
+      if (area) { im.dataset.area = '1'; b.dataset.t = ts[idx]; }
       im.onerror = () => { b.classList.add('noimg'); if (b.dataset.gen) { if (im.parentNode === b) { collapse(b); settle(decodeURIComponent(b.dataset.c || '')); } } else localPic(b, b.dataset.c || ts[ts.length - 1]); }; b.classList.remove('noimg');
       b.innerHTML = ''; b.append(im);
       if (area) { const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); }
@@ -897,6 +921,7 @@
     });
     renderCredits();
     variety(run);
+    varietyAreas(run);
     const fl = Object.keys(files);
     if (!fl.length) return;
     try {
