@@ -240,6 +240,7 @@
 </footer>
 
 <script src="partners.js"></script>
+<script src="hotels-more.js"></script>
 <script src="keep.js"></script>
 <script src="polish-r.js"></script>
 <script>
@@ -713,6 +714,7 @@
   };
   let HTAB = /[?&]fav=1/.test(location.search) ? '_f' : '';
   const ALIAS = {'mecca':'makkah','مكة':'makkah','مكة المكرمة':'makkah','medina':'madinah','المدينة':'madinah','المدينة المنورة':'madinah','دبي':'dubai','أبوظبي':'abu dhabi','إسطنبول':'istanbul','اسطنبول':'istanbul','طرابزون':'trabzon','لندن':'london','باكو':'baku','كوالالمبور':'kuala lumpur','القاهرة':'cairo','تبليسي':'tbilisi','جورجيا':'tbilisi','باتومي':'batumi','المالديف':'maldives','جزر المالديف':'maldives','صلالة':'salalah','بانكوك':'bangkok','تايلاند':'bangkok'};
+  if (window.NZ_MORE) { Object.assign(DEST, NZ_MORE.dest); Object.assign(HG, NZ_MORE.hg); Object.assign(ALIAS, NZ_MORE.alias); }
 
   const $ = id => document.getElementById(id);
   const qs = new URLSearchParams(location.search);
@@ -793,6 +795,63 @@
       (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>';
   }
 
+  // صور من ويكيبيديا (تراخيص حرة فقط) للفنادق اللي ما لها صورة محفوظة: صورة الفندق، وإلا صورة المنطقة
+  const WIKI = {};
+  function wikiHtml(h, g, H){
+    const t = [h.w, g && g.w, H.city].filter((x, i, a) => x && a.indexOf(x) === i);
+    if (!t.length) return '';
+    return '<div class="hi noimg"' + (h.w ? ' data-own="1"' : '') + ' data-w="' + t.map(x => encodeURIComponent(x)).join('|') + '"></div>';
+  }
+  let wikiRun = 0;
+  async function fillWiki(){
+    const run = ++wikiRun, boxes = [...document.querySelectorAll('#hl .hi[data-w]')];
+    if (!boxes.length) return;
+    const need = [...new Set(boxes.flatMap(b => b.dataset.w.split('|').map(decodeURIComponent)))].filter(t => !(t in WIKI));
+    try {
+      for (let i = 0; i < need.length; i += 40) {
+        const part = need.slice(i, i + 40);
+        const d = await (await fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=640&pilicense=free&titles=' + encodeURIComponent(part.join('|')))).json();
+        const q = d.query || {}, map = {};
+        part.forEach(t => map[t] = t);
+        (q.normalized || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
+        (q.redirects || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
+        const by = {}; Object.values(q.pages || {}).forEach(p => { by[p.title] = p; });
+        part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage) ? {src: p.thumbnail.source, file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
+      }
+    } catch(e) { return; }
+    if (run !== wikiRun) return;
+    const files = {};
+    boxes.forEach(b => {
+      if (!b.isConnected) return;
+      const ts = b.dataset.w.split('|').map(decodeURIComponent), idx = ts.findIndex(t => WIKI[t]);
+      if (idx < 0) return;
+      const w = WIKI[ts[idx]], area = idx > 0 || !b.dataset.own;
+      const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = '';
+      if (area) im.dataset.area = '1';
+      im.onerror = () => b.classList.add('noimg'); b.classList.remove('noimg');
+      b.innerHTML = ''; b.append(im);
+      if (area) { const s = document.createElement('span'); s.className = 'lab'; s.textContent = T[lang].areaPic; b.append(s); }
+      im.src = w.src;
+      if (!(w.file in CREDITS)) { credit(w.file, w.who || '', w.lic || ''); if (!w.who) files[w.raw] = w; }
+    });
+    renderCredits();
+    const fl = Object.keys(files);
+    if (!fl.length) return;
+    try {
+      for (let i = 0; i < fl.length; i += 40) {
+        const m = await (await fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata&titles=' + encodeURIComponent(fl.slice(i, i + 40).map(f => 'File:' + f).join('|')))).json();
+        Object.values((m.query || {}).pages || {}).forEach(p => {
+          const md = ((p.imageinfo || [])[0] || {}).extmetadata || {}, name = (p.title || '').replace(/^File:/, '');
+          const w = Object.values(files).find(x => x.file === name); if (!w) return;
+          w.who = ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60) || ' ';
+          w.lic = (md.LicenseShortName || {}).value || '';
+          if (run === wikiRun && w.file in CREDITS) credit(w.file, w.who.trim(), w.lic);
+        });
+      }
+      if (run === wikiRun) renderCredits();
+    } catch(e) {}
+  }
+
   function renderHotels(){
     const L = T[lang], k = key(), H = HG[k], box = $('hs');
     const hideType = F.type && F.type !== 'hotel';
@@ -820,7 +879,7 @@
       const ef = {hotel: h.n};
       const bk = NUZUL.bookingUrl(h.n, o, {}, lang), hc = NUZUL.hotelsUrl(h.c || H.city, o, ef, 'hotel'), ex = NUZUL.expediaUrl(h.c || H.city, o, ef, 'hotel');
       const extra = g.walk ? '<span>' + L.walk + g.walk[lang] + '</span>' : (g.info ? '<span>✨ ' + g.info[lang] + '</span>' : '');
-      const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area); if (!im) c.classList.add('noi');
+      const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) || wikiHtml(h, g, H); if (!im) c.classList.add('noi');
       const on = !!(window.NZKEEP && NZKEEP.isFav(k, h.n));
       c.innerHTML = im +
         '<div class="hx"><div class="hr"><div><div class="hn"></div>' + (lang === 'ar' ? '<div class="he"></div>' : '') + '</div>' +
@@ -830,13 +889,14 @@
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.n;
       c.tabIndex = 0; c.setAttribute('role', 'button');
-      const open = () => openSheet(c, {h:h, g:g, extra:extra, im:IMG[h.img] ? c.querySelector('.hi img') : null, hc:hc, ex:ex, bk:bk});
+      const open = () => openSheet(c, {h:h, g:g, extra:extra, im:c.querySelector('.hi img'), hc:hc, ex:ex, bk:bk});
       c.onclick = e => { if (e.target.closest('.fv')) return; open(); };
       c.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); open(); } };
       const fb = c.querySelector('.fv');
       if (fb) fb.onclick = () => { NZKEEP.toggleFav({city:k, d:S.d, cityAr:DEST[k] ? DEST[k].ar : '', n:h.n, ar:h.ar}); if (HTAB === '_f' && !NZKEEP.favCount(k)) HTAB = ''; renderHotels(); };
       hl.append(c);
     });
+    fillWiki();
   }
 
   // لوحة المقارنة: تطلع من تحت فوق نفس الصفحة وفيها الشركاء الثلاثة
@@ -847,7 +907,7 @@
     const src = d.im && !d.im.parentNode.classList.contains('noimg') ? d.im.currentSrc || d.im.src : '';
     const a = (cls, name, href) => '<a class="sha ' + cls + '" target="_blank" rel="noopener sponsored" href="' + href + '"><span>' + name + '</span><small>' + L.shGo + ' ↗</small></a>';
     $('shp').innerHTML = '<div class="shg" aria-hidden="true"><i></i></div><button type="button" class="shx" id="shx" aria-label="' + L.shClose + '">✕</button>' +
-      (src ? '<div class="shi"><img alt="" src="' + src + '">' + (h.area ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>' : '') +
+      (src ? '<div class="shi"><img alt="" src="' + src + '">' + ((h.area || (d.im && d.im.dataset.area)) ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>' : '') +
       '<div class="shb"><h3 id="shN"></h3>' + (lang === 'ar' ? '<div class="he" id="shE"></div>' : '') +
       '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + d.g[lang] + '</span>' + d.extra + '</div>' +
       '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
