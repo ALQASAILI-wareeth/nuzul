@@ -8,7 +8,9 @@ const root = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const BANNED = [
   'أفضل سعر', 'بأفضل الأسعار', 'قارن أسعار الفنادق', 'أسعار شفافة', "cmp:'قارن الأسعار", "cheaperB:'💲 سعر أوفر'",
   'إلغاء مجاني لمعظم الحجوزات', 'معظم الغرف تتيح الإلغاء المجاني',
-  'best price', 'Compare hotel prices', 'Transparent prices', "cmp:'Compare prices", 'Most rooms offer free cancellation'
+  'best price', 'Compare hotel prices', 'Transparent prices', "cmp:'Compare prices", 'Most rooms offer free cancellation',
+  // Retired on 24 Nov 2026 (second pass): a 24/7, Arabic-speaking service could not be confirmed for every partner.
+  'دعم على مدار الساعة', 'متاحة 24/7', '24/7 support', 'round-the-clock'
 ];
 const REQUIRED = [
   ['index.html', '<title>نُزُل — اختر فندقك وقارن بين مواقع الحجز</title>'],
@@ -18,6 +20,8 @@ const REQUIRED = [
   ['index.html', 'وشروط كل غرفة تظهر لك في موقع الحجز قبل الدفع.'],
   ['index.html', 'Compare booking sites<br>'], ['index.html', '✔ No fees from us'],
   ['index.html', 'The terms of each room are shown on the booking site before you pay.'],
+  ['index.html', '✔ الدعم من موقع الحجز'], ['index.html', 'وطرق التواصل معها في تأكيد حجزك.'],
+  ['index.html', '✔ Booking-site support'], ['index.html', 'Contact details are in your booking confirmation.'],
   ['index.html', 'https://nuzultravel.com/og.png?v=20261124'],
   ['results.html', '<title>نُزُل — قارن مواقع حجز الفنادق</title>'],
   ['results.html', "cmp:'شوف الأسعار ←'"], ['results.html', "cmp:'See prices →'"], ['results.html', "cheaperB:'💲 اقتصادي'"],
