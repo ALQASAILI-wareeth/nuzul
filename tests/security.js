@@ -102,6 +102,26 @@ const H = { 'access-control-allow-origin': '*', 'content-type': 'application/jso
     ok('CSP meta tag present on all 5 page types', present === 5, 'present=' + present);
     ok('CSP: no violations during normal use', viol.length === 0, viol.slice(0, 3).join(' | '));
     ok('CSP: a script from a foreign host is blocked', blocked === 5, 'blocked=' + blocked); }
+  // 8) إضافتان بعد مراجعة الإغلاق (24 نوفمبر 2026) تسدّان ثغرتين في الاختبار نفسه
+  // 8-أ) الاسم المعروض n يبدأ بحرف عربي: الصفحة القديمة كانت تثق في n بهذا الشكل فقط، والحمولات فوق ما فيها حرف عربي فما كانت تختبره
+  { let exec = 0, inj = 0, shown = 0;
+    for (const pay of PAY) { const pg = await page();
+      await pg.goto(B + '/results.html?d=Zzzland&n=' + encodeURIComponent('ع ' + pay), { waitUntil: 'networkidle2' }); await sleep(500);
+      if (await pg.evaluate(() => document.getElementById('title').textContent.indexOf('ع') >= 0)) shown++;
+      await pg.evaluate(() => { const c = document.querySelector('.hc'); if (c) c.click(); }); await sleep(350);
+      const s1 = await state(pg);
+      await pg.evaluate(() => { const l = document.getElementById('langBtn'); if (l) l.click(); }); await sleep(250);
+      const s2 = await state(pg); if (s1.x || s2.x || pg._dlg) exec++; if (s1.bad || s2.bad) inj++;
+      await pg.browserContext().close(); }
+    ok('results.html display name "n" with an Arabic letter: shown as text, no script execution, no injected elements', exec === 0 && inj === 0 && shown === PAY.length, 'exec=' + exec + ' injected=' + inj + ' shown=' + shown); }
+  // 8-ب) آخر بحث محفوظ: خانات البالغين والغرف والتواريخ فيها حمولة (الفحص رقم 5 فوق يسمّم خانات النص فقط)
+  { let exec = 0, inj = 0, err = 0, n = 0; const pg = await page(); await pg.goto(B + '/', { waitUntil: 'networkidle2' });
+    for (const pay of PAY) for (const pre of ['', '3']) { const e0 = pg._e.length; n++; pg._dlg = 0;
+      await pg.evaluate(v => { localStorage.clear(); localStorage.setItem('nuzul_last', JSON.stringify({ d: 'Dubai', n: '', name: 'Dubai', ci: '2031-05-10' + v, co: '2031-05-13' + v, a: v, r: v, ts: Date.now() })); }, pre + pay);
+      await pg.reload({ waitUntil: 'networkidle2' }); await sleep(500);
+      await pg.evaluate(() => { const l = document.getElementById('langBtn'); if (l) l.click(); }); await sleep(250);
+      const s = await state(pg); if (s.x || pg._dlg) exec++; if (s.bad) inj++; if (pg._e.length > e0) err++; }
+    ok('home page: saved-search adults, rooms and dates carrying markup are never written as markup', exec === 0 && inj === 0 && err === 0, 'exec=' + exec + ' injected=' + inj + ' errors=' + err + ' cases=' + n); await pg.browserContext().close(); }
   console.log(out.join('\n')); console.log('total', out.length, 'pass', out.filter(x => x.startsWith('PASS')).length);
   if (process.env.OUT) require('fs').writeFileSync(process.env.OUT, out.join('\n'));
   if (out.some(x => x.startsWith('FAIL'))) process.exitCode = 1;
