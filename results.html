@@ -163,7 +163,7 @@
   footer a{color:#fff;opacity:.85}
   .creds{margin-top:10px;font-size:12px}.creds summary{cursor:pointer;opacity:.8}.creds ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:2px;opacity:.85}.creds p{margin-top:6px;opacity:.8}
 </style>
-<link rel="stylesheet" href="polish-r.css?v=20261124b">
+<link rel="stylesheet" href="polish-r.css?v=20261124c">
 </head>
 <body>
 <header>
@@ -241,13 +241,13 @@
   </div>
 </footer>
 
-<script src="search.js?v=20261124b"></script>
-<script src="partners.js?v=20261124b"></script>
-<script src="hotels-more.js?v=20261124b"></script>
-<script src="hotel-ids.js?v=20261124b"></script>
-<script src="keep.js?v=20261124b"></script>
-<script src="polish-r.js?v=20261124b"></script>
-<script src="ptr.js?v=20261124b"></script>
+<script src="search.js?v=20261124c"></script>
+<script src="partners.js?v=20261124c"></script>
+<script src="hotels-more.js?v=20261124c"></script>
+<script src="hotel-ids.js?v=20261124c"></script>
+<script src="keep.js?v=20261124c"></script>
+<script src="polish-r.js?v=20261124c"></script>
+<script src="ptr.js?v=20261124c"></script>
 <script>
 (function(){
   const MAIL = 'info@nuzultravel.com';
@@ -726,6 +726,8 @@
   const pad = n => String(n).padStart(2,'0');
   const fmt = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
   const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+  // تاريخ نصي (YYYY-MM-DD) يُقرأ كتاريخ محلي وقت الظهر، مو منتصف الليل بتوقيت UTC، عشان «+يوم» يطلع صح في كل المناطق الزمنية
+  const localDay = s => { const p = String(s).split('-'); return new Date(+p[0], +p[1] - 1, +p[2], 12); };
   const today = new Date();
 
   let lang = 'ar';
@@ -734,7 +736,21 @@
 
   // أمان: أي نص يدخل في HTML يمر على esc، وأي نص من الرابط يتنظف من الرموز المخفية ويُقص
   const esc = s => String(s == null ? '' : s).replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
-  const clean = s => String(s == null ? '' : s).replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g, '').replace(/\s+/g, ' ').trim().slice(0, 80);
+  // القص على حروف كاملة: ما ينقسم إيموجي ولا حرف مع تشكيله، وأي نصف رمز (surrogate مفرد) ينشال، عشان encodeURIComponent ما يرمي خطأ
+  const cutText = (s, max) => {
+    if (s.length <= max) return s;
+    let o = '';
+    try {
+      if (window.Intl && Intl.Segmenter) {
+        for (const g of new Intl.Segmenter(undefined, {granularity: 'grapheme'}).segment(s)) { if (o.length + g.segment.length > max) break; o += g.segment; }
+        if (o) return o;
+      }
+    } catch(e) { o = ''; }
+    for (const ch of s) { if (o.length + ch.length > max) break; o += ch; }
+    return o;
+  };
+  const wholeChars = s => { let o = ''; for (const ch of s) { if (ch.length === 1 && ch >= '\uD800' && ch <= '\uDFFF') continue; o += ch; } return o; };
+  const clean = s => wholeChars(cutText(String(s == null ? '' : s).replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g, '').replace(/\s+/g, ' ').trim(), 80)).trim();
   const isDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(new Date(s + 'T12:00:00'));
   // صور خارجية: نقبل فقط خوادم ويكيميديا عبر https
   const safeImg = u => { try { const x = new URL(u); return (x.protocol === 'https:' && x.hostname === 'upload.wikimedia.org') ? x.href.replace(/["'()\\\s]/g, encodeURIComponent) : ''; } catch(e) { return ''; } };
@@ -746,7 +762,7 @@
     adults: Math.min(10, Math.max(1, +qs.get('a') || 2)),
     rooms: Math.min(5, Math.max(1, +qs.get('r') || 1))
   };
-  if (S.cout <= S.cin) S.cout = fmt(addDays(new Date(S.cin),1));
+  if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin),1));
   const tp = qs.get('t') || '';
   const F = {type: ['hotel','apartment','resort','villa'].includes(tp) ? tp : '', budget:'', stars: tp === '5star' ? '5' : '', rating8:false, freeCancel:false, sort:'best', near:false};
 
@@ -1202,7 +1218,7 @@
   for (let i=1;i<=5;i++) $('e_rm').add(new Option(i, i));
   $('e_cin').addEventListener('change', () => {
     const v = $('e_cin').value; if (!v) return;
-    const nx = fmt(addDays(new Date(v), 1));
+    const nx = fmt(addDays(localDay(v), 1));
     $('e_cout').min = nx; $('e_cout').value = nx;
   });
   function fillForm(){ $('e_dest').value = lang === 'ar' ? dispName() : S.d; $('e_cin').value = S.cin; $('e_cout').value = S.cout; $('e_ad').value = S.adults; $('e_rm').value = S.rooms; $('e_cin').min = fmt(today); }
@@ -1213,7 +1229,7 @@
     const raw = v; const k = ALIAS[raw] || raw.toLowerCase();
     S.d = (DEST[k] && k === 'makkah') ? 'Makkah' : (DEST[k] && k === 'madinah') ? 'Madinah' : (DEST[k] ? k.replace(/\b\w/g, c => c.toUpperCase()) : raw);
     S.n = raw; canon(); S.cin = isDate($('e_cin').value) ? $('e_cin').value : S.cin; S.cout = isDate($('e_cout').value) ? $('e_cout').value : S.cout;
-    if (S.cout <= S.cin) S.cout = fmt(addDays(new Date(S.cin),1));
+    if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin),1));
     S.adults = +$('e_ad').value; S.rooms = +$('e_rm').value; F.near = false;
     const u = new URLSearchParams({d:S.d, n:S.n, ci:S.cin, co:S.cout, a:S.adults, r:S.rooms});
     try { history.replaceState(null, '', '?' + u.toString()); } catch(e){}
