@@ -10,6 +10,10 @@
   function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]; }); }
   function lang() { return document.documentElement.lang === 'en' ? 'en' : 'ar'; }
+  // البيانات المحفوظة في المتصفح ممكن ترجع بأي شكل (قديمة، تالفة، أو معدّلة باليد): ننظفها قبل أي استخدام
+  function str(v) { return typeof v === 'string' ? v : ''; }
+  function num(v, lo, hi, d) { var n = (typeof v === 'number' || typeof v === 'string') ? Math.round(Number(v)) : NaN; return isFinite(n) && n !== 0 ? Math.min(hi, Math.max(lo, n)) : d; }
+  function isYmd(s) { if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false; var a = s.split('-'), d = new Date(+a[0], +a[1] - 1, +a[2], 12); return !isNaN(d) && ymd(d) === s; }
 
   var T = {
     ar: {h: 'كمّل من وين وقفت', last: 'آخر بحث', go: 'كمّل بحثك', favH: 'مفضلتك', see: 'شوف السعر', rm: 'حذف من المفضلة',
@@ -24,6 +28,12 @@
   function saveSearch(S, name) {
     if (!S || !S.d) return;
     set(K_LAST, {d: S.d, n: S.n || '', name: name || S.n || S.d, ci: S.cin, co: S.cout, a: S.adults, r: S.rooms, ts: Date.now()});
+  }
+  // آخر بحث بعد التنظيف: نصوص فقط، تواريخ صحيحة فقط، وعدد البالغين والغرف أرقام ضمن الحدود
+  function lastSearch() {
+    var v = get(K_LAST, null);
+    if (!v || typeof v !== 'object' || Array.isArray(v) || !str(v.d).trim()) return null;
+    return {d: str(v.d), n: str(v.n), name: str(v.name), ci: isYmd(v.ci) ? v.ci : '', co: isYmd(v.co) ? v.co : '', a: num(v.a, 1, 10, 2), r: num(v.r, 1, 5, 1)};
   }
   // التواريخ القديمة ما تنفع: نرجّع نفس عدد الليالي ابتداءً من بكرة
   function freshDates(ci, co) {
@@ -41,7 +51,13 @@
   }
 
   /* ---------- المفضلة ---------- */
-  function favs() { var f = get(K_FAV, []); return Array.isArray(f) ? f : []; }
+  // المفضلة بعد التنظيف: نتجاهل أي عنصر مو كائن أو ناقص الاسم/المعرّف/الوجهة، والباقي يرجع نصوص فقط
+  function favs() {
+    var f = get(K_FAV, []);
+    if (!Array.isArray(f)) return [];
+    return f.filter(function (x) { return x && typeof x === 'object' && !Array.isArray(x) && str(x.id) && str(x.n) && str(x.d); })
+      .map(function (x) { return {id: x.id, city: str(x.city), d: x.d, cityAr: str(x.cityAr), n: x.n, ar: str(x.ar), ts: num(x.ts, 0, 9e15, 0)}; });
+  }
   function favId(city, hotel) { return (city + '|' + hotel).toLowerCase(); }
   function isFav(city, hotel) { var id = favId(city, hotel); return favs().some(function (f) { return f.id === id; }); }
   function toggleFav(o) {
@@ -81,7 +97,7 @@
 
   function renderHome() {
     var anchor = document.querySelector('.wrap.search'); if (!anchor) return;
-    var L = T[lang()], last = get(K_LAST, null), fv = favs();
+    var L = T[lang()], last = lastSearch(), fv = favs();
     var box = document.getElementById('nzkeep');
     if (!last && !fv.length) { if (box) box.remove(); return; }
     css();
@@ -93,7 +109,7 @@
     if (last) {
       var n = Math.max(1, Math.round((new Date(base.co) - new Date(base.ci)) / 864e5));
       var nm = ar ? (last.name || last.n || last.d) : last.d;
-      html += '<div class="c last"><div class="tx"><small>' + L.last + '</small><b>' + esc(nm) + '</b><span>' + dt(base.ci) + ' – ' + dt(base.co) + ' · ' + L.nights(n) + ' · ' + L.ad(last.a || 2) + '</span></div>' +
+      html += '<div class="c last"><div class="tx"><small>' + L.last + '</small><b>' + esc(nm) + '</b><span>' + esc(dt(base.ci) + ' – ' + dt(base.co) + ' · ' + L.nights(n) + ' · ' + L.ad(last.a)) + '</span></div>' +
         '<a class="go" href="' + esc(resultsUrl(last.d, last.n, base, last.a, last.r)) + '">' + L.go + '</a></div>';
     }
     html += '</div>';
@@ -113,12 +129,13 @@
   }
 
   /* ---------- أضف للشاشة الرئيسية (يظهر من الزيارة الثانية فقط) ---------- */
+  function visits() { return num(get(K_VIS, 0), 0, 1e9, 0); }
   var deferred = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; maybeA2hs(); });
   function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
   function maybeA2hs() {
     if (standalone() || get(K_A2HS, 0) || document.getElementById('nza')) return;
-    if (get(K_VIS, 0) < 2) return;
+    if (visits() < 2) return;
     var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent);
     if (!deferred && !ios) return;
     css();
@@ -134,7 +151,7 @@
 
   function boot() {
     // نعدّ الزيارة مرة وحدة في الجلسة
-    try { if (!sessionStorage.getItem('nz_v')) { sessionStorage.setItem('nz_v', '1'); set(K_VIS, get(K_VIS, 0) + 1); } } catch (e) {}
+    try { if (!sessionStorage.getItem('nz_v')) { sessionStorage.setItem('nz_v', '1'); set(K_VIS, visits() + 1); } } catch (e) {}
     if (document.querySelector('.wrap.search')) {
       renderHome();
       var lb = document.getElementById('langBtn'); if (lb) lb.addEventListener('click', function () { setTimeout(renderHome, 0); });
