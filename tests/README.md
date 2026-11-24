@@ -26,4 +26,4 @@ Requests to Wikipedia and Cloudflare are simulated or blocked, so results do not
 Types 48 real-world destination spellings on the home page (Arabic/English variants, countries, hotel names, typos, nonsense) and checks what the results page shows, plus the suggestion list and the Enter key. 51 checks.
 
 ## wording.js
-Static check, no browser. NUZUL shows no prices, so the pages must not promise a best price or a price comparison done by NUZUL itself. Fails if a retired phrase comes back or an approved phrase goes missing. 23 checks. Run: `node tests/wording.js`.
+Static check, no browser. NUZUL shows no prices, so the pages must not promise a best price, a price comparison done by NUZUL itself, or free cancellation it cannot verify. Fails if a retired phrase comes back or an approved phrase goes missing (home page, results page, app manifest, share image present). 56 checks. Run: `node tests/wording.js` (optionally pass a folder to check another copy).
