@@ -151,7 +151,7 @@
   .fl a:hover{opacity:1;color:var(--sand2)}
   .fl b{color:var(--teal);font-weight:700}
 </style>
-<link rel="stylesheet" href="polish.css?v=20261124b">
+<link rel="stylesheet" href="polish.css?v=20261124c">
 </head>
 <body>
 
@@ -270,7 +270,7 @@
   </div>
 </footer>
 
-<script src="search.js?v=20261124b"></script>
+<script src="search.js?v=20261124c"></script>
 <script>
   // ===== الإعدادات =====
   // ضع هنا رقم الشريك (Affiliate ID) بعد التسجيل في برنامج العمولة
@@ -378,6 +378,8 @@
   const pad = n => String(n).padStart(2,'0');
   const fmt = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
   const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+  // تاريخ الخانة (YYYY-MM-DD) يُقرأ كتاريخ محلي وقت الظهر، مو منتصف الليل بتوقيت UTC، عشان «+يوم» يطلع صح في كل المناطق الزمنية
+  const localDay = s => { const p = String(s).split('-'); return new Date(+p[0], +p[1] - 1, +p[2], 12); };
 
   function toEn(text){
     const s = text.trim();
@@ -453,8 +455,8 @@
     return ok;
   }
   $('cin').addEventListener('change', () => {
-    if ($('cin').value) { $('cout').value = fmt(addDays(new Date($('cin').value),1)); $('cout').dispatchEvent(new Event('input', {bubbles:true})); }
-    $('cout').min = fmt(addDays(new Date($('cin').value),1));
+    if ($('cin').value) { $('cout').value = fmt(addDays(localDay($('cin').value),1)); $('cout').dispatchEvent(new Event('input', {bubbles:true})); }
+    $('cout').min = fmt(addDays(localDay($('cin').value),1));
     update(); renderTypes();
   });
   ['dest','cout','adults','rooms'].forEach(id => {
@@ -573,11 +575,11 @@
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "467e088c51954c0e9555402613322308"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
-<script src="search-ui.js?v=20261124b"></script>
-<script src="keep.js?v=20261124b"></script>
-<script src="extras.js?v=20261124b"></script>
-<script src="home.js?v=20261124b"></script>
-<script src="business-parser.js?v=20261124b"></script>
-<script src="business.js?v=20261124b"></script>
-<script src="polish.js?v=20261124b"></script>
-<script src="ptr.js?v=20261124b"></script>
+<script src="search-ui.js?v=20261124c"></script>
+<script src="keep.js?v=20261124c"></script>
+<script src="extras.js?v=20261124c"></script>
+<script src="home.js?v=20261124c"></script>
+<script src="business-parser.js?v=20261124c"></script>
+<script src="business.js?v=20261124c"></script>
+<script src="polish.js?v=20261124c"></script>
+<script src="ptr.js?v=20261124c"></script>
