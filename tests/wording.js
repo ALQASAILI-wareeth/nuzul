@@ -39,6 +39,17 @@ for (const f of ['index.html', 'results.html', 'privacy.html', 'home.js', 'busin
 if (read('results.html').includes('id="mailBtn" href="mailto:info@nuzultravel.com"')) pass++; else fails.push('results.html: email contact button missing');
 try { JSON.parse(read('manifest.webmanifest')); pass++; } catch (e) { fails.push('manifest.webmanifest is not valid JSON'); }
 if (fs.existsSync(path.join(root, 'og.png')) && fs.statSync(path.join(root, 'og.png')).size > 20000) pass++; else fails.push('og.png missing or too small');
+// Marketing sources are not part of the published site, so they are checked only where they exist (the repository):
+// the ending texts of the videos follow the same rule as the pages.
+let extra = 0;
+for (const f of ['studio/scripts/videos.json', 'studio/scripts/overlays.py']) {
+  if (!fs.existsSync(path.join(root, f))) continue;
+  const s = read(f);
+  for (const b of ['أفضل سعر', 'بأفضل الأسعار', 'قارن الأسعار واحجز']) {
+    extra++;
+    if (s.includes(b)) fails.push(f + ' still contains retired wording: ' + b); else pass++;
+  }
+}
 fails.forEach(x => console.log('FAIL', x));
-console.log('total', FILES.length * BANNED.length + REQUIRED.length + 2 + 6, 'pass', pass);
+console.log('total', FILES.length * BANNED.length + REQUIRED.length + 2 + 6 + extra, 'pass', pass);
 if (fails.length) process.exitCode = 1;

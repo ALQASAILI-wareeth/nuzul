@@ -21,9 +21,26 @@ python3 /home/claude/scripts/render.py     # يرندر الفيديوهات إ�
 | `scripts/sync.py` | يحدد مقطع الموسيقى لكل فيديو (`PICK`) ويضبط القصّات على الإيقاع |
 | `scripts/mix.py` | يقص الموسيقى ويضبط مستوى الصوت |
 | `scripts/render.py` | يرندر المشاهد مع انتقال ناعم 0.4 ث، وشاشة ختامية قصيرة ~2.5 ث |
+| `scripts/endcard_swap.py` | يبدّل الشاشة الختامية فقط في الفيديوهات الجاهزة حسب `videos.json`، بدون إعادة الرندر وبدون لمس الصوت |
+| `scripts/launch_text.py` | يبدّل عنوان صور الانطلاق الأربع (`media/nuzul_launch_*.png`) داخل الصورة نفسها، لأن ما لها قالب مصدر |
+| `scripts/og_text.py` | يعيد كتابة نص صورة المشاركة `og.png` |
 | `footage_sources.txt` | روابط اللقطات (Pexels / Pixabay) |
 | `music_sources.txt` | مسارات الموسيقى على cdn.pixabay.com/audio |
 | `fonts/` | خط Tajawal (رخصة SIL Open Font) |
+
+## تعديل النص بدون إعادة إنتاج
+
+لما يتغيّر النص المعتمد وما نحتاج لقطات جديدة:
+
+```bash
+# الشاشة الختامية للفيديوهات: عدّل "cta" في videos.json (والسطر الثاني في overlays.py) ثم
+python3 studio/scripts/endcard_swap.py <مجلد الإخراج> [<مجلد الفيديوهات الأصلية>]
+
+# عنوان صور الانطلاق: عدّل CFG داخل السكربت ثم
+python3 studio/scripts/launch_text.py <مجلد الصور الأصلية> <مجلد الإخراج>
+```
+
+السكربتان يشتغلان على النسخ الأصلية (commit `fbded98`)؛ تُسحب من git بـ `git show fbded98:media/<الملف>`. كل شي غير النص المبدَّل يبقى كما هو: في الفيديو الصوت والمشاهد، وفي الصور الشعار والنقاط والخلفية.
 
 ## فيديو جديد
 

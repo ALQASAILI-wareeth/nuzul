@@ -177,7 +177,7 @@ def endcard_layer(cta):
         sz -= 2
     w, h = draw_ar(d, (W / 2, y), cta, font(sz, 'Black'), WHITE)
     y += h + 40
-    sub = 'قارن الأسعار واحجز بثقة'
+    sub = 'قارن مواقع الحجز واحجز بثقة'
     w, h = draw_ar(d, (W / 2, y), sub, font(50, 'Bold'), (220, 245, 250))
     # URL pill
     y += h + 60
