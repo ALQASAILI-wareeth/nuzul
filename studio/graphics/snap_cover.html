@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<!-- Snapchat public-profile cover, 1000x1500. Render with: node studio/graphics/shot.js covers <outdir> -->
+<style>
+@font-face{font-family:T;src:url(../fonts/Tajawal-Black.ttf);font-weight:900}
+@font-face{font-family:T;src:url(../fonts/Tajawal-ExtraBold.ttf);font-weight:800}
+@font-face{font-family:T;src:url(../fonts/Tajawal-Bold.ttf);font-weight:700}
+html,body{margin:0;padding:0}
+.c{width:1000px;height:1500px;position:relative;overflow:hidden;font-family:T;
+background:linear-gradient(180deg,#1d1446 0%,#3b2a78 22%,#7a4a9e 42%,#d9708a 60%,#f5a35c 74%,#f7c873 82%,#1f2a4a 82.2%,#16203b 100%)}
+.stars{position:absolute;inset:0 0 50% 0;background-image:
+radial-gradient(2px 2px at 8% 12%,#fff8,transparent),radial-gradient(2px 2px at 22% 6%,#fffa,transparent),radial-gradient(1.5px 1.5px at 35% 18%,#fff9,transparent),radial-gradient(2px 2px at 57% 9%,#fff8,transparent),radial-gradient(1.5px 1.5px at 71% 15%,#fffa,transparent),radial-gradient(2px 2px at 88% 7%,#fff9,transparent),radial-gradient(1.5px 1.5px at 15% 28%,#fff7,transparent),radial-gradient(2px 2px at 45% 30%,#fff6,transparent),radial-gradient(1.5px 1.5px at 93% 26%,#fff7,transparent),radial-gradient(2px 2px at 64% 24%,#fff6,transparent)}
+.sun{position:absolute;left:50%;top:1010px;transform:translate(-50%,-50%);width:420px;height:420px;border-radius:50%;
+background:radial-gradient(circle at 50% 45%,#ffd27a,#f5a33c 70%);box-shadow:0 0 120px 40px #ffb85a55}
+.waves{position:absolute;left:0;right:0;top:1150px;height:80px}
+.plane{position:absolute;top:330px;left:120px;font-size:54px;color:#fff;opacity:.9;transform:rotate(-12deg)}
+.dash{position:absolute;top:285px;left:170px;width:520px;height:200px;border-top:4px dashed #ffffff66;border-radius:50%;transform:rotate(-8deg)}
+.t{position:absolute;left:0;right:0;top:470px;text-align:center;color:#fff;direction:rtl}
+.t h1{margin:0;font-weight:900;font-size:230px;line-height:1;text-shadow:0 8px 30px #0006}
+.t .s{font-weight:800;font-size:50px;margin-top:24px;white-space:nowrap;text-shadow:0 4px 16px #0006}
+.t .e{font-weight:700;font-size:30px;letter-spacing:8px;margin-top:18px;direction:ltr;opacity:.95}
+.web{position:absolute;left:0;right:0;top:880px;text-align:center}
+.web span{display:inline-block;background:#ffffffee;color:#1f2a4a;font-weight:800;font-size:40px;padding:14px 40px;border-radius:50px;direction:ltr;box-shadow:0 6px 20px #0003}
+svg.sky{position:absolute;left:0;bottom:270px;width:1000px;height:330px}
+.ground{position:absolute;left:0;right:0;bottom:0;height:270px;background:linear-gradient(180deg,#1f2a4a,#121a30)}
+.tags{position:absolute;left:0;right:0;bottom:110px;text-align:center;color:#ffd27a;font-weight:800;font-size:40px;direction:rtl}
+</style></head><body><div class="c">
+<div class="stars"></div><div class="sun"></div>
+<div class="dash"></div><div class="plane">✈</div>
+<svg class="sky" viewBox="0 0 1000 330" preserveAspectRatio="none" fill="#141b33">
+<!-- pyramids -->
+<polygon points="20,330 140,170 260,330"/><polygon points="170,330 250,230 330,330"/>
+<!-- eiffel -->
+<path d="M360,330 L392,180 L398,60 L402,20 L406,60 L412,180 L444,330 L430,330 C418,290 386,290 374,330 Z"/>
+<!-- dome & minaret -->
+<path d="M480,330 L480,250 C480,205 560,205 560,250 L560,330 Z"/><rect x="574" y="150" width="16" height="180"/><polygon points="570,150 582,118 594,150"/>
+<!-- burj -->
+<path d="M690,330 L700,230 L708,120 L714,30 L716,0 L718,30 L724,120 L732,230 L742,330 Z"/>
+<rect x="760" y="230" width="40" height="100"/><rect x="805" y="200" width="34" height="130"/>
+<!-- palms -->
+<path d="M890,330 L897,220 L903,220 L908,330 Z"/><path d="M900,222 C860,200 840,210 825,225 C860,205 880,212 900,222 C880,190 860,185 845,190 C875,192 890,205 900,222 C905,190 925,180 945,182 C925,192 912,205 900,222 C935,205 960,210 975,225 C950,212 925,212 900,222 Z"/>
+<rect x="0" y="318" width="1000" height="12"/>
+</svg>
+<svg style="position:absolute;left:0;top:1150px" width="1000" height="90"><path d="M0,30 C160,0 320,60 500,30 S840,0 1000,30" stroke="#ffffffdd" stroke-width="16" fill="none"/><path d="M0,70 C160,40 320,100 500,70 S840,40 1000,70" stroke="#ffffffaa" stroke-width="14" fill="none"/></svg>
+<div class="ground"></div>
+<div class="t"><h1>نُزُل</h1><div class="s">قارن مواقع حجز الفنادق من مكان واحد</div><div class="e">NUZUL · HOTELS &amp; TRAVEL</div></div>
+<div class="web"><span>nuzultravel.com</span></div>
+<div class="tags">مكة • دبي • إسطنبول • لندن • المالديف</div>
+</div></body></html>

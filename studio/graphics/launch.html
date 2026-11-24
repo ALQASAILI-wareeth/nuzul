@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<!-- Launch images (media/nuzul_launch_*.png). Render with: node studio/graphics/shot.js launch <outdir>. The text is in the script at the bottom. -->
+<style>
+@font-face{font-family:T;src:url(../fonts/Tajawal-Black.ttf);font-weight:900}
+@font-face{font-family:T;src:url(../fonts/Tajawal-ExtraBold.ttf);font-weight:800}
+@font-face{font-family:T;src:url(../fonts/Tajawal-Bold.ttf);font-weight:700}
+html,body{margin:0;padding:0}
+.c{position:relative;overflow:hidden;font-family:T;direction:rtl;color:#fff;box-sizing:border-box;
+ background:radial-gradient(120% 80% at 85% 0%,#0a78c4 0%,#0062A8 28%,#062F52 70%,#041f36 100%);
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0}
+.glow{position:absolute;width:calc(var(--u)*70);height:calc(var(--u)*70);border-radius:50%;background:radial-gradient(circle,#00C2D133,transparent 65%);left:calc(var(--u)*-22);bottom:calc(var(--u)*-22)}
+.sun{position:absolute;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:50%;background:radial-gradient(circle,#FFB23855,transparent 65%);right:calc(var(--u)*-12);top:calc(var(--u)*-12)}
+.dash{position:absolute;top:calc(var(--u)*9);left:calc(var(--u)*8);width:calc(var(--u)*46);height:calc(var(--u)*18);border-top:calc(var(--u)*.35) dashed #ffffff55;border-radius:50%;transform:rotate(-8deg)}
+.logo{width:calc(var(--u)*17);height:calc(var(--u)*17);border-radius:50%;box-shadow:0 0 0 calc(var(--u)*.6) #ffffff22,0 calc(var(--u)*1) calc(var(--u)*4) #0006;position:relative}
+.badge{position:relative;margin-top:calc(var(--u)*3);background:#FFB238;color:#062F52;font-weight:900;font-size:calc(var(--u)*3.4);padding:calc(var(--u)*.8) calc(var(--u)*3.2);border-radius:999px}
+h1{position:relative;margin:calc(var(--u)*3) 0 0;font-weight:900;font-size:calc(var(--u)*10.5);line-height:1.18;text-shadow:0 calc(var(--u)*.6) calc(var(--u)*2.5) #0006}
+h1 span{color:#FFB238}
+.sub{position:relative;font-weight:700;font-size:calc(var(--u)*4.1);margin-top:calc(var(--u)*2.2);opacity:.95;max-width:92%}
+.chips{position:relative;display:flex;gap:calc(var(--u)*1.6);margin-top:calc(var(--u)*4);direction:ltr;flex-wrap:wrap;justify-content:center}
+.chips b{background:#ffffff;color:#062F52;font-weight:800;font-size:calc(var(--u)*3.3);padding:calc(var(--u)*1.1) calc(var(--u)*2.6);border-radius:calc(var(--u)*1.6)}
+ul{position:relative;list-style:none;margin:calc(var(--u)*4) 0 0;padding:0;text-align:right;display:inline-block}
+li{font-weight:800;font-size:calc(var(--u)*4);margin:calc(var(--u)*1.3) 0;display:flex;align-items:center;gap:calc(var(--u)*1.6)}
+li i{flex:0 0 auto;width:calc(var(--u)*4.4);height:calc(var(--u)*4.4);border-radius:50%;background:#00C2D1;display:inline-flex;align-items:center;justify-content:center}
+li i svg{width:60%;height:60%}
+.web{position:relative;margin-top:calc(var(--u)*5);background:#FFB238;color:#062F52;font-weight:900;font-size:calc(var(--u)*5);padding:calc(var(--u)*1.5) calc(var(--u)*5);border-radius:999px;direction:ltr;box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) #0005}
+#in{max-width:90%}
+.wide{flex-direction:row;gap:calc(var(--u)*6);text-align:right;padding:calc(var(--u)*6) calc(var(--u)*9)}
+.wide .l{display:flex;flex-direction:column;align-items:center;flex:0 0 auto}
+.wide .r{display:flex;flex-direction:column;align-items:flex-start;flex:1}
+.wide h1{margin-top:0}.wide ul{margin-top:calc(var(--u)*3)}.wide .chips{justify-content:flex-start;direction:rtl}
+.wide .logo{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+</style></head><body><div class="c" id="c"></div>
+<script>
+const q=new URLSearchParams(location.search),w=+q.get('w'),h=+q.get('h'),wide=w>h*1.3,c=document.getElementById('c');
+c.style.width=w+'px';c.style.height=h+'px';
+const u=wide?h/78:(h>w*1.6?w/72:(h>w?w/74:w/100));c.style.setProperty('--u',u+'px');
+const ck='<i><svg viewBox="0 0 24 24" fill="none" stroke="#062F52" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>';
+const head='<h1>قارن مواقع الحجز<br>من <span>مكان واحد</span></h1>';
+const sub='<div class="sub">ابحث مرة وحدة، وشوف السعر على أشهر مواقع الحجز</div>';
+const chips='<div class="chips"><b>Hotels.com</b><b>Expedia</b><b>Booking.com</b></div>';
+const ul='<ul><li>'+ck+'بدون أي رسوم إضافية</li><li>'+ck+'فنادق وشقق ومنتجعات حول العالم</li><li>'+ck+'طيران، سيارات، eSIM وجولات</li></ul>';
+const web='<div class="web">nuzultravel.com</div>',logo='<img class="logo" src="nuzul_avatar.png">',badge='<div class="badge">انطلقنا</div>';
+const bg='<div class="sun"></div><div class="glow"></div><div class="dash"></div>';
+if(wide){c.classList.add('wide');c.innerHTML=bg+'<div class="r">'+head+sub+ul+'</div><div class="l">'+logo+badge+web.replace('class="web"','class="web" style="font-size:calc(var(--u)*4)"')+'</div>';}
+else c.innerHTML=bg+'<div id="in" style="display:flex;flex-direction:column;align-items:center;position:relative">'+logo+badge+head+sub+chips+ul+web+'</div>';
+window.fit=()=>{const tall=h>w*1.6,avail=h*(tall?0.74:0.90);let uu=u,i=0,el=document.getElementById('in')||c;
+ const need=()=>el===c?Math.max(...[...c.querySelectorAll('.l,.r')].map(e=>e.scrollHeight)):el.offsetHeight;
+ const wneed=()=>el===c?0:el.scrollWidth;
+ while((need()>avail||wneed()>w*0.9)&&i++<60){uu*=0.97;c.style.setProperty('--u',uu+'px');}
+ while(need()<avail*0.93&&wneed()<w*0.86&&i++<120&&el!==c){uu*=1.02;c.style.setProperty('--u',uu+'px');} return uu;};
+</script></body></html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:T;src:url(../fonts/Tajawal-Black.ttf);font-weight:900}
+@font-face{font-family:T;src:url(../fonts/Tajawal-ExtraBold.ttf);font-weight:800}
+@font-face{font-family:T;src:url(../fonts/Tajawal-Bold.ttf);font-weight:700}
+html,body{margin:0;padding:0;background:#000}
+#c{position:relative;overflow:hidden;font-family:T}
+#bg,#scene,#ext{position:absolute}
+.t{position:absolute;left:0;right:0;text-align:center;color:#fff;direction:rtl}
+.t h1{margin:0;font-weight:900;line-height:1;text-shadow:0 calc(var(--k)*5px) calc(var(--k)*18px) #1a123aa8}
+.t .s{font-weight:800;text-shadow:0 calc(var(--k)*2px) calc(var(--k)*3px) #1a123a,0 0 calc(var(--k)*14px) #1a123ad0,0 0 calc(var(--k)*5px) #1a123a}
+.t .e{font-weight:700;direction:ltr;color:#fbe3a6;text-shadow:0 calc(var(--k)*1px) calc(var(--k)*2px) #1a123a,0 0 calc(var(--k)*8px) #1a123ae0,0 0 calc(var(--k)*3px) #1a123a}
+</style></head><body><div id="c"></div>
+<script>
+// Wide cover for X, Facebook and YouTube in the sunset style of the existing covers.
+// ?w=&h=&sw=  (sw = width of the centred scene; the sky, sea and ground continue to the edges)
+const q=new URLSearchParams(location.search),W=+q.get('w'),H=+q.get('h'),SW=+(q.get('sw')||W);
+const TAG=q.get('tag')||'قارن مواقع حجز الفنادق من مكان واحد';
+const k=SW/1500,SH=500*k,sx=(W-SW)/2,sy=(H-SH)/2+(+(q.get('dy')||0)),HZ=sy+405*k;   // HZ = horizon line on the canvas
+const c=document.getElementById('c');c.style.width=W+'px';c.style.height=H+'px';c.style.setProperty('--k',k);
+const INK='#1c1936';
+// ---- background: sky down to the horizon, sea below it
+const skyStops=[[0,'#2a1c5e'],[0.20,'#46308a'],[0.45,'#7c4a9e'],[0.66,'#cf6690'],[0.82,'#f0906c'],[0.93,'#f7b877'],[1,'#fbd08c']];
+let bg=`<svg id="bg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>
+<linearGradient id="sky" gradientUnits="userSpaceOnUse" x1="0" y1="${Math.min(sy,0)}" x2="0" y2="${HZ}">${skyStops.map(s=>`<stop offset="${s[0]}" stop-color="${s[1]}"/>`).join('')}</linearGradient>
+<linearGradient id="sea" gradientUnits="userSpaceOnUse" x1="0" y1="${HZ}" x2="0" y2="${Math.max(H,HZ+95*k)}"><stop offset="0" stop-color="#f6a873"/><stop offset="0.22" stop-color="#d98a86"/><stop offset="0.55" stop-color="#7f78ae"/><stop offset="1" stop-color="#3c6cb4"/></linearGradient>
+<radialGradient id="halo" gradientUnits="userSpaceOnUse" cx="${W/2}" cy="${HZ}" r="${330*k}"><stop offset="0" stop-color="#ffe7a8" stop-opacity=".75"/><stop offset=".45" stop-color="#ffc98a" stop-opacity=".28"/><stop offset="1" stop-color="#ffc98a" stop-opacity="0"/></radialGradient>
+<clipPath id="above"><rect x="0" y="0" width="${W}" height="${HZ}"/></clipPath></defs>
+<rect width="${W}" height="${HZ+1}" fill="url(#sky)"/><rect y="${HZ}" width="${W}" height="${H-HZ}" fill="url(#sea)"/>
+<rect width="${W}" height="${HZ}" fill="url(#halo)"/>`;
+// stars (fixed pseudo-random so every render is the same)
+let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+const nst=Math.round(90*W/1500);for(let i=0;i<nst;i++){const x=rnd()*W,y=rnd()*(HZ-250*k)*0.9+ (sy<0?0:0),r=(0.7+rnd()*1.3)*k,o=0.35+rnd()*0.6; if(y<HZ-230*k) bg+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(2)}" fill="#fff" opacity="${o.toFixed(2)}"/>`;}
+// sun on the horizon and its reflection
+const sunR=84*k;bg+=`<circle cx="${W/2}" cy="${HZ}" r="${sunR}" fill="#fde0a0" clip-path="url(#above)"/>`;
+const refl=[[10,150],[23,138],[37,122],[52,104],[68,84],[85,62],[103,40]];
+refl.forEach(([dy,w],i)=>{bg+=`<rect x="${W/2-w*k/2}" y="${HZ+dy*k*0.95}" width="${w*k}" height="${5.2*k}" rx="${2.6*k}" fill="#fde6b4" opacity="${(0.95-i*0.1).toFixed(2)}"/>`;});
+// ground line under the skyline, open in the middle for the sun; it runs to the canvas edges
+const gl=sx+505*k,gr=sx+1000*k;bg+=`<rect x="0" y="${HZ-4*k}" width="${gl}" height="${9*k}" fill="${INK}"/><rect x="${gr}" y="${HZ-4*k}" width="${W-gr}" height="${9*k}" fill="${INK}"/></svg>`;
+// ---- skyline (scene units: 1500 x 500, horizon at y=405)
+const palm=(x,y,s,flip)=>{const f=flip?-1:1;return `<g transform="translate(${x},${y}) scale(${s*f},${s})" fill="${INK}">
+<path d="M-6,0 C-10,-60 -18,-120 -30,-182 L-20,-184 C-8,-122 0,-62 6,0 Z"/>
+<path d="M-25,-183 C-60,-215 -100,-212 -128,-178 C-98,-196 -62,-196 -25,-183 Z"/>
+<path d="M-25,-183 C-52,-232 -96,-246 -132,-226 C-94,-230 -58,-216 -25,-183 Z"/>
+<path d="M-25,-183 C-30,-236 -6,-262 30,-262 C2,-246 -14,-220 -25,-183 Z"/>
+<path d="M-25,-183 C6,-226 48,-232 78,-208 C44,-214 10,-204 -25,-183 Z"/>
+<path d="M-25,-183 C16,-200 58,-190 82,-158 C52,-176 14,-180 -25,-183 Z"/>
+<path d="M-25,-183 C-56,-190 -92,-176 -104,-142 C-84,-166 -56,-176 -25,-183 Z"/>
+<path d="M-25,-183 C4,-178 30,-160 40,-128 C22,-154 0,-170 -25,-183 Z"/></g>`;};
+let sc=`<svg id="scene" style="left:${sx}px;top:${sy}px" width="${SW}" height="${SH}" viewBox="0 0 1500 500"><g fill="${INK}">
+<polygon points="160,405 240,322 322,405"/><polygon points="286,405 338,350 392,405"/>
+<path d="M378,405 L412,300 L426,214 L433,165 L436,150 L439,165 L446,214 L460,300 L494,405 L470,405 C466,372 406,372 402,405 Z"/><rect x="417" y="296" width="38" height="6"/><rect x="424" y="212" width="24" height="5"/>
+<path d="M1052,405 L1052,330 L1058,330 L1058,262 L1064,262 L1064,206 L1069,206 L1069,166 L1074,166 L1074,134 L1078,134 L1080,96 L1082,134 L1086,134 L1086,166 L1091,166 L1091,206 L1096,206 L1096,262 L1102,262 L1102,330 L1108,330 L1108,405 Z"/>
+<path d="M1163,405 L1163,286 L1168,286 L1168,268 L1179,236 L1190,268 L1190,286 L1195,286 L1195,405 Z"/>
+<rect x="1220" y="282" width="9" height="123"/><polygon points="1218,284 1224.5,262 1231,284"/>
+<rect x="1338" y="282" width="9" height="123"/><polygon points="1336,284 1342.5,262 1349,284"/>
+<path d="M1246,405 L1246,360 C1246,318 1324,318 1324,360 L1324,405 Z"/><rect x="1283" y="306" width="4" height="20"/><circle cx="1285" cy="304" r="4"/>
+</g><circle cx="1179" cy="300" r="8.5" fill="#f9cf7c"/>
+${palm(150,405,0.95,false)}${palm(1402,405,0.95,true)}
+<path d="M520,128 C640,48 800,10 985,34" fill="none" stroke="#ffffff" stroke-opacity=".8" stroke-width="2.6" stroke-dasharray="7 9" stroke-linecap="round"/>
+<g transform="translate(1004,30) rotate(-10) scale(1.55)" fill="#fff"><path d="M-17,1 L15,-3 C20,-3.5 22,-1 20,1 C19,2.5 16,3 13,3.2 L4,4 L-5,15 L-9,15 L-3,4.5 L-12,5.2 L-16,9.5 L-19,9.5 L-17,4.5 Z"/><path d="M2,-2 L-8,-13 L-12,-13 L-6,-1.2 Z"/></g>
+</svg>`;
+// far sides (only where the canvas is wider than the scene): a few more palms so the edges are not empty
+let ext='';if(W>SW+200*k){ext=`<svg id="ext" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><g transform="translate(0,${HZ}) scale(${k})">${palm((sx-150*k)/k,0,0.8,true)}${palm((sx-330*k)/k,0,0.6,false)}${palm((sx+SW+150*k)/k,0,0.8,false)}${palm((sx+SW+330*k)/k,0,0.6,true)}</g></svg>`;}
+// ---- text
+const tx=`<div class="t" style="top:${sy+150*k}px"><h1 style="font-size:${118*k}px">نُزُل</h1><div class="s" id="tag" style="font-size:${38*k}px;margin-top:${6*k}px">${TAG}</div><div class="e" style="font-size:${17.5*k}px;letter-spacing:${4.6*k}px;margin-top:${7*k}px">NUZUL · HOTELS &amp; TRAVEL</div></div>`;
+c.innerHTML=bg+ext+sc+tx;
+</script></body></html>

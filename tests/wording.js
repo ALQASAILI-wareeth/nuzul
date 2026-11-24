@@ -40,12 +40,13 @@ if (read('results.html').includes('id="mailBtn" href="mailto:info@nuzultravel.co
 try { JSON.parse(read('manifest.webmanifest')); pass++; } catch (e) { fails.push('manifest.webmanifest is not valid JSON'); }
 if (fs.existsSync(path.join(root, 'og.png')) && fs.statSync(path.join(root, 'og.png')).size > 20000) pass++; else fails.push('og.png missing or too small');
 // Marketing sources are not part of the published site, so they are checked only where they exist (the repository):
-// the ending texts of the videos follow the same rule as the pages.
+// the ending texts of the videos, the launch images and the profile covers follow the same rule as the pages.
 let extra = 0;
-for (const f of ['studio/scripts/videos.json', 'studio/scripts/overlays.py']) {
+for (const f of ['studio/scripts/videos.json', 'studio/scripts/overlays.py',
+  'studio/graphics/launch.html', 'studio/graphics/cover.html', 'studio/graphics/snap_cover.html']) {
   if (!fs.existsSync(path.join(root, f))) continue;
   const s = read(f);
-  for (const b of ['أفضل سعر', 'بأفضل الأسعار', 'قارن الأسعار واحجز']) {
+  for (const b of ['أفضل سعر', 'بأفضل الأسعار', 'قارن الأسعار واحجز', 'قارن أسعار الفنادق', 'أرخص']) {
     extra++;
     if (s.includes(b)) fails.push(f + ' still contains retired wording: ' + b); else pass++;
   }
