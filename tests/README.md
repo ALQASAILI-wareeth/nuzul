@@ -5,9 +5,15 @@ Headless-browser checks for the static site. This folder is not published (see `
 ## Run
 
 ```
-npm i puppeteer-core            # once, anywhere; or set PUPPETEER=/path/to/puppeteer-core
-tests/run-all.sh                # every suite, with a summary and exit codes
+npm ci --prefix tests           # once: installs the pinned puppeteer-core into tests/node_modules
+PUPPETEER=$PWD/tests/node_modules/puppeteer-core tests/run-all.sh    # every suite, with a summary and exit codes
 ```
+
+(Any other copy of puppeteer-core also works: set `PUPPETEER=/path/to/puppeteer-core`.)
+
+## Automatic runs (GitHub Actions)
+
+`.github/workflows/tests.yml` runs the nine suites on every pull request to `main` or `dev`, on every push to `dev`, and on demand (Actions tab → tests → Run workflow). Each suite runs as its own job, `suite (<name>)`; the job named **`tests`** passes only when all nine pass, so `tests` is the one check to require before merging into `main`. The full output of each suite is printed in the job log and kept for 14 days as an artifact (`output-<suite>`). The workflow only reads the repository (`permissions: contents: read`); it does not build or deploy the site. `.github/` and `tests/` are not part of the published site.
 
 Or one suite at a time:
 
