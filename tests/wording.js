@@ -31,8 +31,14 @@ for (const f of FILES) {
   for (const b of BANNED) { if (s.includes(b)) fails.push(f + ' still contains retired wording: ' + b); else pass++; }
 }
 for (const [f, r] of REQUIRED) { if (read(f).includes(r)) pass++; else fails.push(f + ' is missing approved wording: ' + r); }
+// Customer contact is by email only (owner decision, 24 Nov 2026): no WhatsApp chat link or phone number in the pages.
+for (const f of ['index.html', 'results.html', 'privacy.html', 'home.js', 'business.js']) {
+  const s = read(f);
+  if (/wa\.me\/|971504113342/.test(s)) fails.push(f + ' still contains a WhatsApp chat link or the phone number'); else pass++;
+}
+if (read('results.html').includes('id="mailBtn" href="mailto:info@nuzultravel.com"')) pass++; else fails.push('results.html: email contact button missing');
 try { JSON.parse(read('manifest.webmanifest')); pass++; } catch (e) { fails.push('manifest.webmanifest is not valid JSON'); }
 if (fs.existsSync(path.join(root, 'og.png')) && fs.statSync(path.join(root, 'og.png')).size > 20000) pass++; else fails.push('og.png missing or too small');
 fails.forEach(x => console.log('FAIL', x));
-console.log('total', FILES.length * BANNED.length + REQUIRED.length + 2, 'pass', pass);
+console.log('total', FILES.length * BANNED.length + REQUIRED.length + 2 + 6, 'pass', pass);
 if (fails.length) process.exitCode = 1;

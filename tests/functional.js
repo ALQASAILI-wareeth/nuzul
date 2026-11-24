@@ -59,6 +59,8 @@ for(const mode of ['lead','flag','gal','none','fail','bad','brokenimg','slow']){
  await pg.evaluate(()=>{document.getElementById('editBtn').click();const d=document.getElementById('e_dest');d.value='باريس';document.getElementById('e_ad').value='3';document.getElementById('e_go').click();});await sleep(1200);
  const ed=await pg.evaluate(()=>({t:document.getElementById('title').textContent,h:document.getElementById('hsTitle').textContent,url:location.search,c:document.querySelectorAll('.hc').length}));
  ok('edit search to باريس shows Paris list',/باريس/.test(ed.t)&&/باريس/.test(ed.h)&&ed.c>=8,JSON.stringify(ed));
+ const ct=await pg.evaluate(()=>{const m=document.getElementById('mailBtn');return {href:m?m.getAttribute('href'):'',wa:document.querySelectorAll('a[href*="wa.me"]').length}});
+ ok('results: contact is email with the search attached, no WhatsApp chat link',/^mailto:info@nuzultravel\.com\?subject=.+&body=.+/.test(ct.href)&&ct.wa===0,JSON.stringify(ct).slice(0,200));
  ok('results: no JS errors, no missing files',pg._errs.length===0&&pg._404.length===0,pg._errs.join('|')+pg._404.join(','));await pg.close();}
 // C) home page
 {const pg=await page('lead');await pg.goto(B+'/',{waitUntil:'networkidle2'});await sleep(1500);
@@ -86,6 +88,8 @@ for(const mode of ['lead','flag','gal','none','fail','bad','brokenimg','slow']){
  const e=await pg.evaluate(()=>({dir:document.documentElement.dir,sw:document.documentElement.scrollWidth,ar:[...document.querySelectorAll('h1,h2,h3,button,.nz-badges span,.xt b,.type b')].filter(x=>x.offsetParent&&/[؀-ۿ]/.test(x.textContent)&&x.id!=='langBtn').map(x=>x.textContent.trim().slice(0,25))}));
  ok('home english: ltr, no overflow, no Arabic left',e.dir==='ltr'&&e.sw<=390&&e.ar.length===0,JSON.stringify(e));
  await pg.evaluate(()=>document.getElementById('langBtn').click());await sleep(300);
+ const hc=await pg.evaluate(()=>({wa:document.querySelectorAll('a[href*="wa.me"]').length,fab:!!document.querySelector('.wa-fab'),mail:document.querySelectorAll('footer a[href^="mailto:info@nuzultravel.com"]').length}));
+ ok('home: contact is email, no WhatsApp chat link or floating button',hc.wa===0&&!hc.fab&&hc.mail>=1,JSON.stringify(hc));
  ok('home: no JS errors, no missing files',pg._errs.length===0&&pg._404.length===0,pg._errs.join('|')+pg._404.join(','));await pg.close();}
 // D) pull to refresh
 for(const u of ['/','/results.html?d=Dubai']){const pg=await page('lead');await pg.goto(B+u,{waitUntil:'networkidle2'});await sleep(700);

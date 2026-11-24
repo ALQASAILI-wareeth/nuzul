@@ -1,8 +1,6 @@
-// عروض الأسبوع + زر واتساب العائم
+// عروض الأسبوع
 // لتحديث العروض: عدّل مصفوفة DEALS فقط. أي عرض ينتهي تاريخه (until) يختفي تلقائياً.
 (function () {
-  var WA = '971504113342';
-
   var DEALS = [
     { img: "maldives", r: "all", until: "2026-12-03", color: "#D32F2F", url: {"kind": "home"},
       ar: { tag: "الجمعة البيضاء · Hotels.com", h: "خصم يصل إلى 50% على فنادق مختارة", p: "تخفيضات Hotels.com السنوية شغالة الحين لما تحجز قبل 3 ديسمبر. الخصم على فنادق مختارة، فقارن السعر قبل ما تحجز.", cta: "شوف العروض" },
@@ -76,8 +74,8 @@
   ];
 
   var TXT = {
-    ar: { h: 'عروض ومواسم حول العالم', sub: 'عروض مواقع الحجز الحالية وأحسن وقت لكل وجهة، نحدّثها كل أسبوع', more: function (n) { return 'عرض كل العروض (' + n + ')'; }, less: 'عرض أقل', reg: { all: 'الكل', me: 'الخليج والشرق الأوسط', as: 'آسيا', eu: 'أوروبا والقوقاز', af: 'أفريقيا', am: 'الأمريكتان وأستراليا' }, left: function (d) { return d <= 0 ? 'آخر يوم اليوم' : (d === 1 ? 'باقي يوم واحد' : (d === 2 ? 'باقي يومين' : 'باقي ' + d + (d <= 10 ? ' أيام' : ' يوم'))); }, wa: 'تواصل معنا عبر واتساب', waMsg: 'مرحبا نُزُل، أبي مساعدة في حجز رحلتي' },
-    en: { h: 'Deals and seasons worldwide', sub: 'Current booking-site sales and the best time for each destination, updated weekly', more: function (n) { return 'Show all (' + n + ')'; }, less: 'Show less', reg: { all: 'All', me: 'Gulf & Middle East', as: 'Asia', eu: 'Europe & Caucasus', af: 'Africa', am: 'Americas & Australia' }, left: function (d) { return d <= 0 ? 'Last day today' : d + (d === 1 ? ' day left' : ' days left'); }, wa: 'Chat with us on WhatsApp', waMsg: 'Hi Nuzul, I need help booking my trip' }
+    ar: { h: 'عروض ومواسم حول العالم', sub: 'عروض مواقع الحجز الحالية وأحسن وقت لكل وجهة، نحدّثها كل أسبوع', more: function (n) { return 'عرض كل العروض (' + n + ')'; }, less: 'عرض أقل', reg: { all: 'الكل', me: 'الخليج والشرق الأوسط', as: 'آسيا', eu: 'أوروبا والقوقاز', af: 'أفريقيا', am: 'الأمريكتان وأستراليا' }, left: function (d) { return d <= 0 ? 'آخر يوم اليوم' : (d === 1 ? 'باقي يوم واحد' : (d === 2 ? 'باقي يومين' : 'باقي ' + d + (d <= 10 ? ' أيام' : ' يوم'))); } },
+    en: { h: 'Deals and seasons worldwide', sub: 'Current booking-site sales and the best time for each destination, updated weekly', more: function (n) { return 'Show all (' + n + ')'; }, less: 'Show less', reg: { all: 'All', me: 'Gulf & Middle East', as: 'Asia', eu: 'Europe & Caucasus', af: 'Africa', am: 'Americas & Australia' }, left: function (d) { return d <= 0 ? 'Last day today' : d + (d === 1 ? ' day left' : ' days left'); } }
   };
 
   function lang() { return document.documentElement.lang === 'en' ? 'en' : 'ar'; }
@@ -117,10 +115,7 @@
     '.dl-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:6px;scrollbar-width:none}.dl-tabs::-webkit-scrollbar{display:none}' +
     '.dl-tabs button{flex:0 0 auto;min-height:40px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font:inherit;font-weight:700;font-size:14.5px;padding:0 16px;border-radius:999px;cursor:pointer;white-space:nowrap}' +
     '.dl-tabs button.on{background:var(--navy);border-color:var(--navy);color:#fff}' +
-    '.dl-more{display:block;margin:16px auto 0;min-height:46px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);font:inherit;font-weight:800;font-size:15px;padding:0 24px;border-radius:999px;cursor:pointer}' +
-    '.wa-fab{position:fixed;bottom:18px;left:18px;z-index:50;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:transform .2s}' +
-    '.wa-fab:hover{transform:scale(1.07)}' +
-    '.wa-fab svg{width:30px;height:30px;fill:#fff}';
+    '.dl-more{display:block;margin:16px auto 0;min-height:46px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);font:inherit;font-weight:800;font-size:15px;padding:0 24px;border-radius:999px;cursor:pointer}';
   document.head.appendChild(css);
 
   var sec = document.createElement('section');
@@ -130,13 +125,6 @@
   var destSec = document.getElementById('destinations');
   if (destSec && destSec.parentNode) destSec.parentNode.insertBefore(sec, destSec.nextSibling);
   else if (search && search.parentNode) search.parentNode.insertBefore(sec, search.nextSibling);
-
-  var fab = document.createElement('a');
-  fab.className = 'wa-fab';
-  fab.target = '_blank';
-  fab.rel = 'noopener';
-  fab.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.2-1.8-1.9-3.9-1.9-6.1C4.9 9.8 9.9 5 16 5s11.1 4.8 11.1 10.8S22.1 26.4 16 26.4zm6.1-8c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.3-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.5c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.9 5.2.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.1-.3-.2-.6-.4z"/></svg>';
-  document.body.appendChild(fab);
 
   var REG = 'all', ALL = false;
   function render() {
@@ -178,9 +166,6 @@
     more.textContent = ALL ? T.less : T.more(list.length);
     more.onclick = function () { ALL = !ALL; render(); if (!ALL) sec.scrollIntoView({ behavior: 'smooth' }); };
     sec.style.display = shown ? '' : 'none';
-    fab.href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(T.waMsg);
-    fab.setAttribute('aria-label', T.wa);
-    fab.title = T.wa;
   }
 
   render();

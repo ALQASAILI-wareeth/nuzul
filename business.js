@@ -4,7 +4,6 @@
   'use strict';
 
   // ===== الإعدادات =====
-  var NUZUL_WHATSAPP = '971504113342'; // رقم واتساب فريق نُزُل
   var NUZUL_EMAIL = 'info@nuzultravel.com'; // إيميل استقبال طلبات الشركات
   var TP_MARKER = '805832';         // رقم الشريك في Travelpayouts (من روابطك الحالية)
   var LINKS = {
@@ -62,7 +61,7 @@
       bNote: 'التوزيع تقديري لمساعدتك في الاختيار، والأسعار الفعلية تظهر في صفحات الحجز.',
       send: 'أرسل الطلب لفريق نُزُل', sendSub: 'نراجع طلب شركتك ونرسل لك عرض سعر للمجموعة.',
       name: 'الاسم', company: 'الشركة', contact: 'الجوال أو الإيميل', extra: 'ملاحظات إضافية',
-      wa: 'إرسال عبر واتساب', mail: 'إرسال بالإيميل', copy: 'نسخ الطلب', copied: 'تم النسخ ✓',
+      mail: 'إرسال بالإيميل', copy: 'نسخ الطلب', copied: 'تم النسخ ✓',
       noContact: 'انسخ الطلب وأرسله لنا عبر حساباتنا: @nuzul.travel',
       subj: 'طلب حجز شركة — نُزُل',
       sum: {
@@ -115,7 +114,7 @@
       bNote: 'The split is an estimate to guide your choice; real prices show on the booking pages.',
       send: 'Send the request to the Nuzul team', sendSub: 'We review your company request and send you a group quote.',
       name: 'Name', company: 'Company', contact: 'Phone or email', extra: 'Extra notes',
-      wa: 'Send on WhatsApp', mail: 'Send by email', copy: 'Copy request', copied: 'Copied ✓',
+      mail: 'Send by email', copy: 'Copy request', copied: 'Copied ✓',
       noContact: 'Copy the request and send it to us on our accounts: @nuzul.travel',
       subj: 'Company booking request — Nuzul',
       sum: {
@@ -198,7 +197,6 @@
     '.bz-btn:hover{background:var(--navy2)}',
     '.bz-btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}',
     '.bz-btn.sand{background:var(--sand);color:var(--navy)}',
-    '.bz-btn.wa{background:#1f9d55}.bz-btn.wa:hover{background:#178048}',
     '.bz-btn.sm{height:40px;font-size:15px;padding:0 16px;border-radius:10px}',
     '.bz-err{color:#b3261e;margin-top:8px;display:none}',
     '#bzOut{display:none;margin-top:22px}',
@@ -425,7 +423,7 @@
   function renderSend() {
     var T = tx();
     var c = $('bzSend');
-    var canWa = !!NUZUL_WHATSAPP, canMail = !!NUZUL_EMAIL;
+    var canMail = !!NUZUL_EMAIL;
     c.innerHTML = '<h3>' + esc(T.send) + '</h3><p>' + esc(T.sendSub) + '</p>' +
       '<div class="bz-row">' +
       fld(T.name, '<input type="text" id="bzName">') +
@@ -433,10 +431,9 @@
       fld(T.contact, '<input type="text" id="bzContact">') +
       '</div><div class="bz-f" style="margin-top:8px"><label>' + esc(T.extra) + '</label><textarea id="bzExtra"></textarea></div>' +
       '<div class="bz-actions">' +
-      (canWa ? '<a class="bz-btn wa" id="bzWa" target="_blank" rel="noopener">' + esc(T.wa) + '</a>' : '') +
       (canMail ? '<a class="bz-btn sand" id="bzMail">' + esc(T.mail) + '</a>' : '') +
       '<button class="bz-btn ghost" type="button" id="bzCopy">' + esc(T.copy) + '</button>' +
-      '</div>' + (!canWa && !canMail ? '<p class="bz-small" style="color:#c9d3dd">' + esc(T.noContact) + '</p>' : '');
+      '</div>' + (!canMail ? '<p class="bz-small" style="color:#c9d3dd">' + esc(T.noContact) + '</p>' : '');
     ['bzName', 'bzCo', 'bzContact', 'bzExtra'].forEach(function (id) { $(id).oninput = refreshSend; });
     $('bzCopy').onclick = function () {
       var txt = summary(), b = this;
@@ -598,7 +595,6 @@
 
   function refreshSend() {
     var txt = summary();
-    var wa = $('bzWa'); if (wa) wa.href = 'https://wa.me/' + NUZUL_WHATSAPP + '?text=' + encodeURIComponent(txt);
     var ml = $('bzMail'); if (ml) ml.href = 'mailto:' + NUZUL_EMAIL + '?subject=' + encodeURIComponent(tx().subj) + '&body=' + encodeURIComponent(txt);
   }
 

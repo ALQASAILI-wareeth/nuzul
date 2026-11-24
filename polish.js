@@ -105,7 +105,7 @@
     if (location.hash === '#business') b.classList.add('open');
   }
 
-  // ---------- 6) حركة هادئة + زر الواتساب ----------
+  // ---------- 6) حركة هادئة ----------
   var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function reveal() {
     if (calm || !('IntersectionObserver' in window)) return;
@@ -117,12 +117,6 @@
       if (s.getBoundingClientRect().top > window.innerHeight * 0.9) { s.classList.add('nz-rv'); io.observe(s); }
     });
   }
-  var lastY = 0;
-  window.addEventListener('scroll', function () {
-    var y = window.scrollY, fab = D.querySelector('.wa-fab');
-    if (fab) fab.classList.toggle('nz-hide', y > lastY && y > 300);
-    lastY = y;
-  }, { passive: true });
 
   function all() { swapIcons(); syncDates(); foldBusiness(); reveal(); drawBadges(); }
   all();

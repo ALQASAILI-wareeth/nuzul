@@ -88,10 +88,6 @@ h2{letter-spacing:-.2px}
 .nz-rv.nz-in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.nz-rv{opacity:1;transform:none;transition:none}.hero.has-img{animation:none}}
 
-/* زر الواتساب: أصغر ويختفي وقت النزول */
-.wa-fab{width:50px!important;height:50px!important;bottom:16px!important;transition:transform .25s ease,opacity .25s ease!important}
-.wa-fab svg{width:26px!important;height:26px!important}
-.wa-fab.nz-hide{transform:translateY(90px);opacity:0;pointer-events:none}
 
 .nz-date-l::before{content:"";flex:0 0 18px;height:18px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230062A8' stroke-width='1.8' stroke-linecap='round'%3E%3Crect x='4' y='5.500' width='16' height='15' rx='2.500'/%3E%3Cpath d='M4 10h16M8.500 3.500v4M15.500 3.500v4'/%3E%3C/svg%3E") center/contain no-repeat}
 .f select{background-position:left 14px center;background-size:12px 8px}

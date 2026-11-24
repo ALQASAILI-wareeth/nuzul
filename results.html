@@ -154,7 +154,7 @@
   .tip b{color:var(--navy)}
   .help{margin-top:14px;background:var(--navy);color:#fff;border-radius:18px;padding:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
   .help p{opacity:.9;font-size:15px}
-  .help a{background:#25D366;color:#fff;font-weight:800;padding:10px 18px;border-radius:12px;display:inline-flex;gap:8px;align-items:center}
+  .help a{background:var(--sand);color:var(--navy);font-weight:800;padding:10px 18px;border-radius:12px;display:inline-flex;gap:8px;align-items:center}
   .why{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
   .why div{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14.5px}
   .why b{display:block;color:var(--navy)}
@@ -163,7 +163,7 @@
   footer a{color:#fff;opacity:.85}
   .creds{margin-top:10px;font-size:12px}.creds summary{cursor:pointer;opacity:.8}.creds ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:2px;opacity:.85}.creds p{margin-top:6px;opacity:.8}
 </style>
-<link rel="stylesheet" href="polish-r.css?v=20261124a">
+<link rel="stylesheet" href="polish-r.css?v=20261124b">
 </head>
 <body>
 <header>
@@ -219,8 +219,8 @@
   <div class="tip" id="tip"><div class="ic">💡</div><div id="tipTxt"></div></div>
 
   <div class="help">
-    <p data-i="helpP">محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.</p>
-    <a id="wa" href="#" target="_blank" rel="noopener"><span>💬</span><span data-i="helpB">اسأل نُزُل</span></a>
+    <p data-i="helpP">عندك ملاحظة أو استفسار؟ راسلنا على info@nuzultravel.com</p>
+    <a id="mailBtn" href="mailto:info@nuzultravel.com"><span>✉</span><span data-i="helpB">راسلنا</span></a>
   </div>
 
   <div class="why">
@@ -241,16 +241,16 @@
   </div>
 </footer>
 
-<script src="search.js?v=20261124a"></script>
-<script src="partners.js?v=20261124a"></script>
-<script src="hotels-more.js?v=20261124a"></script>
-<script src="hotel-ids.js?v=20261124a"></script>
-<script src="keep.js?v=20261124a"></script>
-<script src="polish-r.js?v=20261124a"></script>
-<script src="ptr.js?v=20261124a"></script>
+<script src="search.js?v=20261124b"></script>
+<script src="partners.js?v=20261124b"></script>
+<script src="hotels-more.js?v=20261124b"></script>
+<script src="hotel-ids.js?v=20261124b"></script>
+<script src="keep.js?v=20261124b"></script>
+<script src="polish-r.js?v=20261124b"></script>
+<script src="ptr.js?v=20261124b"></script>
 <script>
 (function(){
-  const WA = '971504113342';
+  const MAIL = 'info@nuzultravel.com';
   const T = {
     ar:{brand:'نُزُل',tagline:'احجز إقامتك بثقة',other:'English',edit:'✏️ تعديل البحث',update:'تحديث',destL:'الوجهة',cinL:'الوصول',coutL:'المغادرة',adultsL:'البالغون',roomsL:'الغرف',
       title:n=>'فنادق '+n, nights:n=>n===1?'ليلة وحدة':(n===2?'ليلتين':n+' ليالي'), adults:n=>n===1?'بالغ واحد':n+' بالغين', rooms:n=>n===1?'غرفة':(n===2?'غرفتين':n+' غرف'),
@@ -262,11 +262,11 @@
       bk:{badge:'الأكثر خيارات',pts:['أكبر عدد فنادق وشقق في العالم','إلغاء مجاني لمعظم الغرف','الموقع والدعم بالعربي'],cta:'شوف الفنادق على Booking',sm:'تنفتح نتائج Booking في نافذة جديدة'},
       hc:{badge:'',pts:['مكافآت One Key على كل حجز','أسعار خاصة للأعضاء','فنادق ومنتجعات مختارة'],cta:'شوف الفنادق على Hotels.com',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Hotels.com في نافذة جديدة'},
       ex:{badge:'',pts:['وفّر لما تحجز طيران + فندق مع بعض','نفس مكافآت One Key','خيارات دفع مرنة'],cta:'شوف الفنادق على Expedia',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Expedia في نافذة جديدة'},
-      helpP:'محتار بين الفنادق؟ أرسل لنا بحثك على واتساب ونساعدك تختار، مجاناً.',helpB:'اسأل نُزُل',
+      helpP:'عندك ملاحظة أو استفسار؟ راسلنا على info@nuzultravel.com',helpB:'راسلنا',
       y1t:'✔ بدون رسوم من عندنا',y1p:'تدفع نفس سعر الموقع، ونُزُل ما يضيف أي مبلغ.',y2t:'✔ حجز آمن',y2p:'الدفع والحجز يتمان مباشرة عند موقع الحجز نفسه.',y3t:'✔ إلغاء مجاني',y3p:'فعّل فلتر «إلغاء مجاني» عشان تشوف الغرف القابلة للإلغاء بس.',
       back:'→ الرجوع للصفحة الرئيسية', privacy:'سياسة الخصوصية', credH:'حقوق الصور', credP:'الصور من ويكيميديا كومنز بتراخيص حرة، وكل الحقوق لأصحابها:',
       disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند مواقع الحجز نفسها مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
-      waMsg:(n,ci,co,a)=>'السلام عليكم، أبي مساعدة في اختيار فندق في '+n+' من '+ci+' إلى '+co+' لـ '+a+' أشخاص.',
+      mailSub:'ملاحظة من موقع نُزُل', mailBody:(n,ci,co,a)=>'السلام عليكم،\n\n\n\n(بحثي في نُزُل: '+n+'، من '+ci+' إلى '+co+'، عدد البالغين '+a+')',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.',
       hsSub:'اضغط على الفندق عشان تقارن السعر لتواريخك على المواقع الثلاثة.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
       cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 اقتصادي', areaPic:'📷 صورة المنطقة', cmp:'شوف الأسعار ←', shQ:'شوف السعر لتواريخك على:', shGo:'شوف السعر', shClose:'إغلاق', shNote:'السعر يختلف بين المواقع، فقارن الثلاثة قبل ما تحجز. الحجز والدفع يتمان عند الموقع اللي تختاره. على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك تطبيقهم.', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
@@ -280,11 +280,11 @@
       bk:{badge:'Most choice',pts:['The largest selection of hotels and apartments','Free cancellation on most rooms','Site and support in Arabic'],cta:'See hotels on Booking',sm:'Booking results open in a new tab'},
       hc:{badge:'',pts:['One Key rewards on every booking','Member-only prices','Hand-picked hotels and resorts'],cta:'See hotels on Hotels.com',mob:'📱 On mobile: tap "Continue to website" if you don\'t have the app',sm:'Hotels.com results open in a new tab'},
       ex:{badge:'',pts:['Save when you book flight + hotel together','Same One Key rewards','Flexible payment options'],cta:'See hotels on Expedia',mob:'📱 On mobile: tap "Continue to website" if you don\'t have the app',sm:'Expedia results open in a new tab'},
-      helpP:'Can\'t decide? Send us your search on WhatsApp and we\'ll help you choose, free.',helpB:'Ask Nuzul',
+      helpP:'Have feedback or a question? Email us at info@nuzultravel.com',helpB:'Email us',
       y1t:'✔ No fees from us',y1p:'You pay the site\'s price; Nuzul adds nothing.',y2t:'✔ Secure booking',y2p:'Payment and booking happen directly on the booking site.',y3t:'✔ Free cancellation',y3p:'Turn on "Free cancellation" to see only refundable rooms.',
       back:'← Back to home', privacy:'Privacy policy', credH:'Photo credits', credP:'Photos from Wikimedia Commons under free licences; all rights belong to their authors:',
       disc:'Nuzul is an independent website. Bookings and payments are made on the booking sites themselves, such as Booking.com, Hotels.com and Expedia, and we may earn a commission at no extra cost to you.',
-      waMsg:(n,ci,co,a)=>'Hi, I\'d like help choosing a hotel in '+n+' from '+ci+' to '+co+' for '+a+' people.',
+      mailSub:'Feedback from the Nuzul website', mailBody:(n,ci,co,a)=>'Hello,\n\n\n\n(My Nuzul search: '+n+', '+ci+' to '+co+', adults: '+a+')',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.',
       hsSub:'Tap a hotel to compare its price for your dates across the three sites.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
       cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', cmp:'See prices →', shQ:'See the price for your dates on:', shGo:'See price', shClose:'Close', shNote:'Prices differ between sites, so check all three before you book. Booking and payment happen on the site you choose. On mobile, pick “Continue to site” if you do not have their app.', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
@@ -1194,7 +1194,7 @@
     renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits(); renderNote(); openAsked();
     if (window.NZKEEP) NZKEEP.saveSearch(S, (k && DEST[k].ar) || S.n || S.d);
     $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
-    $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(L.waMsg(n, S.cin, S.cout, S.adults));
+    $('mailBtn').href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent(L.mailSub) + '&body=' + encodeURIComponent(L.mailBody(n, S.cin, S.cout, S.adults));
   }
 
   // edit form

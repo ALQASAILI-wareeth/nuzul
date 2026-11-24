@@ -46,6 +46,7 @@
     pen: '<path d="M4 20l1-4L16.500 4.500a2.100 2.100 0 013 3L8 19l-4 1z"/><path d="M14.500 6.500l3 3"/>',
     cam: '<path d="M4 8.500A1.500 1.500 0 015.500 7H8l1.500-2h5L16 7h2.500A1.500 1.500 0 0120 8.500v9a1.500 1.500 0 01-1.500 1.500h-13A1.500 1.500 0 014 17.500v-9z"/><circle cx="12" cy="13" r="3.200"/>',
     chat: '<path d="M4 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-7l-4.500 3.500V16H6a2 2 0 01-2-2V6z"/>',
+    mail: '<rect x="3" y="5.500" width="18" height="13" rx="2"/><path d="M3.500 7.500l8.500 6 8.500-6"/>',
     phone: '<rect x="7" y="3" width="10" height="18" rx="2.200"/><path d="M11 17.500h2"/>',
     bell: '<path d="M6 16V11a6 6 0 0112 0v5l1.500 2h-15L6 16z"/><path d="M10 20a2 2 0 004 0"/>',
     tag: '<path d="M3.500 12.500V5a1.500 1.500 0 011.500-1.500h7.500L21 12l-8.500 8.500-9-8z"/><circle cx="8" cy="8" r="1.300"/>',
@@ -61,7 +62,7 @@
     plane: '<path d="M21 3l-7.500 18-3-8-8-3L21 3z"/><path d="M10.500 13L21 3"/>',
     check: '<path d="M5 12.500l4.500 4.500L19 7.500" stroke-width="3"/>'
   };
-  var E = { '📍': 'pin', '✨': 'spark', '🎯': 'filter', '🏙': 'city', '💡': 'bulb', '📅': 'cal', '👥': 'users', '🛏': 'bed', '✏': 'pen', '📷': 'cam', '💬': 'chat', '📱': 'phone', '🔔': 'bell', '💲': 'tag', '🏨': 'hotel', '🏢': 'apt', '🏡': 'home', '💎': 'gem', '⭐': 'star', '🚶': 'walk', '🕌': 'mosque', '🏝': 'palm', '👇': 'down', '✈': 'plane', '✔': 'check' };
+  var E = { '📍': 'pin', '✨': 'spark', '🎯': 'filter', '🏙': 'city', '💡': 'bulb', '📅': 'cal', '👥': 'users', '🛏': 'bed', '✏': 'pen', '📷': 'cam', '💬': 'chat', '✉': 'mail', '📱': 'phone', '🔔': 'bell', '💲': 'tag', '🏨': 'hotel', '🏢': 'apt', '🏡': 'home', '💎': 'gem', '⭐': 'star', '🚶': 'walk', '🕌': 'mosque', '🏝': 'palm', '👇': 'down', '✈': 'plane', '✔': 'check' };
   var RX = new RegExp('(' + Object.keys(E).join('|') + ')\\uFE0F?', 'u');
   var NS = 'http://www.w3.org/2000/svg';
   function icon(n) {
