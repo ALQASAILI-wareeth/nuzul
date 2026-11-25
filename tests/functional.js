@@ -44,7 +44,8 @@ for(const mode of ['lead','flag','gal','none','fail','bad','brokenimg','slow']){
  // sheet
  await pg.evaluate(()=>document.querySelector('.hc').click());await sleep(500);
  const sh=await pg.evaluate(()=>({open:!document.getElementById('sh').hidden,links:[...document.querySelectorAll('.sha')].map(a=>a.href),name:document.getElementById('shN').textContent}));
- ok('sheet opens with 3 links',sh.open&&sh.links.length===3&&sh.links.every(h=>h.startsWith('https://')),sh.name);
+ ok('sheet opens with 4 links (Hotels.com, Expedia, Booking.com, Agoda)',sh.open&&sh.links.length===4&&sh.links.every(h=>h.startsWith('https://')),sh.name);
+ ok('sheet: Booking.com and Agoda go through Stay22 with our aid',/^https:\/\/www\.stay22\.com\/allez\/booking\?aid=nuzul&/.test(sh.links[2])&&/^https:\/\/www\.stay22\.com\/allez\/agoda\?aid=nuzul&/.test(sh.links[3])&&/hotelname=/.test(sh.links[3]),sh.links[3]);
  ok('sheet links carry tracking',/camref=1011l6vPKX/.test(decodeURIComponent(sh.links[0]))&&/camref=1101l6yQPk/.test(decodeURIComponent(sh.links[1])));
  // «احجز إقامتك وارجع لنا»: قائمة «حول الفندق» تنفتح وتنقفل داخل نفس البطاقة، ولما يرجع من موقع الحجز تنفتح لحالها
  const nl=await pg.evaluate(async()=>{const w=t=>new Promise(r=>setTimeout(r,t));const b=document.getElementById('pmh'),l=document.getElementById('pml');if(!b||!l)return 'missing';

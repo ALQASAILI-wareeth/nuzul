@@ -98,7 +98,8 @@
   // المرجع: https://dev.stay22.com/docs/allez/parameters
   const S22 = { aid: 'nuzul' };
   const S22_CITY = { Makkah: 'Mecca Saudi Arabia', Madinah: 'Medina Saudi Arabia' };
-  function s22(params, o = {}, lang = 'ar', campaign = 'site') {
+  // provider = 'booking' أو 'agoda'. الفلاتر (النجوم والسعر والترتيب) ما تنتقل عبر Stay22، ولا رابط link= يحفظ التواريخ
+  function s22(params, o = {}, lang = 'ar', campaign = 'site', provider = 'booking') {
     const p = new URLSearchParams({ aid: S22.aid });
     Object.keys(params).forEach(k => { if (params[k]) p.set(k, params[k]); });
     if (o.cin) p.set('checkin', o.cin);
@@ -106,7 +107,7 @@
     p.set('adults', Math.max(1, +o.adults || 2));
     p.set('lang', lang === 'ar' ? 'ar' : 'en');
     p.set('campaign', campaign);
-    return 'https://www.stay22.com/allez/booking?' + p.toString();
+    return 'https://www.stay22.com/allez/' + provider + '?' + p.toString();
   }
   // فندق محدد: يفتح صفحة الفندق نفسها على Booking.com
   function bookingHotelUrl(city, hotel, o = {}, lang = 'ar') {
@@ -117,5 +118,13 @@
     return s22({ address: S22_CITY[place] || place }, o, lang, 'nuzul_city');
   }
 
-  window.NUZUL = { AID, EG, EX, S22, bookingUrl, bookingHotelUrl, bookingCityUrl, hotelsUrl, expediaUrl, hotelsHotelUrl, expediaHotelUrl };
+  // Agoda عبر Stay22 (Allez): فندق محدد (يطلع الفندق أول النتائج) أو نتائج الوجهة بالتواريخ
+  function agodaHotelUrl(city, hotel, o = {}, lang = 'ar') {
+    return s22({ address: S22_CITY[city] || city, hotelname: hotel }, o, lang, 'nuzul_hotel', 'agoda');
+  }
+  function agodaCityUrl(place, o = {}, lang = 'ar') {
+    return s22({ address: S22_CITY[place] || place }, o, lang, 'nuzul_city', 'agoda');
+  }
+
+  window.NUZUL = { AID, EG, EX, S22, bookingUrl, bookingHotelUrl, bookingCityUrl, agodaHotelUrl, agodaCityUrl, hotelsUrl, expediaUrl, hotelsHotelUrl, expediaHotelUrl };
 })();
