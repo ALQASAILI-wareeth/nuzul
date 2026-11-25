@@ -65,7 +65,7 @@ const H = { 'access-control-allow-origin': '*', 'content-type': 'application/jso
     const m = await pg.evaluate(() => document.getElementById('meta').textContent);
     ok('invalid dates fall back to defaults', !/Invalid/i.test(m) && pg._e.length === 0, m.slice(0, 60)); await pg.browserContext().close(); }
   // 4) ردود ويكيبيديا خبيثة: روابط صور غير مسموحة لا تُستخدم
-  { const evil = ['javascript:window.__x=1', 'http://evil.example/a.jpg', 'https://evil.example/a.jpg', 'https://upload.wikimedia.org.evil.example/a.jpg', 'data:text/html,<script>window.__x=1</script>'];
+  { const evil = ['javascript:window.__x=1', 'http://evil.example/a.jpg', 'https://evil.example/a.jpg', 'https://upload.wikimedia.org.evil.example/a.jpg', 'https://thumb.wikimedia.org.evil.example/a.jpg', 'https://evil.example/thumb.wikimedia.org/a.jpg', 'data:text/html,<script>window.__x=1</script>'];
     let used = 0, exec = 0;
     for (const e of evil) {
       const pg = await page(u => { const t = decodeURIComponent(new URL(u).searchParams.get('titles') || 'x').split('|'); const pages = {};
@@ -122,6 +122,56 @@ const H = { 'access-control-allow-origin': '*', 'content-type': 'application/jso
       await pg.evaluate(() => { const l = document.getElementById('langBtn'); if (l) l.click(); }); await sleep(250);
       const s = await state(pg); if (s.x || pg._dlg) exec++; if (s.bad) inj++; if (pg._e.length > e0) err++; }
     ok('home page: saved-search adults, rooms and dates carrying markup are never written as markup', exec === 0 && inj === 0 && err === 0, 'exec=' + exec + ' injected=' + inj + ' errors=' + err + ' cases=' + n); await pg.browserContext().close(); }
+  // 9) F-5 (25 نوفمبر 2026): ويكيميديا نقلت الصور المصغّرة إلى thumb.wikimedia.org، وصورة مستشفى ظهرت كصورة رئيسية لطرابزون
+  { const THUMB = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/';
+    const pic = require('fs').readFileSync(require('path').join(__dirname, '..', 'img', 'cities', 'rome.webp'));
+    const T = f => THUMB + 'a/ab/' + f + '/960px-' + f;
+    async function f5page(lead, list) {
+      const cx = await (b.createBrowserContext ? b.createBrowserContext() : b.createIncognitoBrowserContext());
+      const pg = await cx.newPage(); pg._e = []; pg._img = []; pg._csp = [];
+      pg.on('pageerror', e => pg._e.push(e.message));
+      pg.on('console', m => { if (/Content Security Policy|Refused to/i.test(m.text())) pg._csp.push(m.text().slice(0, 140)); });
+      await pg.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+      await pg.setRequestInterception(true);
+      pg.on('request', r => { const u = r.url();
+        if (/wikipedia\.org\/w\/api|commons\.wikimedia\.org\/w\/api/.test(u)) {
+          if (u.includes('generator=images')) { const pages = {}; list.forEach((f, i) => pages[i + 1] = { title: 'File:' + f, imagerepository: 'shared', imageinfo: [{ thumburl: T(f.replace(/ /g, '_')), width: 2000, height: 1300, mime: 'image/jpeg', extmetadata: { Artist: { value: 'A' }, LicenseShortName: { value: 'CC BY 4.0' } } }] });
+            return r.respond({ status: 200, headers: H, body: JSON.stringify({ query: { pages } }) }); }
+          const t = decodeURIComponent(new URL(u).searchParams.get('titles') || 'x').split('|'); const pages = {};
+          t.forEach((x, i) => { const f = lead(x); pages[i + 1] = f ? { title: x, pageimage: f, thumbnail: { source: T(f) } } : { title: x, missing: '' }; });
+          return r.respond({ status: 200, headers: H, body: JSON.stringify({ query: { pages } }) }); }
+        if (/^https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//.test(u)) { const f = decodeURIComponent(u.split('/Special:FilePath/')[1].split('?')[0]); return r.respond({ status: 302, headers: { location: T(f), 'access-control-allow-origin': '*' }, body: '' }); }
+        if (u.startsWith(THUMB)) { pg._img.push(decodeURIComponent(u)); return r.respond({ status: 200, headers: { 'content-type': 'image/webp', 'access-control-allow-origin': '*' }, body: pic }); }
+        if (/wikimedia|cloudflareinsights|evil\.example/.test(u)) return r.abort();
+        r.continue(); });
+      return pg; }
+    const look = pg => pg.evaluate(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 50)); } window.scrollTo(0, 0); await new Promise(r => setTimeout(r, 400));
+      const im = [...document.querySelectorAll('.hc .hi:not(.noimg) img')];
+      return { bg: document.getElementById('top').style.backgroundImage, cards: document.querySelectorAll('.hc').length, shown: im.filter(i => i.complete && i.naturalWidth > 0).length, broken: im.filter(i => i.complete && !i.naturalWidth).length, noimg: document.querySelectorAll('.hc .hi.noimg').length }; });
+    const BAD = ['Acriteon_Hospital_Trebizond.jpg', 'Trabzon 1910.jpg', 'USS Oak Hill Marines Visit Batumi.jpg', 'Old map of Trabzon.jpg'];
+    const GOOD = ['Trabzon harbour view.jpg', 'Uzungol lake Trabzon.jpg', 'Trabzon square.jpg'];
+    const badHit = pg => pg._img.filter(u => /Acriteon|1910|USS|Old_map|Old map/.test(u));
+    // 9-أ) صورة رئيسية مناسبة على thumb.wikimedia.org تُقبل وتظهر، وصور الفنادق (Special:FilePath ← thumb) تظهر بدون مخالفة CSP
+    { const pg = await f5page(() => 'Trabzon_harbour_view.jpg', BAD.concat(GOOD));
+      await pg.goto(B + '/results.html?d=Trabzon', { waitUntil: 'networkidle2' }); await sleep(1500); const s = await look(pg); await sleep(400);
+      ok('F-5: lead photo on thumb.wikimedia.org is used for the header', /thumb\.wikimedia\.org/.test(s.bg) && /Trabzon_harbour_view/.test(s.bg), s.bg.slice(0, 120));
+      ok('F-5: Trabzon hotel photos (Commons → thumb.wikimedia.org) load, none broken', s.cards >= 5 && s.shown >= 1 && s.broken === 0, JSON.stringify(s));
+      ok('F-5: no CSP violation and no page errors with thumb.wikimedia.org images', pg._csp.length === 0 && pg._e.length === 0, pg._csp.concat(pg._e).slice(0, 3).join(' | '));
+      ok('F-5: hospital, war, map and pre-1950 pictures from the image list are never loaded', badHit(pg).length === 0, badHit(pg).join(', '));
+      await pg.browserContext().close(); }
+    // 9-ب) الصورة الرئيسية غير مناسبة (مستشفى) في الصفحتين: الترويسة تبقى بدون صورة، وما نأخذ صورة عشوائية من القائمة
+    { const pg = await f5page(() => 'Acriteon_Hospital_Trebizond.jpg', BAD.concat(GOOD));
+      await pg.goto(B + '/results.html?d=Trabzon', { waitUntil: 'networkidle2' }); await sleep(1500); const s = await look(pg);
+      ok('F-5: unsuitable lead photo (hospital) is refused and the header stays plain', !/url\(/.test(s.bg), s.bg.slice(0, 120));
+      ok('F-5: hospital picture never requested', badHit(pg).length === 0, badHit(pg).join(', '));
+      await pg.browserContext().close(); }
+    // 9-ج) وجهة غير معروفة: صور «المنطقة» تأتي من قائمة الصور، والقائمة فيها صور غير مناسبة تُستبعد والمناسبة تُستخدم
+    { const pg = await f5page(x => /Tourism|السياحة/.test(x) ? 'Flag_of_Zzz.svg' : 'USS_Oak_Hill_Marines_Visit_Batumi.jpg', BAD.concat(GOOD));
+      await pg.goto(B + '/results.html?d=Zzzland', { waitUntil: 'networkidle2' }); await sleep(1500); const s = await look(pg); await sleep(500);
+      const good = pg._img.filter(u => /harbour|Uzungol|square/.test(u)).length;
+      ok('F-5: unknown destination: flag and warship leads refused, header plain', !/url\(/.test(s.bg), s.bg.slice(0, 120));
+      ok('F-5: unknown destination: only suitable pictures from the list are used', badHit(pg).length === 0 && good >= 1 && s.broken === 0 && pg._e.length === 0, 'bad=' + badHit(pg).join(',') + ' good=' + good + ' ' + JSON.stringify(s));
+      await pg.browserContext().close(); } }
   console.log(out.join('\n')); console.log('total', out.length, 'pass', out.filter(x => x.startsWith('PASS')).length);
   if (process.env.OUT) require('fs').writeFileSync(process.env.OUT, out.join('\n'));
   if (out.some(x => x.startsWith('FAIL'))) process.exitCode = 1;

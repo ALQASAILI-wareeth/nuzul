@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://upload.wikimedia.org https://commons.wikimedia.org; connect-src 'self' https://en.wikipedia.org https://ar.wikipedia.org https://commons.wikimedia.org https://cloudflareinsights.com https://*.cloudflareinsights.com; media-src 'self'; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://upload.wikimedia.org https://thumb.wikimedia.org https://commons.wikimedia.org; connect-src 'self' https://en.wikipedia.org https://ar.wikipedia.org https://commons.wikimedia.org https://cloudflareinsights.com https://*.cloudflareinsights.com; media-src 'self'; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>نُزُل — قارن مواقع حجز الفنادق</title>
 <meta name="description" content="قارن بين Booking.com و Hotels.com و Expedia من مكان واحد، مع فلاتر للميزانية والنجوم ونوع الإقامة والقرب من الحرم.">
@@ -753,7 +753,9 @@
   const clean = s => wholeChars(cutText(String(s == null ? '' : s).replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g, '').replace(/\s+/g, ' ').trim(), 80)).trim();
   const isDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(new Date(s + 'T12:00:00'));
   // صور خارجية: نقبل فقط خوادم ويكيميديا عبر https
-  const safeImg = u => { try { const x = new URL(u); return (x.protocol === 'https:' && x.hostname === 'upload.wikimedia.org') ? x.href.replace(/["'()\\\s]/g, encodeURIComponent) : ''; } catch(e) { return ''; } };
+  // ويكيميديا صارت تخدم الصور المصغّرة من thumb.wikimedia.org (الأصلية تبقى على upload)
+  const IMG_HOSTS = ['upload.wikimedia.org', 'thumb.wikimedia.org'];
+  const safeImg = u => { try { const x = new URL(u); return (x.protocol === 'https:' && IMG_HOSTS.indexOf(x.hostname) >= 0) ? x.href.replace(/["'()\\\s]/g, encodeURIComponent) : ''; } catch(e) { return ''; } };
   const S = {
     d: clean(qs.get('d')) || 'Dubai',
     n: clean(qs.get('n')),
@@ -864,6 +866,17 @@
   const WIKI = {};
   // صور ما تصلح كصورة وجهة: أعلام وشعارات وخرائط
   const badPic = f => /علم|شعار|خريطة|flag|coat[ _]of[ _]arms|emblem|logo|seal[ _]of|locator|[ _]map|map[ _]|orthographic|\.svg/i.test(String(f || ''));
+  // صور ما تناسب موقع فنادق كصورة عامة للوجهة: مستشفيات وحروب وعسكر وكوارث ومقابر وسجون، ولوحات ورسومات وبطاقات وعملات قديمة
+  const UNFIT = /\b(hospital|h[oô]pital|ospedale|hastane|krankenhaus|surgery|surgical|operation|clinic|morgue|corpse|massacre|genocide|holocaust|execution|war|guerre|guerra|krieg|world war|ww1|ww2|wwi|wwii|battle|bataille|battaglia|batalla|siege|army|military|soldiers?|troops|marines|marine corps|warship|battleship|uss|hms|meu|us navy|royal navy|naval|weapons?|bomb|bombing|bombed|explosion|attack|riot|protest|earthquake|tsunami|hurricane|flooding|flooded|destroyed|cemetery|cimeti[eè]re|cimitero|cementerio|friedhof|graveyard|funeral|prison|jail|portrait|painting|peinture|pintura|dipinto|gem[aä]lde|engraving|gravure|lithograph|drawing|sketch|illustration|watercolou?r|postcard|carte postale|cartolina|postkarte|kartpostal|manuscript|stamp|coin|banknote|medal)\b|مستشفى|جراح|حرب|معركة|مجزرة|مذبحة|جيش|جنود|عسكري|مقبرة|جنازة|سجن|زلزال|انفجار|قصف|لوحة|مخطوط/i;
+  // سنة قديمة (1500–1949) مكتوبة في اسم الملف كرقم مستقل، مو رقم كاميرا (IMG 1865) ولا مقاس (1920x1080)
+  const oldYear = s => { const re = /(^|[^0-9A-Za-z])(1[5-9]\d\d)(?=$|[^0-9A-Za-z])/g; let m; while ((m = re.exec(s))) { if (+m[2] < 1950 && !/(?:img|dsc[nf]?|pict|cimg|gopr|mvi|sam|pic|image|photo|foto)[ -]*$/i.test(s.slice(0, m.index + m[1].length))) return true; } return false; };
+  // f = اسم الملف، when = تاريخ الصورة من ويكيميديا إن وُجد (أي تاريخ كل سنواته قبل 1950 = صورة قديمة)
+  const unfitPic = (f, when) => {
+    let n = String(f || ''); try { n = decodeURIComponent(n); } catch(e) {} n = n.replace(/^[^:]{1,12}:/, '').replace(/_/g, ' ');
+    if (UNFIT.test(n) || oldYear(n)) return true;
+    const ys = (String(when || '').replace(/<[^>]*>/g, ' ').match(/(?:^|[^0-9])(1\d{3}|20\d{2})(?![0-9])/g) || []).map(y => +y.replace(/[^0-9]/g, ''));
+    return ys.length > 0 && Math.max.apply(null, ys) < 1950;
+  };
   const tourTitle = t => /[؀-ۿ]/.test(t) ? 'السياحة في ' + t : 'Tourism in ' + t;
   function wikiHtml(h, g, H){
     if (H.gen && NOPIC[H.city]) return '';
@@ -900,6 +913,7 @@
         if (ii.mime !== 'image/jpeg' || ii.width < 700 || badPic(p.title)) return;
         const r = ii.width / ii.height; if (r < 0.6 || r > 2.3) return;
         const md = ii.extmetadata || {};
+        if (unfitPic(p.title, (md.DateTimeOriginal || {}).value)) return;
         const su = safeImg(ii.thumburl); if (!su) return;
         out.push({wide: r >= 1.2, src: su, file: String(p.title).replace(/^[^:]+:/, ''), who: ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60), lic: (md.LicenseShortName || {}).value || ''});
       });
@@ -966,7 +980,7 @@
         (q.normalized || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         (q.redirects || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         const by = {}; Object.values(q.pages || {}).forEach(p => { by[p.title] = p; });
-        part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage && !badPic(p.pageimage) && safeImg(p.thumbnail.source)) ? {src: safeImg(p.thumbnail.source), file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
+        part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage && !badPic(p.pageimage) && !unfitPic(p.pageimage) && safeImg(p.thumbnail.source)) ? {src: safeImg(p.thumbnail.source), file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
       } }
     } catch(e) {}
     if (run !== wikiRun) return;
@@ -1171,18 +1185,10 @@
         const d = await (await fetch(q)).json();
         const x = Object.values((d.query || {}).pages || {})[0] || {};
         if (heroFor !== name) return;
-        if (x.thumbnail && x.pageimage && !badPic(x.pageimage) && safeImg(x.thumbnail.source)) { pg = x; break; }
+        if (x.thumbnail && x.pageimage && !badPic(x.pageimage) && !unfitPic(x.pageimage) && safeImg(x.thumbnail.source)) { pg = x; break; }
       }
-      if (!pg) {
-        let g = await gallery(tourTitle(name)); if (!g.length) g = await gallery(name);
-        const w = g.find(x => x.wide) || g[0];
-        if (!w || heroFor !== name) return;
-        await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = w.src; });
-        if (heroFor !== name) return;
-        top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("' + w.src + '")';
-        top.classList.add('ph'); HERO_CR = [w.file, w.who, w.lic]; renderCredits();
-        return;
-      }
+      // لا صورة رئيسية مناسبة: نترك الترويسة الزرقاء بدل صورة عشوائية من قائمة الصور
+      if (!pg) return;
       const src = safeImg(pg.thumbnail.source); if (!src) return;
       await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
       if (heroFor !== name) return;
