@@ -85,18 +85,26 @@ footer a{opacity:1}
 .shnr.back b{font-size:17px}
 @keyframes nzPulse{0%,100%{box-shadow:0 0 0 2px #ffd27a}50%{box-shadow:0 0 0 7px rgba(255,210,122,.45)}}
 @media(prefers-reduced-motion:reduce){.shnr.back{animation:none}}
-.shpm{position:relative;overflow:hidden;display:block;width:100%;text-align:start;margin:6px 0 14px;padding:16px 16px 14px;padding-inline-start:70px;border:0;border-radius:18px;background:linear-gradient(135deg,#062F52 0%,#0062A8 62%,#00a3b8 100%);color:#fff;font:inherit;cursor:pointer;box-shadow:0 10px 26px -10px rgba(6,47,82,.55),inset 0 0 0 1.5px rgba(255,210,122,.55);transition:transform .2s ease,box-shadow .2s ease}
+.shpm{position:relative;overflow:hidden;margin:6px 0 14px;border-radius:18px;background:linear-gradient(135deg,#062F52 0%,#0062A8 62%,#00a3b8 100%);color:#fff;box-shadow:0 10px 26px -10px rgba(6,47,82,.55),inset 0 0 0 1.5px rgba(255,210,122,.55);transition:box-shadow .2s ease}
+.shpm .pmh{position:relative;display:block;width:100%;text-align:start;padding:16px 16px 14px;padding-inline-start:70px;border:0;background:none;color:inherit;font:inherit;cursor:pointer;border-radius:18px}
+.shpm .pmh:focus-visible{outline:2px solid #FFB238;outline-offset:-3px}
 .shpm::after{content:"";position:absolute;top:0;bottom:0;inset-inline-start:-60%;width:45%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-18deg);animation:nzShine 3.6s ease-in-out 0.6s 3;pointer-events:none}
-.shpm:hover,.shpm:focus-visible{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(6,47,82,.6),inset 0 0 0 2px #FFB238}
+.shpm .pmc .pmx,.shpm.open .pmc .pmo{display:none}
+.shpm.open .pmc .pmx{display:inline}
+.shpm .pml{padding:0 12px 12px;animation:nzOpen .25s ease}
+.shpm .pml[hidden]{display:none}
+.shpm .shnr{margin:0;background:#fff}
+@keyframes nzOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.shpm:hover{box-shadow:0 14px 30px -10px rgba(6,47,82,.6),inset 0 0 0 2px #FFB238}
 .shpm .pmi{position:absolute;inset-inline-start:14px;top:16px;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-style:normal;font-size:23px;background:linear-gradient(145deg,#FFD27A,#FFB238);box-shadow:0 6px 14px -6px rgba(255,178,56,.9);animation:nzBob 2.4s ease-in-out infinite}
-.shpm b{display:block;font-size:17px;font-weight:800;color:#FFD27A;line-height:1.4}
-.shpm span{display:block;font-size:13.5px;line-height:1.7;color:#e6f2fb;margin-top:2px}
+.shpm .pmh > b{display:block;font-size:17px;font-weight:800;color:#FFD27A;line-height:1.4}
+.shpm .pmh > span{display:block;font-size:13.5px;line-height:1.7;color:#e6f2fb;margin-top:2px}
 .shpm .pmt{display:flex;gap:6px;margin-top:10px;font-style:normal}
 .shpm .pmt u{text-decoration:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-size:16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18)}
-.shpm .pmc{position:absolute;inset-inline-end:14px;bottom:14px;font-size:13px;font-weight:800;color:#062F52;background:#FFB238;padding:6px 12px;border-radius:999px}
+.shpm .pmc{position:absolute;pointer-events:none;inset-inline-end:14px;bottom:14px;font-size:13px;font-weight:800;color:#062F52;background:#FFB238;padding:6px 12px;border-radius:999px}
 @keyframes nzShine{0%{inset-inline-start:-60%}55%,100%{inset-inline-start:130%}}
 @keyframes nzBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@media(prefers-reduced-motion:reduce){.shpm,.shpm::after,.shpm .pmi{animation:none;transition:none}.shpm:hover,.shpm:focus-visible{transform:none}}
+@media(prefers-reduced-motion:reduce){.shpm,.shpm::after,.shpm .pmi,.shpm .pml{animation:none;transition:none}}
 
 /* ===== ملاحظة فهم البحث (دولة، هل تقصد، فنادق مطابقة) ===== */
 .qnote{background:#fff6e0;border-radius:20px;padding:14px 16px;margin:0 0 12px}
