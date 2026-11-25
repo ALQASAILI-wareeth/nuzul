@@ -46,6 +46,12 @@ for(const mode of ['lead','flag','gal','none','fail','bad','brokenimg','slow']){
  const sh=await pg.evaluate(()=>({open:!document.getElementById('sh').hidden,links:[...document.querySelectorAll('.sha')].map(a=>a.href),name:document.getElementById('shN').textContent}));
  ok('sheet opens with 3 links',sh.open&&sh.links.length===3&&sh.links.every(h=>h.startsWith('https://')),sh.name);
  ok('sheet links carry tracking',/camref=1011l6vPKX/.test(decodeURIComponent(sh.links[0]))&&/camref=1101l6yQPk/.test(decodeURIComponent(sh.links[1])));
+ // «احجز إقامتك وارجع لنا»: قائمة «حول الفندق» تنفتح وتنقفل داخل نفس البطاقة، ولما يرجع من موقع الحجز تنفتح لحالها
+ const nl=await pg.evaluate(async()=>{const w=t=>new Promise(r=>setTimeout(r,t));const b=document.getElementById('pmh'),l=document.getElementById('pml');if(!b||!l)return 'missing';
+  const r=[l.hidden,b.getAttribute('aria-expanded'),document.querySelectorAll('#shp .shnr').length,!!l.querySelector('.shnr')];b.click();await w(150);
+  r.push(!l.hidden&&l.offsetHeight>0,b.getAttribute('aria-expanded'),l.querySelectorAll('.shnr a[href^="https://"]').length,getComputedStyle(b.querySelector('.pmx')).display!=='none');b.click();await w(150);r.push(l.hidden,b.getAttribute('aria-expanded'));
+  document.getElementById('sh').dataset.went='1';window.dispatchEvent(new Event('focus'));await w(200);r.push(!l.hidden,!!l.querySelector('.shnr.back'));return r.join(',');});
+ ok('sheet: nearby list opens and closes inside the card, opens itself after returning from booking',nl==='true,false,1,true,true,true,7,true,true,false,true,true',nl);
  await pg.keyboard.press('Escape');await sleep(500);ok('sheet closes on Escape',await pg.evaluate(()=>document.getElementById('sh').hidden||!document.getElementById('sh').classList.contains('on')));
  // favourite
  const fv=await pg.evaluate(async()=>{const f=document.querySelector('.hc .fv');if(!f)return 'nofav';f.click();await new Promise(x=>setTimeout(x,150));const on=document.querySelector('.hc .fv').classList.contains('on');document.querySelector('.hc .fv').click();await new Promise(x=>setTimeout(x,150));return on+'/'+document.querySelector('.hc .fv').classList.contains('on');});
