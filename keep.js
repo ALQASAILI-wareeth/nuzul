@@ -2,7 +2,7 @@
    كل شي محفوظ على جهاز الزائر فقط (localStorage)، بدون تسجيل وبدون إرسال لأي خادم. */
 (function () {
   'use strict';
-  var K_LAST = 'nuzul_last', K_FAV = 'nuzul_favs', K_VIS = 'nuzul_visits', K_A2HS = 'nuzul_a2hs_off';
+  var K_LAST = 'nuzul_last', K_FAV = 'nuzul_favs', K_HIST = 'nuzul_history', HIST_MAX = 300, K_VIS = 'nuzul_visits', K_A2HS = 'nuzul_a2hs_off';
 
   function get(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
   function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
@@ -18,9 +18,13 @@
   var T = {
     ar: {h: 'كمّل من وين وقفت', last: 'آخر بحث', go: 'كمّل بحثك', favH: 'مفضلتك', see: 'شوف السعر', rm: 'حذف من المفضلة',
       nights: function (n) { return n === 1 ? 'ليلة' : n === 2 ? 'ليلتين' : n + ' ليالي'; }, ad: function (n) { return n === 1 ? 'بالغ واحد' : n + ' بالغين'; },
+      histH: 'رحلاتي السابقة', histAll: function (n) { return 'عرض الكل (' + n + ')'; }, histLess: 'عرض أقل', histRm: 'حذف من السجل',
+      histClr: 'مسح السجل', histSure: 'متأكد؟ اضغط مرة ثانية للمسح', histWent: 'فتحت موقع الحجز', histSite: function (x) { return 'فتحت ' + x; }, histNote: 'محفوظة على جهازك فقط. أضف نُزُل للشاشة الرئيسية عشان يبقى السجل.',
       a2: '📲 خلّ نُزُل على شاشتك الرئيسية عشان توصله بضغطة.', a2ios: 'اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».', a2b: 'أضف', a2x: 'إغلاق'},
     en: {h: 'Pick up where you left off', last: 'Last search', go: 'Continue', favH: 'Your favourites', see: 'See price', rm: 'Remove from favourites',
       nights: function (n) { return n + (n === 1 ? ' night' : ' nights'); }, ad: function (n) { return n + (n === 1 ? ' adult' : ' adults'); },
+      histH: 'My past trips', histAll: function (n) { return 'Show all (' + n + ')'; }, histLess: 'Show less', histRm: 'Remove from history',
+      histClr: 'Clear history', histSure: 'Sure? Tap again to clear', histWent: 'Opened a booking site', histSite: function (x) { return 'Opened ' + x; }, histNote: 'Saved on this device only. Add Nuzul to your home screen to keep it.',
       a2: '📲 Keep Nuzul on your home screen for one-tap access.', a2ios: 'Tap Share, then “Add to Home Screen”.', a2b: 'Add', a2x: 'Close'}
   };
 
@@ -70,6 +74,33 @@
   }
   function favCount(city) { return favs().filter(function (f) { return f.city === city; }).length; }
 
+  /* ---------- رحلاتي السابقة: كل فندق فتحه الزائر، من أول استخدام، على جهازه فقط ---------- */
+  // السجل بعد التنظيف: نتجاهل أي عنصر تالف، والباقي نصوص وتواريخ صحيحة فقط
+  function hist() {
+    var h = get(K_HIST, []);
+    if (!Array.isArray(h)) return [];
+    return h.filter(function (x) { return x && typeof x === 'object' && !Array.isArray(x) && str(x.n) && str(x.d); })
+      .map(function (x) { return {id: str(x.id), city: str(x.city), d: x.d, cityAr: str(x.cityAr), n: x.n, ar: str(x.ar), ci: isYmd(x.ci) ? x.ci : '', co: isYmd(x.co) ? x.co : '',
+        a: num(x.a, 1, 10, 2), r: num(x.r, 1, 5, 1), ts: num(x.ts, 0, 9e15, 0), go: x.go === true, site: str(x.site).slice(0, 30)}; })
+      .slice(0, HIST_MAX);
+  }
+  // نفس الفندق بنفس تاريخ الدخول = نفس الرحلة: نحدّثها وننقلها لفوق بدل ما نكررها
+  function histKey(o) { return (str(o.city) + '|' + str(o.n) + '|' + str(o.ci)).toLowerCase(); }
+  function addHistory(o) {
+    if (!o || !str(o.n) || !str(o.d)) return;
+    var id = histKey(o), list = hist(), old = null;
+    list = list.filter(function (x) { if (x.id === id) { old = x; return false; } return true; });
+    list.unshift({id: id, city: str(o.city), d: str(o.d), cityAr: str(o.cityAr), n: str(o.n), ar: str(o.ar), ci: isYmd(o.ci) ? o.ci : '', co: isYmd(o.co) ? o.co : '',
+      a: num(o.a, 1, 10, 2), r: num(o.r, 1, 5, 1), ts: Date.now(), go: !!(old && old.go), site: old ? old.site : ''});
+    set(K_HIST, list.slice(0, HIST_MAX));
+  }
+  function markBooked(o, site) {
+    var id = histKey(o), list = hist(), hit = false;
+    list.forEach(function (x) { if (x.id === id) { x.go = true; x.site = str(site).slice(0, 30); x.ts = Date.now(); hit = true; } });
+    if (hit) set(K_HIST, list);
+  }
+  var histOpen = false, histArm = false;
+
   /* ---------- قسم «كمّل من وين وقفت» في الصفحة الرئيسية ---------- */
   function css() {
     if (document.getElementById('nzkeep-css')) return;
@@ -87,6 +118,11 @@
       '.nzk .c a.go{flex-shrink:0;background:#FFB238;color:#0A2540;font-weight:800;font-size:14px;border-radius:12px;padding:0 14px;height:44px;display:flex;align-items:center;white-space:nowrap}' +
       '.nzk .c button{flex-shrink:0;width:44px;height:44px;border:0;background:#FFF0F0;color:#D32F2F;border-radius:12px;font-size:18px;cursor:pointer}' +
       '.nzk h3{font-size:15px;font-weight:800;color:#0A2540;margin:14px 0 8px}' +
+      '.nzk .c small.went{color:#12804a;margin-top:2px}' +
+      '.nzk .hb{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}' +
+      '.nzk .hb button{height:40px;padding:0 14px;border-radius:999px;font:inherit;font-weight:800;font-size:14px;cursor:pointer;border:1.5px solid #dce7ee;background:#fff;color:#0A2540}' +
+      '.nzk .hb .clr{color:#b42318;border-color:#f3c7c2;background:#fff7f6}' +
+      '.nzk .hn{margin:8px 0 0;color:#5f6b78;font-size:12.5px}' +
       '.nza{position:fixed;inset-inline:12px;bottom:12px;z-index:60;background:#0A2540;color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 10px 30px rgba(6,47,82,.35);display:flex;align-items:center;gap:10px;font-size:14px;line-height:1.5}' +
       '.nza p{margin:0;flex:1}.nza small{display:block;opacity:.8;font-size:12.5px}' +
       '.nza button{border:0;border-radius:10px;height:44px;padding:0 14px;font:inherit;font-weight:800;cursor:pointer}' +
@@ -97,9 +133,9 @@
 
   function renderHome() {
     var anchor = document.querySelector('.wrap.search'); if (!anchor) return;
-    var L = T[lang()], last = lastSearch(), fv = favs();
+    var L = T[lang()], last = lastSearch(), fv = favs(), hs = hist();
     var box = document.getElementById('nzkeep');
-    if (!last && !fv.length) { if (box) box.remove(); return; }
+    if (!last && !fv.length && !hs.length) { if (box) box.remove(); return; }
     css();
     if (!box) { box = document.createElement('div'); box.id = 'nzkeep'; box.className = 'nzk'; anchor.after(box); }
     var ar = lang() === 'ar', loc = ar ? 'ar-AE' : 'en-GB';
@@ -122,7 +158,25 @@
       });
       html += '</div>';
     }
+    if (hs.length) {
+      var mo = function (h) { var d = h.ci ? new Date(h.ci + 'T12:00:00') : new Date(h.ts); return isNaN(d) ? '' : d.toLocaleDateString(loc, {month: 'long', year: 'numeric'}); };
+      html += '<h3 id="nzhist">🧳 ' + L.histH + ' (' + hs.length + ')</h3><div class="row">';
+      (histOpen ? hs : hs.slice(0, 6)).forEach(function (h) {
+        html += '<div class="c"><div class="tx"><b>' + esc(ar ? (h.ar || h.n) : h.n) + '</b><span>' + esc((ar ? (h.cityAr || h.d) : h.d) + (mo(h) ? ' · ' + mo(h) : '')) + '</span>' +
+          (h.go ? '<small class="went">✓ ' + esc(h.site ? L.histSite(h.site) : L.histWent) + '</small>' : '') + '</div>' +
+          '<a class="go" href="' + esc(resultsUrl(h.d, '', freshDates(h.ci, h.co), h.a, h.r)) + '">' + L.see + '</a>' +
+          '<button type="button" data-hrm="' + esc(h.id) + '" aria-label="' + L.histRm + '" title="' + L.histRm + '">✕</button></div>';
+      });
+      html += '</div><div class="hb">' + (hs.length > 6 ? '<button type="button" class="more" id="nzhMore">' + (histOpen ? L.histLess : L.histAll(hs.length)) + '</button>' : '') +
+        '<button type="button" class="clr" id="nzhClr">' + (histArm ? L.histSure : L.histClr) + '</button></div><p class="hn">' + L.histNote + '</p>';
+    }
     box.innerHTML = html;
+    box.querySelectorAll('[data-hrm]').forEach(function (b) {
+      b.onclick = function () { set(K_HIST, hist().filter(function (h) { return h.id !== b.getAttribute('data-hrm'); })); renderHome(); };
+    });
+    var hm = document.getElementById('nzhMore'); if (hm) hm.onclick = function () { histOpen = !histOpen; renderHome(); };
+    var hc = document.getElementById('nzhClr');
+    if (hc) hc.onclick = function () { if (!histArm) { histArm = true; renderHome(); setTimeout(function () { if (histArm) { histArm = false; renderHome(); } }, 5000); return; } histArm = false; histOpen = false; set(K_HIST, []); renderHome(); };
     box.querySelectorAll('[data-rm]').forEach(function (b) {
       b.onclick = function () { set(K_FAV, favs().filter(function (f) { return f.id !== b.getAttribute('data-rm'); })); renderHome(); };
     });
@@ -162,6 +216,6 @@
     var lb2 = document.getElementById('langBtn'); if (lb2) lb2.addEventListener('click', function () { setTimeout(function () { var o = document.getElementById('nza'); if (o) { o.remove(); maybeA2hs(); } }, 80); });
   }
 
-  window.NZKEEP = {saveSearch: saveSearch, isFav: isFav, toggleFav: toggleFav, favCount: favCount, favs: favs};
+  window.NZKEEP = {addHistory: addHistory, markBooked: markBooked, history: hist, saveSearch: saveSearch, isFav: isFav, toggleFav: toggleFav, favCount: favCount, favs: favs};
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
