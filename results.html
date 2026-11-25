@@ -163,7 +163,7 @@
   footer a{color:#fff;opacity:.85}
   .creds{margin-top:10px;font-size:12px}.creds summary{cursor:pointer;opacity:.8}.creds ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:2px;opacity:.85}.creds p{margin-top:6px;opacity:.8}
 </style>
-<link rel="stylesheet" href="polish-r.css?v=20261124c">
+<link rel="stylesheet" href="polish-r.css?v=20261125b">
 </head>
 <body>
 <header>
@@ -1119,7 +1119,7 @@
       '<div class="shb"><h3 id="shN"></h3>' + (lang === 'ar' ? '<div class="he" id="shE"></div>' : '') +
       '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + esc(d.g[lang]) + '</span>' + d.extra + '</div>' +
       '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
-      (h.f ? '' : '<button type="button" class="shpm" id="shpm"><b>' + (lang === 'ar' ? 'احجز إقامتك وارجع لنا' : 'Book your stay, then come back') + '</b><span>' + (lang === 'ar' ? 'جهّزنا لك قائمة بأقرب المطاعم والكوفيهات وأماكن الترفيه حول الفندق.' : 'We have a list of the nearest restaurants, cafés and fun places around the hotel ready for you.') + '</span></button>') +
+      (h.f ? '' : '<button type="button" class="shpm" id="shpm"><i class="pmi" aria-hidden="true">🎁</i><b>' + (lang === 'ar' ? 'احجز إقامتك وارجع لنا' : 'Book your stay, then come back') + '</b><span>' + (lang === 'ar' ? 'جهّزنا لك قائمة بأقرب المطاعم والكوفيهات وأماكن الترفيه حول الفندق.' : 'We have a list of the nearest restaurants, cafés and fun places around the hotel ready for you.') + '</span><em class="pmt" aria-hidden="true"><u>🍽️</u><u>☕</u><u>🌳</u><u>🎡</u></em><small class="pmc">' + (lang === 'ar' ? 'شوف القائمة' : 'See the list') + ' ↓</small></button>') +
       '<div class="shq">' + L.shQ + '</div>' +
       a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) +
       (h.f ? '' : nearHtml(h, d.city)) +
