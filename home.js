@@ -114,7 +114,7 @@
     '.deal .hd::after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;inset-inline-end:70px;bottom:-80px;background:rgba(255,255,255,.08)}' +
     '.deal .ic{position:absolute;z-index:1;inset-inline-end:14px;bottom:12px;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:32px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);box-shadow:0 8px 20px -8px rgba(0,0,0,.35)}' +
     '.deal .tag{position:absolute;z-index:1;top:14px;inset-inline-start:14px;background:rgba(255,255,255,.95);color:var(--dc);font-weight:800;font-size:13px;padding:4px 12px;border-radius:999px;max-width:calc(100% - 28px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
-    '.deal .left{position:absolute;z-index:1;bottom:14px;inset-inline-start:14px;background:rgba(4,22,40,.55);color:#FFD27A;font-weight:800;font-size:12.5px;padding:3px 10px;border-radius:999px}' +
+    '.deal .left{position:absolute;z-index:1;bottom:14px;inset-inline-start:14px;background:rgba(4,22,40,.55);color:#FFD27A;font-weight:800;font-size:13.5px;padding:3px 10px;border-radius:999px}' +
     '.deal .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}' +
     '.deal b{color:var(--navy);font-size:18px;line-height:1.35}' +
     '.deal p{color:var(--muted);font-size:14px;flex:1}' +

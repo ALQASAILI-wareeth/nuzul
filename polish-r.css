@@ -114,3 +114,17 @@ footer a{opacity:1}
 .qnote .qc:hover{background:var(--navy,#0d2b45);color:#fff;border-color:var(--navy,#0d2b45)}
 #credList a{display:inline-block;padding:9px 0}
 footer a{display:inline-block;padding:9px 0}
+
+/* مراجعة 3 (راحة العين، طلب المالك): لا خط أصغر من 13px، ولا نص باهت، وأزرار القنوات بلون أغمق */
+header small{font-size:13px}
+.hc .he,.shb .he{font-size:13.5px}
+.hc .hm,.shb .hm{font-size:13.5px}
+@media(max-width:480px){.hc .hm{font-size:13px}}
+.hc .hi .lab,.shi .lab{font-size:13px;padding:3px 8px;background:rgba(6,30,52,.78);white-space:nowrap;max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis}
+.pc small,.pc .mob{font-size:13.5px}
+.pc .badge{font-size:13px}
+.hs .hnote,.shn{font-size:13.5px}
+footer a{opacity:1}
+.creds{font-size:13px}.creds summary,.creds ul,.creds p{opacity:1}
+.chn .w{background:#0F7A3D}.chn .t{background:#1B76B0}
+@media(max-width:480px){.hc .hi .lab{font-size:12px;padding:2px 7px;top:6px;inset-inline-start:6px;max-width:calc(100% - 8px)}}

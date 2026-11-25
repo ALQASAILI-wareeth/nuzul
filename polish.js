@@ -4,15 +4,13 @@
   var D = document, R = D.documentElement;
   var lang = function () { return R.lang === 'en' ? 'en' : 'ar'; };
 
-  // ---------- 1) صورة الواجهة حسب الشهر ----------
-  var HERO = ['maldives', 'maldives', 'istanbul', 'istanbul', 'bali', 'interlaken', 'interlaken', 'london', 'istanbul', 'dubai', 'dubai', 'maldives'];
+  // ---------- 1) صورة الواجهة: جسر المقطع وبرج المقطع، أبوظبي (ثابتة طول السنة، طلب المالك) ----------
+  // الصورة: «At sunrise bridge» للمصور Sa7er90، ويكيميديا كومنز، CC BY-SA 4.0 (قص وتهدئة ألوان)
   var hero = D.querySelector('.hero');
   if (hero) {
-    var pic = HERO[new Date().getMonth()];
     var im = new Image();
-    var src = 'img/cities/' + pic + '.webp';
-    if (pic === 'dubai') src = 'img/hero/dubai-' + (window.innerWidth > 760 ? 'd' : 'm') + '.webp';
-    im.onload = function () { hero.style.setProperty('--hero-img', 'url("' + src + '")'); hero.classList.add('has-img'); if (pic === 'dubai') hero.classList.add('nz-bright'); };
+    var src = 'img/hero/maqta-' + (window.innerWidth > 760 ? 'd' : 'm') + '.webp';
+    im.onload = function () { hero.style.setProperty('--hero-img', 'url("' + src + '")'); hero.classList.add('has-img', 'nz-bright', 'nz-maqta'); };
     im.src = src;
   }
 
