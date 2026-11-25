@@ -1,0 +1,8 @@
+{
+  "name": "nuzul-tests",
+  "private": true,
+  "description": "Test-only dependencies for the NUZUL site. This folder is not published (see _config.yml).",
+  "dependencies": {
+    "puppeteer-core": "25.18.1"
+  }
+}

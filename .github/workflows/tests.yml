@@ -1,0 +1,79 @@
+# NUZUL — automatic tests (T1, approved 25 Nov 2026).
+# Runs the nine test suites in tests/ on every pull request to main or dev, on every push to dev,
+# and on demand. It only reads the repository: it does not deploy, publish, or change anything.
+# The single check named "tests" passes only when all nine suites pass; that is the name to use
+# later as a required status check for main.
+name: tests
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  suite:
+    name: suite (${{ matrix.suite }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [wording, functional, search, destinations, security, probes, timezones, unicode, storage]
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - name: Install the test dependency (puppeteer-core, pinned in tests/package-lock.json)
+        run: npm ci --prefix tests --ignore-scripts --no-audit --no-fund
+
+      - name: Show tool versions
+        run: |
+          node --version
+          google-chrome --version
+          python3 --version
+
+      - name: Run tests/${{ matrix.suite }}.js
+        env:
+          PUPPETEER: ${{ github.workspace }}/tests/node_modules/puppeteer-core
+          SUITES: ${{ matrix.suite }}
+        run: bash tests/run-all.sh "$RUNNER_TEMP/out"
+
+      - name: Print the full suite output
+        if: always()
+        run: cat "$RUNNER_TEMP/out/${{ matrix.suite }}.txt" || true
+
+      - name: Keep the suite output
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: output-${{ matrix.suite }}
+          path: ${{ runner.temp }}/out
+          retention-days: 14
+
+  tests:
+    name: tests
+    if: always()
+    needs: suite
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: All nine suites must pass
+        run: |
+          echo "Result of the nine suites: ${{ needs.suite.result }}"
+          test "${{ needs.suite.result }}" = "success"
