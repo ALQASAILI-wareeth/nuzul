@@ -159,6 +159,41 @@ const HOTEL2 = { id: 'dubai|atlantis the palm', city: 'dubai', d: 'Dubai', cityA
     if (r.cards < 10 || r.partner !== 3 || !r.sheet) why.push('results: ' + J(r)); if (pg._e.length) why.push('script error: ' + pg._e[0]);
     ok(label + ' | home and results pages still work', why.length === 0, why[0] || ''); await pg.browserContext().close(); }); }
 
+  // رحلاتي السابقة (25 نوفمبر 2026): كل فندق يفتحه الزائر ينحفظ على جهازه، من أول استخدام لآخر استخدام
+  { const pg = await page(); await pg.goto(B + '/', { waitUntil: 'networkidle2' }); await pg.evaluate(() => localStorage.clear());
+    const pick = async (d, n, book) => { await pg.goto(B + '/results.html?d=' + encodeURIComponent(d), { waitUntil: 'networkidle2' }); await sleep(400);
+      await pg.evaluate(async (n, book) => { document.addEventListener('click', e => { if (e.target.closest('a')) e.preventDefault(); }, true);
+        const c = document.querySelectorAll('.hc')[n]; c.click(); await new Promise(r => setTimeout(r, 400)); if (book) document.querySelector('.sha.b3').click(); }, n, book); await sleep(150); };
+    await pick('Paris', 0, false); await pick('Istanbul', 0, false); await pick('Abu Dhabi', 1, true); await pick('Cairo', 0, false); await pick('London', 0, true); await pick('London', 0, true);
+    const h = await pg.evaluate(() => JSON.parse(localStorage.getItem('nuzul_history') || '[]'));
+    ok('trip history: every opened hotel saved, newest first, same hotel and date kept once', h.length === 5 && /london/i.test(h[0].d) && /paris/i.test(h[4].d) && h[0].go === true && h[0].site === 'Expedia' && h.filter(x => x.go).length === 2 && h.every(x => realDate(x.ci) && realDate(x.co) && x.n),
+      h.map(x => x.d + (x.go ? '*' : '')).join(','));
+    await pg.goto(B + '/', { waitUntil: 'networkidle2' }); await sleep(400);
+    const v = await pg.evaluate(() => ({ t: (document.getElementById('nzhist') || {}).textContent || '', cards: document.querySelectorAll('#nzkeep [data-hrm]').length, went: document.querySelectorAll('#nzkeep small.went').length,
+      first: (document.querySelector('#nzkeep [data-hrm]') || { closest: () => null }).closest('.c').querySelector('span').textContent,
+      links: [...document.querySelectorAll('#nzkeep [data-hrm]')].map(b => b.closest('.c').querySelector('a.go').getAttribute('href')) }));
+    ok('home page: «رحلاتي السابقة» lists the 5 trips with booking marks and working links', /رحلاتي السابقة \(5\)/.test(v.t) && v.cards === 5 && v.went === 2 && /لندن|London/.test(v.first) && v.links.every(l => { const q = new URLSearchParams(l.split('?')[1]); return l.startsWith('/results.html?') && realDate(q.get('ci')) && q.get('co') > q.get('ci') && q.get('ci') >= ymd(new Date()); }), JSON.stringify(v).slice(0, 300));
+    await pg.evaluate(() => document.querySelector('#nzkeep [data-hrm]').click()); await sleep(150);
+    const r1 = await pg.evaluate(() => [JSON.parse(localStorage.getItem('nuzul_history')).length, document.querySelectorAll('#nzkeep [data-hrm]').length].join('/'));
+    await pg.evaluate(() => document.getElementById('nzhClr').click()); await sleep(150);
+    const r2 = await pg.evaluate(() => [JSON.parse(localStorage.getItem('nuzul_history')).length, document.getElementById('nzhClr').textContent].join('/'));
+    await pg.evaluate(() => document.getElementById('nzhClr').click()); await sleep(150);
+    const r3 = await pg.evaluate(() => [JSON.parse(localStorage.getItem('nuzul_history')).length, !!document.getElementById('nzhist')].join('/'));
+    ok('trip history: remove one, clear needs a second tap, no browser dialog', r1 === '4/4' && /^4\/متأكد/.test(r2) && r3 === '0/false' && !pg._dlg && pg._e.length === 0, [r1, r2, r3, pg._e[0]].join(' | '));
+    // سنوات من الاستخدام: 320 رحلة تنقص لآخر 300، ويظهر 6 ثم «عرض الكل»
+    await pg.evaluate(() => { const L = []; for (let i = 0; i < 320; i++) L.push({ id: 'c|h' + i + '|', city: 'c', d: 'City ' + i, cityAr: '', n: 'Hotel ' + i, ar: '', ci: '2019-0' + (1 + i % 9) + '-10', co: '2019-0' + (1 + i % 9) + '-12', a: 2, r: 1, ts: 1e12 + i, go: false });
+      localStorage.setItem('nuzul_history', JSON.stringify(L)); });
+    await pg.reload({ waitUntil: 'networkidle2' }); await sleep(300);
+    const big0 = await pg.evaluate(() => document.querySelectorAll('#nzkeep [data-hrm]').length); await pg.evaluate(() => document.getElementById('nzhMore').click()); await sleep(200);
+    const big1 = await pg.evaluate(() => [document.querySelectorAll('#nzkeep [data-hrm]').length, document.getElementById('nzhist').textContent].join('/'));
+    await pick('Dubai', 0, false); const cap = await pg.evaluate(() => JSON.parse(localStorage.getItem('nuzul_history')).length);
+    ok('trip history: years of trips kept up to 300, home shows 6 then «show all»', big0 === 6 && /^300\//.test(big1) && cap === 300, big0 + ' ' + big1 + ' cap=' + cap); await pg.browserContext().close(); }
+  // سجل تالف أو معدّل باليد: الصفحة تشتغل وما ينفّذ شي
+  { const pg = await page(); await pg.goto(B + '/', { waitUntil: 'networkidle2' }); const bad = [];
+    for (const raw of ['{bad', '"x"', '42', 'null', '{}', J([1, null, 'x', [], { n: IMG }, { d: IMG }]), J([{ n: IMG, d: IMG, ar: IMG, cityAr: IMG, ci: IMG, co: '2026-02-31', a: IMG, r: -5, ts: IMG, go: IMG, site: IMG, id: IMG }]), J([{ n: 'A', d: 'B', __proto__: { polluted: 1 }, constructor: { prototype: { polluted: 1 } } }])]) {
+      const s = await home(pg, { nuzul_history: raw }); const why = sound(s); const t = await pg.evaluate(() => document.querySelectorAll('#nzkeep a.go').length ? [...document.querySelectorAll('#nzkeep a.go')].map(a => a.getAttribute('href')).join(' ') : '');
+      if (/Invalid|NaN|undefined|2026-02-31/.test(t)) why.push('bad link ' + t.slice(0, 60)); if (why.length) bad.push(raw.slice(0, 20) + ': ' + why.join('; ')); }
+    ok('trip history: corrupt or hostile saved data never breaks the page or runs script', bad.length === 0, bad.slice(0, 3).join(' | ')); await pg.browserContext().close(); }
   console.log(out.join('\n')); console.log('total', out.length, 'pass', out.filter(x => x.startsWith('PASS')).length);
   if (process.env.OUT) require('fs').writeFileSync(process.env.OUT, out.join('\n'));
   if (out.some(x => x.startsWith('FAIL'))) process.exitCode = 1;

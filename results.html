@@ -245,7 +245,7 @@
 <script src="partners.js?v=20261124c"></script>
 <script src="hotels-more.js?v=20261124c"></script>
 <script src="hotel-ids.js?v=20261124c"></script>
-<script src="keep.js?v=20261124c"></script>
+<script src="keep.js?v=20261125a"></script>
 <script src="polish-r.js?v=20261124c"></script>
 <script src="ptr.js?v=20261124c"></script>
 <script>
@@ -1133,7 +1133,10 @@
     $('shx').onclick = closeSheet;
     sh.dataset.went = '';
     { const pm = $('pmh'); if (pm) pm.onclick = () => { const open = $('pml').hidden; nearOpen(open); if (open) setTimeout(() => { try { $('pml').scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e){} }, 60); }; }
-    $('shp').querySelectorAll('.sha').forEach(x => x.addEventListener('click', () => { sh.dataset.went = '1'; }));
+    // رحلاتي السابقة: نحفظ الفندق اللي فتحه الزائر، ولما يضغط موقع حجز نعلّمه (على جهازه فقط)
+    const tk = key() || '', trip = {city: tk, d: S.d, cityAr: DEST[tk] ? DEST[tk].ar : (S.n || ''), n: h.n, ar: h.ar || '', ci: S.cin, co: S.cout, a: S.adults, r: S.rooms};
+    if (window.NZKEEP && !h.f) NZKEEP.addHistory(trip);
+    $('shp').querySelectorAll('.sha').forEach(x => x.addEventListener('click', () => { sh.dataset.went = '1'; if (window.NZKEEP && !h.f) NZKEEP.markBooked(trip, x.querySelector('span') ? x.querySelector('span').textContent : ''); }));
     sh.hidden = false; document.body.classList.add('shlock');
     requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
     setTimeout(() => { try { $('shx').focus({preventScroll:true}); } catch(e){} }, 60);
