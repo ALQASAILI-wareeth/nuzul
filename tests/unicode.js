@@ -51,7 +51,7 @@ const show = s => Array.from(s.slice(-6)).map(c => 'U+' + c.codePointAt(0).toStr
     return { name, cards: document.querySelectorAll('#hl .hc').length, links, badLinks }; });
   const judge = (input, s, errs) => { const want = spec(input); const why = [];
     if (errs) why.push('script error');
-    if (s.cards < 1 || s.links !== 3 || s.badLinks) why.push('cards=' + s.cards + ' links=' + s.links + ' badLinks=' + s.badLinks);
+    if (s.cards < 1 || s.links !== 4 || s.badLinks) why.push('cards=' + s.cards + ' links=' + s.links + ' badLinks=' + s.badLinks);
     if (!wellFormed(s.name)) why.push('half a character left in the name');
     if (s.name.length > MAX) why.push('name longer than ' + MAX);
     if (s.name !== want) why.push('name ends with ' + show(s.name) + ' expected ' + show(want));

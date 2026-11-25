@@ -129,7 +129,7 @@
   .shq{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:8px}
   .sha{display:flex;align-items:center;justify-content:space-between;gap:10px;height:58px;border-radius:14px;padding:0 16px;margin-bottom:8px;color:#fff;font-weight:800;font-size:17px}
   .sha small{font-size:13.5px;font-weight:700;opacity:.95;white-space:nowrap}
-  .sha.b1{background:#003580}.sha.b2{background:#D32F2F}.sha.b3{background:#FDDB32;color:#191E3B}
+  .sha.b1{background:#003580}.sha.b4{background:#1F2D5C}.sha.b2{background:#D32F2F}.sha.b3{background:#FDDB32;color:#191E3B}
   .shn{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:6px}
   @media(min-width:700px){.sh{align-items:center}.shp{border-radius:22px;padding-bottom:16px}.shg{display:none}}
   body.shlock{overflow:hidden}
@@ -207,7 +207,7 @@
 
   <section class="hs" id="hs" hidden>
     <h2 id="hsTitle"></h2>
-    <p class="sub" data-i="hsSub">اضغط على الفندق عشان تقارن السعر لتواريخك على المواقع الثلاثة.</p>
+    <p class="sub" data-i="hsSub">اضغط على الفندق عشان تقارن السعر لتواريخك على مواقع الحجز.</p>
     <div class="htabs" id="htabs"></div>
     <div class="hl" id="hl"></div>
     <p class="hnote" data-i="hsNote">* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.</p>
@@ -260,6 +260,7 @@
       rating8:'⭐ تقييم 8+', freeCancel:'↩️ إلغاء مجاني', sort:{best:'الأنسب',price:'الأرخص',rating:'الأعلى تقييماً'},
       cardsH:'قارن على أكثر من موقع', cardsNote:'نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.',
       bk:{badge:'الأكثر خيارات',pts:['أكبر عدد فنادق وشقق في العالم','إلغاء مجاني لمعظم الغرف','الموقع والدعم بالعربي'],cta:'شوف الفنادق على Booking',sm:'تنفتح نتائج Booking في نافذة جديدة'},
+      ag:{badge:'',pts:['خيارات كثيرة، خصوصاً في آسيا','عروض وأسعار خاصة للأعضاء','الموقع بالعربي'],cta:'شوف الفنادق على أجودا',sm:'تنفتح نتائج أجودا في نافذة جديدة'},
       hc:{badge:'',pts:['مكافآت One Key على كل حجز','أسعار خاصة للأعضاء','فنادق ومنتجعات مختارة'],cta:'شوف الفنادق على Hotels.com',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Hotels.com في نافذة جديدة'},
       ex:{badge:'',pts:['وفّر لما تحجز طيران + فندق مع بعض','نفس مكافآت One Key','خيارات دفع مرنة'],cta:'شوف الفنادق على Expedia',mob:'📱 على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك التطبيق',sm:'تنفتح نتائج Expedia في نافذة جديدة'},
       helpP:'عندك ملاحظة أو استفسار؟ راسلنا على info@nuzultravel.com',helpB:'راسلنا',
@@ -268,8 +269,8 @@
       disc:'نُزُل موقع مستقل. يتم الحجز والدفع عند مواقع الحجز نفسها مثل Booking.com و Hotels.com و Expedia، وقد نحصل على عمولة دون أي تكلفة إضافية عليك.',
       mailSub:'ملاحظة من موقع نُزُل', mailBody:(n,ci,co,a)=>'السلام عليكم،\n\n\n\n(بحثي في نُزُل: '+n+'، من '+ci+' إلى '+co+'، عدد البالغين '+a+')',
       genTip:'احجز بدري قدر الإمكان، وفعّل «إلغاء مجاني» عشان تقدر تغيّر لو لقيت سعر أحسن.',
-      hsSub:'اضغط على الفندق عشان تقارن السعر لتواريخك على المواقع الثلاثة.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
-      cardsAll:n=>'أو شوف كل فنادق '+n+' على المواقع الثلاثة', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 اقتصادي', areaPic:'📷 صورة المنطقة', cmp:'شوف الأسعار ←', shQ:'شوف السعر لتواريخك على:', shGo:'شوف السعر', shClose:'إغلاق', shNote:'السعر يختلف بين المواقع، فقارن الثلاثة قبل ما تحجز. الحجز والدفع يتمان عند الموقع اللي تختاره. على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك تطبيقهم.', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
+      hsSub:'اضغط على الفندق عشان تقارن السعر لتواريخك على مواقع الحجز.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
+      cardsAll:n=>'أو شوف كل فنادق '+n+' على مواقع الحجز', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 اقتصادي', areaPic:'📷 صورة المنطقة', cmp:'شوف الأسعار ←', shQ:'شوف السعر لتواريخك على:', shGo:'شوف السعر', shClose:'إغلاق', shNote:'السعر يختلف بين المواقع، فقارن بينها قبل ما تحجز. الحجز والدفع يتمان عند الموقع اللي تختاره. على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك تطبيقهم.', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
       title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
       qH:'Compare prices on:',fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
@@ -278,6 +279,7 @@
       rating8:'⭐ Rated 8+', freeCancel:'↩️ Free cancellation', sort:{best:'Best match',price:'Lowest price',rating:'Top rated'},
       cardsH:'Compare across sites', cardsNote:'The same search and filters open on each site. Prices sometimes differ, so compare before you book.',
       bk:{badge:'Most choice',pts:['The largest selection of hotels and apartments','Free cancellation on most rooms','Site and support in Arabic'],cta:'See hotels on Booking',sm:'Booking results open in a new tab'},
+      ag:{badge:'',pts:['Wide choice, especially in Asia','Member-only deals and prices','Site in Arabic'],cta:'See hotels on Agoda',sm:'Agoda results open in a new tab'},
       hc:{badge:'',pts:['One Key rewards on every booking','Member-only prices','Hand-picked hotels and resorts'],cta:'See hotels on Hotels.com',mob:'📱 On mobile: tap "Continue to website" if you don\'t have the app',sm:'Hotels.com results open in a new tab'},
       ex:{badge:'',pts:['Save when you book flight + hotel together','Same One Key rewards','Flexible payment options'],cta:'See hotels on Expedia',mob:'📱 On mobile: tap "Continue to website" if you don\'t have the app',sm:'Expedia results open in a new tab'},
       helpP:'Have feedback or a question? Email us at info@nuzultravel.com',helpB:'Email us',
@@ -286,8 +288,8 @@
       disc:'Nuzul is an independent website. Bookings and payments are made on the booking sites themselves, such as Booking.com, Hotels.com and Expedia, and we may earn a commission at no extra cost to you.',
       mailSub:'Feedback from the Nuzul website', mailBody:(n,ci,co,a)=>'Hello,\n\n\n\n(My Nuzul search: '+n+', '+ci+' to '+co+', adults: '+a+')',
       genTip:'Book early, and turn on "Free cancellation" so you can switch if you find a better price.',
-      hsSub:'Tap a hotel to compare its price for your dates across the three sites.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
-      cardsAll:n=>'Or see all hotels in '+n+' on the three sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', cmp:'See prices →', shQ:'See the price for your dates on:', shGo:'See price', shClose:'Close', shNote:'Prices differ between sites, so check all three before you book. Booking and payment happen on the site you choose. On mobile, pick “Continue to site” if you do not have their app.', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
+      hsSub:'Tap a hotel to compare its price for your dates across the booking sites.',hsNote:'* Distances and walking times are approximate. The final price shows on the booking site. Photos from Wikimedia Commons, credited to their authors; "Area photo" means the photo shows the area, not the hotel itself.',
+      cardsAll:n=>'Or see all hotels in '+n+' on the booking sites', all:'All', walk:'🚶 ', cheaper:'💲 Budget', cheaperB:'💲 Budget', areaPic:'📷 Area photo', cmp:'See prices →', shQ:'See the price for your dates on:', shGo:'See price', shClose:'Close', shNote:'Prices differ between sites, so compare them before you book. Booking and payment happen on the site you choose. On mobile, pick “Continue to site” if you do not have their app.', favTab:n=>'♥ My favourites ('+n+')', favAdd:'Add to favourites', favRm:'Remove from favourites', chH:'🔔 Get deals first', chP:'Weekly hotel and season deals in our channel. No spam.', chWa:'WhatsApp channel', chTg:'Telegram', noH:'No hand-picked hotels match these filters. See all hotels below 👇'}
   };
   // معلومات الوجهات: اسم عربي، نصيحة، ومَعلم للقرب
   const DEST = {
@@ -853,6 +855,7 @@
     $('cards').append(card('top1', '#D32F2F', 'H', 'Hotels.com', L.hc, NUZUL.hotelsUrl(p, o, F, 'compare')));
     $('cards').append(card('', '#FDDB32;color:#191E3B', '✈', 'Expedia', L.ex, NUZUL.expediaUrl(p, o, F, 'compare')));
     $('cards').append(card('', '#003580', 'B.', 'Booking.com', L.bk, NUZUL.bookingCityUrl(p, o, lang)));
+    $('cards').append(card('', '#1F2D5C', 'a', 'Agoda', L.ag, NUZUL.agodaCityUrl(p, o, lang)));
   }
 
   function imgHtml(k, alt, isArea){
@@ -1041,7 +1044,7 @@
     if (!H || hideType) { box.hidden = true; CREDITS = {}; $('cardsH').textContent = L.cardsH; return; }
     box.hidden = false;
     $('hsTitle').textContent = (H.gen && genTitle(H.city) || H.title)[lang];
-    { const sb = box.querySelector('.sub'); if (sb) sb.textContent = H.gen ? (lang === 'ar' ? 'اضغط على الخيار عشان تشوفه لتواريخك على المواقع الثلاثة.' : 'Tap a pick to see it for your dates on the three sites.') : L.hsSub; }
+    { const sb = box.querySelector('.sub'); if (sb) sb.textContent = H.gen ? (lang === 'ar' ? 'اضغط على الخيار عشان تشوفه لتواريخك على مواقع الحجز.' : 'Tap a pick to see it for your dates on the booking sites.') : L.hsSub; }
     $('cardsH').textContent = L.cardsAll(dispName());
     const hasV = H.list.some(h => h.v);
     const nf = window.NZKEEP ? NZKEEP.favCount(k) : 0;
@@ -1062,7 +1065,7 @@
     list.forEach(h => {
       const g = H.groups[h.g], c = document.createElement('div'); c.className = 'hc';
       const ef = h.f || {hotel: h.n}, rf = h.f ? 'pick' : 'hotel';
-      const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingHotelUrl(h.c || H.city, h.n, o, lang), eid = h.f ? 0 : (window.NZ_EID || {})[h.n], hc = eid ? NUZUL.hotelsHotelUrl(eid, o) : NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = eid ? NUZUL.expediaHotelUrl(eid, o) : NUZUL.expediaUrl(h.c || H.city, o, ef, rf);
+      const bk = h.f ? NUZUL.bookingUrl(H.city, o, h.f, lang) : NUZUL.bookingHotelUrl(h.c || H.city, h.n, o, lang), eid = h.f ? 0 : (window.NZ_EID || {})[h.n], hc = eid ? NUZUL.hotelsHotelUrl(eid, o) : NUZUL.hotelsUrl(h.c || H.city, o, ef, rf), ex = eid ? NUZUL.expediaHotelUrl(eid, o) : NUZUL.expediaUrl(h.c || H.city, o, ef, rf), ag = h.f ? '' : NUZUL.agodaHotelUrl(h.c || H.city, h.n, o, lang);
       const gi = h.info || g.info; const extra = g.walk ? '<span>' + L.walk + esc(g.walk[lang]) + '</span>' : (gi ? '<span>✨ ' + esc(gi[lang]) + '</span>' : '');
       const im = imgHtml(h.img, (lang === 'ar' ? h.ar : h.n), !!h.area) || wikiHtml(h, g, H); if (!im) c.classList.add('noi');
       const on = !!(window.NZKEEP && NZKEEP.isFav(k, h.n));
@@ -1074,7 +1077,7 @@
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.f ? '' : h.n;
       c.tabIndex = 0; c.setAttribute('role', 'button');
-      const open = () => openSheet(c, {h:h, g:g, city:(h.c || H.city), extra:extra, im:c.querySelector('.hi img'), hc:hc, ex:ex, bk:bk});
+      const open = () => openSheet(c, {h:h, g:g, city:(h.c || H.city), extra:extra, im:c.querySelector('.hi img'), hc:hc, ex:ex, bk:bk, ag:ag});
       c.onclick = e => { if (e.target.closest('.fv')) return; open(); };
       c.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); open(); } };
       const fb = c.querySelector('.fv');
@@ -1084,7 +1087,7 @@
     fillWiki();
   }
 
-  // لوحة المقارنة: تطلع من تحت فوق نفس الصفحة وفيها الشركاء الثلاثة
+  // لوحة المقارنة: تطلع من تحت فوق نفس الصفحة وفيها مواقع الحجز
   let shFrom = null;
   // حول الفندق: روابط خرائط لأقرب مطاعم وكوفيهات وحدائق ومساجد (بدون عمولة)
   function nearHtml(h, city){
@@ -1126,7 +1129,7 @@
       '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
       (h.f ? '' : '<div class="shpm" id="shpm"><button type="button" class="pmh" id="pmh" aria-expanded="false" aria-controls="pml"><i class="pmi" aria-hidden="true">🎁</i><b>' + (lang === 'ar' ? 'احجز إقامتك وارجع لنا' : 'Book your stay, then come back') + '</b><span>' + (lang === 'ar' ? 'جهّزنا لك قائمة بأقرب المطاعم والكوفيهات وأماكن الترفيه حول الفندق.' : 'We have a list of the nearest restaurants, cafés and fun places around the hotel ready for you.') + '</span><em class="pmt" aria-hidden="true"><u>🍽️</u><u>☕</u><u>🌳</u><u>🎡</u></em><small class="pmc"><span class="pmo">' + (lang === 'ar' ? 'شوف القائمة ↓' : 'See the list ↓') + '</span><span class="pmx">' + (lang === 'ar' ? 'إخفاء القائمة ↑' : 'Hide the list ↑') + '</span></small></button><div class="pml" id="pml" hidden>' + nearHtml(h, d.city) + '</div></div>') +
       '<div class="shq">' + L.shQ + '</div>' +
-      a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) +
+      a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) + (d.ag ? a('b4', 'Agoda', d.ag) : '') +
       '<p class="shn">' + L.shNote + '</p></div>';
     $('shN').textContent = lang === 'ar' ? h.ar : h.n;
     if (lang === 'ar') $('shE').textContent = h.f ? '' : h.n;

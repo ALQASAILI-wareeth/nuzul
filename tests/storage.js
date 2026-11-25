@@ -134,7 +134,7 @@ const HOTEL2 = { id: 'dubai|atlantis the palm', city: 'dubai', d: 'Dubai', cityA
     for (const [label, favs, hearts] of [['one empty entry', '[null]', 0], ['mixed junk', J([1, 'a', true, [], {}, null]), 0], ['broken JSON', '{bad', 0], ['not a list', J({ a: 1 }), 0], ['numbers where names should be', J([{ id: 1, n: 2, d: 3, city: 4 }]), 0],
       ['valid hotel among junk', J([null, HOTEL, 5, { id: 'x' }]), 1], ['markup in every field', J([{ id: IMG, city: 'dubai', d: IMG, n: IMG, ar: IMG }]), 0]]) {
       const s = await res(favs);
-      if (s.err.length || s.x || s.inj || s.cards < 10 || s.partner !== 3 || s.hearts !== hearts) fails.push(label + ' → ' + (s.err[0] || ('cards=' + s.cards + ' sites=' + s.partner + ' hearts=' + s.hearts + ' exec=' + s.x + ' inj=' + s.inj))); }
+      if (s.err.length || s.x || s.inj || s.cards < 10 || s.partner !== 4 || s.hearts !== hearts) fails.push(label + ' → ' + (s.err[0] || ('cards=' + s.cards + ' sites=' + s.partner + ' hearts=' + s.hearts + ' exec=' + s.x + ' inj=' + s.inj))); }
     ok('results page | damaged favourites: hotel list and booking-site cards still render, only real favourites are marked (7 cases)', fails.length === 0, fails.length ? fails.length + ' wrong, e.g. ' + fails[0] : '');
     // تبديل القلب على قائمة فيها عناصر تالفة: يشتغل ويرجّع التخزين نظيف
     { const s = await res(J([null, HOTEL, 5, { id: 'x' }])); const e0 = pg._e.length;
@@ -156,7 +156,7 @@ const HOTEL2 = { id: 'dubai|atlantis the palm', city: 'dubai', d: 'Dubai', cityA
     await pg.goto(B + '/results.html?d=Dubai', { waitUntil: 'networkidle2' }); await sleep(300);
     const r = await pg.evaluate(() => { const f = document.querySelector('#hl .fv'); if (f) f.click(); const l = document.getElementById('langBtn'); if (l) l.click(); const c = document.querySelector('#hl .hc'); if (c) c.click();
       const sh = document.getElementById('sh'); return { cards: document.querySelectorAll('#hl .hc').length, partner: document.querySelectorAll('#cards .pc').length, sheet: !!sh && !sh.hidden }; });
-    if (r.cards < 10 || r.partner !== 3 || !r.sheet) why.push('results: ' + J(r)); if (pg._e.length) why.push('script error: ' + pg._e[0]);
+    if (r.cards < 10 || r.partner !== 4 || !r.sheet) why.push('results: ' + J(r)); if (pg._e.length) why.push('script error: ' + pg._e[0]);
     ok(label + ' | home and results pages still work', why.length === 0, why[0] || ''); await pg.browserContext().close(); }); }
 
   // رحلاتي السابقة (25 نوفمبر 2026): كل فندق يفتحه الزائر ينحفظ على جهازه، من أول استخدام لآخر استخدام
