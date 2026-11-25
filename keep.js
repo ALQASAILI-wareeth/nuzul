@@ -19,12 +19,12 @@
     ar: {h: 'كمّل من وين وقفت', last: 'آخر بحث', go: 'كمّل بحثك', favH: 'مفضلتك', see: 'شوف السعر', rm: 'حذف من المفضلة',
       nights: function (n) { return n === 1 ? 'ليلة' : n === 2 ? 'ليلتين' : n + ' ليالي'; }, ad: function (n) { return n === 1 ? 'بالغ واحد' : n + ' بالغين'; },
       histH: 'رحلاتي السابقة', histAll: function (n) { return 'عرض الكل (' + n + ')'; }, histLess: 'عرض أقل', histRm: 'حذف من السجل',
-      histClr: 'مسح السجل', histSure: 'متأكد؟ اضغط مرة ثانية للمسح', histWent: 'فتحت موقع الحجز', histSite: function (x) { return 'فتحت ' + x; }, histNote: 'محفوظة على جهازك فقط. أضف نُزُل للشاشة الرئيسية عشان يبقى السجل.',
+      histDel: 'حذف', histWent: 'فتحت موقع الحجز', histSite: function (x) { return 'فتحت ' + x; }, histNote: 'اسحب الرحلة لليمين عشان تحذفها. السجل محفوظ على جهازك فقط، وأضف نُزُل للشاشة الرئيسية عشان يبقى.',
       a2: '📲 خلّ نُزُل على شاشتك الرئيسية عشان توصله بضغطة.', a2ios: 'اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».', a2b: 'أضف', a2x: 'إغلاق'},
     en: {h: 'Pick up where you left off', last: 'Last search', go: 'Continue', favH: 'Your favourites', see: 'See price', rm: 'Remove from favourites',
       nights: function (n) { return n + (n === 1 ? ' night' : ' nights'); }, ad: function (n) { return n + (n === 1 ? ' adult' : ' adults'); },
       histH: 'My past trips', histAll: function (n) { return 'Show all (' + n + ')'; }, histLess: 'Show less', histRm: 'Remove from history',
-      histClr: 'Clear history', histSure: 'Sure? Tap again to clear', histWent: 'Opened a booking site', histSite: function (x) { return 'Opened ' + x; }, histNote: 'Saved on this device only. Add Nuzul to your home screen to keep it.',
+      histDel: 'Delete', histWent: 'Opened a booking site', histSite: function (x) { return 'Opened ' + x; }, histNote: 'Swipe a trip left to delete it. Saved on this device only; add Nuzul to your home screen to keep it.',
       a2: '📲 Keep Nuzul on your home screen for one-tap access.', a2ios: 'Tap Share, then “Add to Home Screen”.', a2b: 'Add', a2x: 'Close'}
   };
 
@@ -99,7 +99,32 @@
     list.forEach(function (x) { if (x.id === id) { x.go = true; x.site = str(site).slice(0, 30); x.ts = Date.now(); hit = true; } });
     if (hit) set(K_HIST, list);
   }
-  var histOpen = false, histArm = false;
+  var histOpen = false;
+  // سحب الرحلة نحو بداية السطر (يمين في العربي، يسار في الإنجليزي) يكشف زر الحذف، والضغط عليه يحذف
+  var SW_OPEN = 92;
+  function swipeRows(box) {
+    var rtl = (document.documentElement.dir || (lang() === 'ar' ? 'rtl' : 'ltr')) === 'rtl', sg = rtl ? 1 : -1;
+    var rows = [].slice.call(box.querySelectorAll('.hr'));
+    function shut(except) { rows.forEach(function (r) { if (r !== except && r.classList.contains('open')) { r.classList.remove('open'); r.querySelector('.c').style.transform = ''; } }); }
+    rows.forEach(function (r) {
+      var c = r.querySelector('.c'), del = r.querySelector('.del'), x0 = 0, y0 = 0, base = 0, off = 0, drag = false, id = null, moved = false;
+      c.addEventListener('pointerdown', function (e) { if (e.button > 0) return; id = e.pointerId; x0 = e.clientX; y0 = e.clientY; base = r.classList.contains('open') ? SW_OPEN : 0; off = base; drag = false; moved = false; });
+      c.addEventListener('pointermove', function (e) {
+        if (e.pointerId !== id) return; var dx = (e.clientX - x0) * sg, dy = e.clientY - y0;
+        if (!drag) { if (Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(dy)) { if (Math.abs(dy) > 10) id = null; return; } drag = true; moved = true; shut(r); r.classList.add('drag'); try { c.setPointerCapture(id); } catch (x) {} }
+        off = Math.max(0, Math.min(SW_OPEN + 24, base + dx)); c.style.transform = 'translateX(' + (off * sg) + 'px)';
+      });
+      function end(e) { if (e.pointerId !== id) return; id = null; r.classList.remove('drag'); if (!drag) return; drag = false;
+        var open = off > SW_OPEN / 2.5; r.classList.toggle('open', open); c.style.transform = open ? 'translateX(' + (SW_OPEN * sg) + 'px)' : ''; }
+      c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
+      // بعد السحب ما نفتح الرابط بالغلط، ولو البطاقة مفتوحة أول ضغطة تقفلها
+      c.addEventListener('click', function (e) { if (moved || r.classList.contains('open')) { e.preventDefault(); e.stopPropagation(); if (!moved) shut(); moved = false; } }, true);
+      del.addEventListener('focus', function () { shut(r); r.classList.add('open'); c.style.transform = 'translateX(' + (SW_OPEN * sg) + 'px)'; });
+      del.addEventListener('blur', function () { setTimeout(function () { if (document.activeElement !== del && !r.matches(':hover')) { r.classList.remove('open'); c.style.transform = ''; } }, 150); });
+      del.onclick = function () { var hid = del.getAttribute('data-hrm'); r.classList.add('gone'); setTimeout(function () { set(K_HIST, hist().filter(function (h) { return h.id !== hid; })); renderHome(); }, 180); };
+    });
+    if (!document.__nzSw) { document.__nzSw = 1; document.addEventListener('pointerdown', function (e) { if (!e.target.closest || !e.target.closest('.nzk .hr')) { var b = document.getElementById('nzkeep'); if (b) [].slice.call(b.querySelectorAll('.hr.open')).forEach(function (r) { r.classList.remove('open'); r.querySelector('.c').style.transform = ''; }); } }); }
+  }
 
   /* ---------- قسم «كمّل من وين وقفت» في الصفحة الرئيسية ---------- */
   function css() {
@@ -121,7 +146,16 @@
       '.nzk .c small.went{color:#12804a;margin-top:2px}' +
       '.nzk .hb{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}' +
       '.nzk .hb button{height:40px;padding:0 14px;border-radius:999px;font:inherit;font-weight:800;font-size:14px;cursor:pointer;border:1.5px solid #dce7ee;background:#fff;color:#0A2540}' +
-      '.nzk .hb .clr{color:#b42318;border-color:#f3c7c2;background:#fff7f6}' +
+      '.nzk .hr{position:relative;border-radius:16px;overflow:hidden;transition:opacity .18s,transform .18s}' +
+      '.nzk .hr.gone{opacity:0;transform:scale(.96)}' +
+      '.nzk .hr .c{position:relative;z-index:1;height:100%;touch-action:pan-y;transition:transform .22s ease;user-select:none;-webkit-user-select:none}' +
+      '.nzk .hr.drag .c{transition:none}' +
+      '.nzk .hr .c a{-webkit-user-drag:none;-webkit-touch-callout:none}' +
+      '.nzk .hr:not(.open):not(.drag) .del{opacity:0}' +
+      '.nzk .hr .del{position:absolute;inset-block:0;inset-inline-end:0;width:92px;border:0;background:#d92d20;color:#fff;font:inherit;font-weight:800;font-size:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer}' +
+      '.nzk .hr .del span{font-size:20px;line-height:1}' +
+      '.nzk .hr .del:focus-visible{outline:3px solid #FFB238;outline-offset:-4px}' +
+      '@media(prefers-reduced-motion:reduce){.nzk .hr,.nzk .hr .c{transition:none}}' +
       '.nzk .hn{margin:8px 0 0;color:#5f6b78;font-size:12.5px}' +
       '.nza{position:fixed;inset-inline:12px;bottom:12px;z-index:60;background:#0A2540;color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 10px 30px rgba(6,47,82,.35);display:flex;align-items:center;gap:10px;font-size:14px;line-height:1.5}' +
       '.nza p{margin:0;flex:1}.nza small{display:block;opacity:.8;font-size:12.5px}' +
@@ -162,21 +196,16 @@
       var mo = function (h) { var d = h.ci ? new Date(h.ci + 'T12:00:00') : new Date(h.ts); return isNaN(d) ? '' : d.toLocaleDateString(loc, {month: 'long', year: 'numeric'}); };
       html += '<h3 id="nzhist">🧳 ' + L.histH + ' (' + hs.length + ')</h3><div class="row">';
       (histOpen ? hs : hs.slice(0, 6)).forEach(function (h) {
-        html += '<div class="c"><div class="tx"><b>' + esc(ar ? (h.ar || h.n) : h.n) + '</b><span>' + esc((ar ? (h.cityAr || h.d) : h.d) + (mo(h) ? ' · ' + mo(h) : '')) + '</span>' +
+        html += '<div class="hr"><button type="button" class="del" data-hrm="' + esc(h.id) + '" aria-label="' + L.histRm + '"><span aria-hidden="true">✕</span>' + L.histDel + '</button><div class="c"><div class="tx"><b>' + esc(ar ? (h.ar || h.n) : h.n) + '</b><span>' + esc((ar ? (h.cityAr || h.d) : h.d) + (mo(h) ? ' · ' + mo(h) : '')) + '</span>' +
           (h.go ? '<small class="went">✓ ' + esc(h.site ? L.histSite(h.site) : L.histWent) + '</small>' : '') + '</div>' +
-          '<a class="go" href="' + esc(resultsUrl(h.d, '', freshDates(h.ci, h.co), h.a, h.r)) + '">' + L.see + '</a>' +
-          '<button type="button" data-hrm="' + esc(h.id) + '" aria-label="' + L.histRm + '" title="' + L.histRm + '">✕</button></div>';
+          '<a class="go" draggable="false" href="' + esc(resultsUrl(h.d, '', freshDates(h.ci, h.co), h.a, h.r)) + '">' + L.see + '</a></div></div>';
       });
-      html += '</div><div class="hb">' + (hs.length > 6 ? '<button type="button" class="more" id="nzhMore">' + (histOpen ? L.histLess : L.histAll(hs.length)) + '</button>' : '') +
-        '<button type="button" class="clr" id="nzhClr">' + (histArm ? L.histSure : L.histClr) + '</button></div><p class="hn">' + L.histNote + '</p>';
+      html += '</div>' + (hs.length > 6 ? '<div class="hb"><button type="button" class="more" id="nzhMore">' + (histOpen ? L.histLess : L.histAll(hs.length)) + '</button></div>' : '') +
+        '<p class="hn">' + L.histNote + '</p>';
     }
     box.innerHTML = html;
-    box.querySelectorAll('[data-hrm]').forEach(function (b) {
-      b.onclick = function () { set(K_HIST, hist().filter(function (h) { return h.id !== b.getAttribute('data-hrm'); })); renderHome(); };
-    });
+    swipeRows(box);
     var hm = document.getElementById('nzhMore'); if (hm) hm.onclick = function () { histOpen = !histOpen; renderHome(); };
-    var hc = document.getElementById('nzhClr');
-    if (hc) hc.onclick = function () { if (!histArm) { histArm = true; renderHome(); setTimeout(function () { if (histArm) { histArm = false; renderHome(); } }, 5000); return; } histArm = false; histOpen = false; set(K_HIST, []); renderHome(); };
     box.querySelectorAll('[data-rm]').forEach(function (b) {
       b.onclick = function () { set(K_FAV, favs().filter(function (f) { return f.id !== b.getAttribute('data-rm'); })); renderHome(); };
     });

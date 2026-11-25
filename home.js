@@ -94,6 +94,10 @@
     var a = new URLSearchParams({ landingPage: landing, camref: EGC.camref, creativeref: EGC.creativeref, adref: 'deals' });
     return 'https://www.hotels.com/affiliate?' + a.toString();
   }
+  // بطاقات العروض بدون صور: لون العرض + أيقونة الوجهة (عروض المواقع العامة تاخذ أيقونة التخفيض)
+  var ICON = { 'abu-dhabi': '🕌', bangkok: '🛕', cairo: '🐪', cancun: '🏝️', 'cape-town': '⛰️', dubai: '🏙️', interlaken: '🏔️', istanbul: '🕌', london: '🎡', madinah: '🕌', makkah: '🕋',
+    maldives: '🏝️', marrakech: '🏜️', 'new-york': '🗽', phuket: '🏖️', sydney: '🌊', tbilisi: '🍇', tokyo: '🗼', vienna: '🎻', zanzibar: '🌴' };
+  function icon(d) { return d.r === 'all' ? '🏷️' : (ICON[d.img] || '✈️'); }
   function daysLeft(until) {
     var end = new Date(until + 'T23:59:59+04:00');
     return Math.floor((end - new Date()) / 86400000);
@@ -105,9 +109,12 @@
     '@media(max-width:860px){.deals{grid-template-columns:1fr}}' +
     '.deal{display:flex;flex-direction:column;background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .2s,box-shadow .2s}' +
     '.deal:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(6,47,82,.14)}' +
-    '.deal .ph{height:130px;background-size:cover;background-position:center;position:relative}' +
-    '.deal .tag{position:absolute;top:12px;inset-inline-start:12px;color:#fff;font-weight:800;font-size:13px;padding:4px 12px;border-radius:999px}' +
-    '.deal .left{position:absolute;bottom:10px;inset-inline-start:12px;background:rgba(4,22,40,.78);color:#FFD27A;font-weight:700;font-size:12px;padding:3px 10px;border-radius:999px}' +
+    '.deal .hd{position:relative;height:118px;overflow:hidden;color:#fff;background:var(--dc);background:linear-gradient(135deg,var(--dc) 0%,color-mix(in srgb,var(--dc) 55%,#041628) 100%)}' +
+    '.deal .hd::before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;inset-inline-end:-50px;top:-70px;background:rgba(255,255,255,.12)}' +
+    '.deal .hd::after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;inset-inline-end:70px;bottom:-80px;background:rgba(255,255,255,.08)}' +
+    '.deal .ic{position:absolute;z-index:1;inset-inline-end:14px;bottom:12px;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:32px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);box-shadow:0 8px 20px -8px rgba(0,0,0,.35)}' +
+    '.deal .tag{position:absolute;z-index:1;top:14px;inset-inline-start:14px;background:rgba(255,255,255,.95);color:var(--dc);font-weight:800;font-size:13px;padding:4px 12px;border-radius:999px;max-width:calc(100% - 28px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
+    '.deal .left{position:absolute;z-index:1;bottom:14px;inset-inline-start:14px;background:rgba(4,22,40,.55);color:#FFD27A;font-weight:800;font-size:12.5px;padding:3px 10px;border-radius:999px}' +
     '.deal .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}' +
     '.deal b{color:var(--navy);font-size:18px;line-height:1.35}' +
     '.deal p{color:var(--muted);font-size:14px;flex:1}' +
@@ -155,8 +162,8 @@
       a.target = '_blank';
       a.rel = 'noopener sponsored';
       a.innerHTML =
-        '<div class="ph" style="background-image:url(\'/img/cities/' + d.img + '.webp\')">' +
-        '<span class="tag" style="background:' + d.color + '">' + d[l].tag + '</span>' +
+        '<div class="hd" style="--dc:' + d.color + '"><span class="ic" aria-hidden="true">' + icon(d) + '</span>' +
+        '<span class="tag">' + d[l].tag + '</span>' +
         (left <= 30 ? '<span class="left">' + T.left(left) + '</span>' : '') + '</div>' +
         '<div class="bd"><b>' + d[l].h + '</b><p>' + d[l].p + '</p><em>' + d[l].cta + (l === 'en' ? ' →' : ' ←') + '</em></div>';
       g.appendChild(a);

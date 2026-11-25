@@ -8,7 +8,7 @@ header{box-shadow:0 1px 0 rgba(255,255,255,.06)}
 .edit{background:#fff;border-color:#fff;color:var(--navy);padding:6px 16px;box-shadow:0 4px 14px rgba(0,20,40,.18);text-shadow:none}
 .eform{box-shadow:0 12px 30px rgba(0,20,40,.22);border-radius:20px;text-shadow:none}
 .eform input,.eform select{border-radius:12px;background:#f7fafc}
-main{margin-top:-22px;position:relative;background:var(--bg);border-radius:24px 24px 0 0;padding-top:20px}
+main{margin-top:-22px;position:relative;background:var(--bg);background:linear-gradient(180deg,#e2f0f6 0%,#e8f4f4 40%,#eef6f1 100%);border-radius:24px 24px 0 0;padding-top:20px}
 
 .panel{border:0;border-radius:20px;box-shadow:0 2px 14px rgba(6,47,82,.07);padding:6px 16px}
 .panel:not(.shut){padding-bottom:12px}
