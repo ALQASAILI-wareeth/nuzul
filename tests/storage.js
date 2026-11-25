@@ -170,16 +170,25 @@ const HOTEL2 = { id: 'dubai|atlantis the palm', city: 'dubai', d: 'Dubai', cityA
       h.map(x => x.d + (x.go ? '*' : '')).join(','));
     await pg.goto(B + '/', { waitUntil: 'networkidle2' }); await sleep(400);
     const v = await pg.evaluate(() => ({ t: (document.getElementById('nzhist') || {}).textContent || '', cards: document.querySelectorAll('#nzkeep [data-hrm]').length, went: document.querySelectorAll('#nzkeep small.went').length,
-      first: (document.querySelector('#nzkeep [data-hrm]') || { closest: () => null }).closest('.c').querySelector('span').textContent,
-      links: [...document.querySelectorAll('#nzkeep [data-hrm]')].map(b => b.closest('.c').querySelector('a.go').getAttribute('href')) }));
+      first: (document.querySelector('#nzkeep [data-hrm]') || { closest: () => null }).closest('.hr').querySelector('.tx span').textContent,
+      links: [...document.querySelectorAll('#nzkeep [data-hrm]')].map(b => b.closest('.hr').querySelector('a.go').getAttribute('href')) }));
     ok('home page: «رحلاتي السابقة» lists the 5 trips with booking marks and working links', /رحلاتي السابقة \(5\)/.test(v.t) && v.cards === 5 && v.went === 2 && /لندن|London/.test(v.first) && v.links.every(l => { const q = new URLSearchParams(l.split('?')[1]); return l.startsWith('/results.html?') && realDate(q.get('ci')) && q.get('co') > q.get('ci') && q.get('ci') >= ymd(new Date()); }), JSON.stringify(v).slice(0, 300));
-    await pg.evaluate(() => document.querySelector('#nzkeep [data-hrm]').click()); await sleep(150);
-    const r1 = await pg.evaluate(() => [JSON.parse(localStorage.getItem('nuzul_history')).length, document.querySelectorAll('#nzkeep [data-hrm]').length].join('/'));
-    await pg.evaluate(() => document.getElementById('nzhClr').click()); await sleep(150);
-    const r2 = await pg.evaluate(() => [JSON.parse(localStorage.getItem('nuzul_history')).length, document.getElementById('nzhClr').textContent].join('/'));
-    await pg.evaluate(() => document.getElementById('nzhClr').click()); await sleep(150);
-    const r3 = await pg.evaluate(() => [JSON.parse(localStorage.getItem('nuzul_history')).length, !!document.getElementById('nzhist')].join('/'));
-    ok('trip history: remove one, clear needs a second tap, no browser dialog', r1 === '4/4' && /^4\/متأكد/.test(r2) && r3 === '0/false' && !pg._dlg && pg._e.length === 0, [r1, r2, r3, pg._e[0]].join(' | '));
+    // الحذف بالسحب: ما فيه زر ✕ ظاهر ولا «مسح السجل»؛ سحب الرحلة نحو اليمين (العربي) يكشف «حذف»، والضغط يحذف
+    const swipe = async (dx) => { const c = await pg.$('#nzkeep .hr .c'); const bx = await c.boundingBox(); const y = bx.y + bx.height / 2, x = bx.x + bx.width / 2;
+      await pg.mouse.move(x, y); await pg.mouse.down(); for (let k = 1; k <= 8; k++) await pg.mouse.move(x + dx * k / 8, y + (k % 2)); await pg.mouse.up(); await sleep(350); };
+    const vis = await pg.evaluate(() => { const r = document.querySelector('#nzkeep .hr'), d = r.querySelector('.del').getBoundingClientRect(), c = r.querySelector('.c').getBoundingClientRect();
+      return { clr: !!document.getElementById('nzhClr'), xs: [...document.querySelectorAll('#nzkeep .hr .c button')].length, covered: d.left >= c.left - 1 && d.right <= c.right + 1 }; });
+    await swipe(-120); const wrongWay = await pg.evaluate(() => document.querySelector('#nzkeep .hr').classList.contains('open'));
+    await swipe(30); const small = await pg.evaluate(() => document.querySelector('#nzkeep .hr').classList.contains('open'));
+    await swipe(130); const opened = await pg.evaluate(() => { const r = document.querySelector('#nzkeep .hr'), d = r.querySelector('.del').getBoundingClientRect(), c = r.querySelector('.c').getBoundingClientRect(); return r.classList.contains('open') && c.left > d.left + 60; });
+    const u0 = await pg.evaluate(() => location.pathname);
+    await pg.evaluate(() => document.querySelector('#nzkeep .hr .del').click()); await sleep(450);
+    const r1 = await pg.evaluate(() => [JSON.parse(localStorage.getItem('nuzul_history')).length, document.querySelectorAll('#nzkeep .hr').length, location.pathname].join('/'));
+    ok('trip history: no visible ✕ or clear button; swipe right reveals «حذف», short or wrong-way swipe does nothing, tap deletes',
+      !vis.clr && vis.xs === 0 && vis.covered && !wrongWay && !small && opened && u0 === '/' && r1 === '4/4//' && !pg._dlg && pg._e.length === 0, JSON.stringify(vis) + ' wrong=' + wrongWay + ' small=' + small + ' open=' + opened + ' ' + r1 + ' ' + (pg._e[0] || ''));
+    // لوحة المفاتيح: زر الحذف يوصله Tab ويظهر لما يتركّز عليه
+    const kb = await pg.evaluate(() => { const d = document.querySelector('#nzkeep .hr .del'); d.focus(); return document.querySelector('#nzkeep .hr').classList.contains('open') && d.getAttribute('aria-label').length > 3; });
+    ok('trip history: delete button reachable by keyboard and labelled', kb);
     // سنوات من الاستخدام: 320 رحلة تنقص لآخر 300، ويظهر 6 ثم «عرض الكل»
     await pg.evaluate(() => { const L = []; for (let i = 0; i < 320; i++) L.push({ id: 'c|h' + i + '|', city: 'c', d: 'City ' + i, cityAr: '', n: 'Hotel ' + i, ar: '', ci: '2019-0' + (1 + i % 9) + '-10', co: '2019-0' + (1 + i % 9) + '-12', a: 2, r: 1, ts: 1e12 + i, go: false });
       localStorage.setItem('nuzul_history', JSON.stringify(L)); });
