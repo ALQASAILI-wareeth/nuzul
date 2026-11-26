@@ -2,6 +2,10 @@
 (function () {
   // Booking.com (CJ) — ضع رقم الشريك بعد الموافقة
   const AID = '';
+  // Booking.com MEA على CJ (برنامج 4347392، موقع Nuzul 101929079، رابط 11891539).
+  // الرابط العميق: صفحة Booking.com نفسها تنحط داخل url= فتنحسب العمولة عن طريق CJ.
+  const CJ_BK = 'https://www.dpbolvw.net/click-101929079-11891539';
+  function cjBooking(u) { return CJ_BK + '?url=' + encodeURIComponent(u); }
   // Expedia Group Creator (Hotels.com / Expedia / Vrbo) عبر Partnerize
   const EG = { camref: '1011l6vPKX', creativeref: '1011l66481' };        // Hotels.com
   const EX = { camref: '1101l6yQPk' };                                    // Expedia.com
@@ -37,7 +41,7 @@
     const bl = lang === 'ar' ? 'ar' : 'en-gb';
     p.set('lang', bl);
     if (AID) p.set('aid', AID);
-    return 'https://www.booking.com/searchresults.' + bl + '.html?' + p.toString();
+    return cjBooking('https://www.booking.com/searchresults.' + bl + '.html?' + p.toString());
   }
 
   function egSearch(host, place, o = {}, f = {}) {
