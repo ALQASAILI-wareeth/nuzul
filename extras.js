@@ -58,7 +58,7 @@
       ar: ['تعويض تأخير الرحلات', 'رحلتك تأخرت أو انلغت؟ اطلب تعويض يوصل إلى 600 يورو'],
       en: ['Flight delay compensation', 'Delayed or cancelled flight? Claim up to €600'],
       providers: [
-        // رد المجلس على WHTP65845 (26 نوفمبر 2026): العمولة على المطالبة بالتعويض جائزة، فرجعت Compensair.
+        // Compensair: خدمة المطالبة بتعويض تأخير الرحلات، رجعت 26 نوفمبر 2026 بعد المراجعة.
         { n: 'Compensair', url: 'https://compensair.tpo.lu/ySvtSQfg' }
         // AirHelp Plus يظل موقوف: رابطه لاشتراك Plus وفيه تغطية تشبه التأمين، لين نتأكد من تفاصيله.
         // { n: 'AirHelp Plus', url: 'https://airhelp.tpo.lu/sHXEVjZs' }
