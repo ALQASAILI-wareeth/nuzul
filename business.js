@@ -7,9 +7,9 @@
   var NUZUL_EMAIL = 'info@nuzultravel.com'; // إيميل استقبال طلبات الشركات
   var TP_MARKER = '805832';         // رقم الشريك في Travelpayouts (من روابطك الحالية)
   var LINKS = {
-    flightsHome: 'https://aviasales.tpo.lu/XkLo0FCi',
-    cars: 'https://localrent.tpo.lu/cCwSXBeu',
-    transfers: 'https://gettransfer.tpo.lu/A2XwzXRT'  // GetTransfer (بدل Kiwitaxi اللي ما يفتح في الإمارات)
+    flightsHome: 'https://aviasales.tpo.lu/qldOmSxJ',
+    cars: 'https://localrent.tpo.lu/nxiaq0E0',
+    transfers: 'https://gettransfer.tpo.lu/x2gSPYWf'  // GetTransfer (بدل Kiwitaxi اللي ما يفتح في الإمارات)
   };
 
   var P = window.NuzulParser;
