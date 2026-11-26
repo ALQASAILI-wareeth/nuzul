@@ -58,14 +58,16 @@
       ar: ['تعويض تأخير الرحلات', 'رحلتك تأخرت أو انلغت؟ اطلب تعويض يوصل إلى 600 يورو'],
       en: ['Flight delay compensation', 'Delayed or cancelled flight? Claim up to €600'],
       providers: [
-        { n: 'Compensair', url: 'https://compensair.tpo.lu/d7M2PjSw' },
-        { n: 'AirHelp Plus', url: 'https://airhelp.tpo.lu/Q09nuxhT' }
+        // موقوفة مؤقتاً لين يرد مجلس الإمارات للإفتاء على السؤال WHTP65845 (26 نوفمبر 2026)
+        // { n: 'Compensair', url: 'https://compensair.tpo.lu/d7M2PjSw' },
+        // { n: 'AirHelp Plus', url: 'https://airhelp.tpo.lu/Q09nuxhT' }
       ] },
     { ic: '🧳',
       ar: ['تخزين الأمتعة', 'خزّن شنطك بأمان في مدينتك قبل تسجيل الدخول أو بعد الخروج من الفندق'],
       en: ['Luggage storage', 'Store your bags safely before check-in or after check-out'],
       providers: [
-        { n: 'Radical Storage', url: 'https://radicalstorage.tpo.lu/rr7cBgkf' }
+        { n: 'Radical Storage', url: 'https://radicalstorage.tpo.lu/rr7cBgkf' },
+        { n: 'Bounce', url: 'https://go.bounce.com/NUZUL174118629204709' }
       ] }
   ];
   var TXT = {
