@@ -6,67 +6,67 @@
       ar: ['إنترنت السفر eSIM', 'شريحة إلكترونية تفعّلها من جوالك قبل السفر — قارن الباقات واختر الأنسب'],
       en: ['Travel eSIM', 'Activate data from your phone before you fly — compare plans and pick the best'],
       providers: [
-        { n: 'Airalo', url: 'https://airalo.tpo.lu/3BRI03iF' },
-        { n: 'Yesim', url: 'https://yesim.tpo.lu/hCZ76dsc' },
-        { n: 'Saily', url: 'https://saily.tpo.lu/xL6B2qFO' },
-        { n: 'GigSky', url: 'https://gigsky.tpo.lu/lDBPe6q3' },
-        { n: 'Drimsim', url: 'https://drimsim.tpo.lu/PWjORAGB' }
+        { n: 'Airalo', url: 'https://airalo.tpo.lu/ipwwjzCN' },
+        { n: 'Yesim', url: 'https://yesim.tpo.lu/zGb65qP4' },
+        { n: 'Saily', url: 'https://saily.tpo.lu/KOJQ1qmO' },
+        { n: 'GigSky', url: 'https://gigsky.tpo.lu/XJcm2ebC' },
+        { n: 'Drimsim', url: 'https://drimsim.tpo.lu/3p25Qoc8' }
       ] },
     { ic: '✈️',
       ar: ['تذاكر طيران', 'قارن أسعار مئات شركات الطيران واحجز الأرخص'],
       en: ['Flights', 'Compare hundreds of airlines and book the cheapest fare'],
       providers: [
-        { n: 'Aviasales', url: 'https://aviasales.tpo.lu/XkLo0FCi' },
-        { n: 'Kiwi.com', url: 'https://kiwi.tpo.lu/aXK0Ba8u' }
+        { n: 'Aviasales', url: 'https://aviasales.tpo.lu/qldOmSxJ' },
+        { n: 'Kiwi.com', url: 'https://kiwi.tpo.lu/z1KeWgmJ' }
       ] },
     { ic: '🚗',
       ar: ['استئجار سيارة', 'سيارات من شركات عالمية ومحلية بأسعار واضحة'],
       en: ['Car rental', 'Cars from global and local companies with clear prices'],
       providers: [
-        { n: 'Localrent', url: 'https://localrent.tpo.lu/cCwSXBeu' },
-        { n: 'GetRentacar', url: 'https://getrentacar.tpo.lu/6Mi1WlvD' },
-        { n: 'EconomyBookings', url: 'https://economybookings.tpo.lu/6gHnUvQh' },
-        { n: 'QEEQ', url: 'https://qeeq.tpo.lu/HN4FzDK7' },
-        { n: 'Auto Europe', url: 'https://autoeurope.tpo.lu/9sjsI0TF' }
+        { n: 'Localrent', url: 'https://localrent.tpo.lu/nxiaq0E0' },
+        { n: 'GetRentacar', url: 'https://getrentacar.tpo.lu/lg7qWRKI' },
+        { n: 'EconomyBookings', url: 'https://economybookings.tpo.lu/0LAS5TSm' },
+        { n: 'QEEQ', url: 'https://qeeq.tpo.lu/52DY5AOf' },
+        { n: 'Auto Europe', url: 'https://autoeurope.tpo.lu/Tl4Y6Xo0' }
       ] },
     { ic: '🚕',
       ar: ['توصيل من وإلى المطار', 'سائق ينتظرك في المطار بسعر ثابت محجوز مسبقاً'],
       en: ['Airport transfers', 'A driver waiting at arrivals, fixed price booked in advance'],
       providers: [
         // Kiwitaxi موقوف: ما يفتح من شبكات الإمارات (21 نوفمبر 2026)
-        { n: 'Welcome Pickups', url: 'https://tpo.lu/XqKI7IqG' },
-        { n: 'GetTransfer', url: 'https://gettransfer.tpo.lu/A2XwzXRT' },
-        { n: 'Intui', url: 'https://intui.tpo.lu/AzUKXBSu' }
+        { n: 'Welcome Pickups', url: 'https://tpo.lu/INazVDYP' },
+        { n: 'GetTransfer', url: 'https://gettransfer.tpo.lu/x2gSPYWf' },
+        { n: 'Intui', url: 'https://intui.tpo.lu/J43XmHXR' }
       ] },
     { ic: '🎟️',
       ar: ['جولات وأنشطة', 'تذاكر المعالم والرحلات والأنشطة في وجهتك'],
       en: ['Tours & activities', 'Tickets for attractions, tours and things to do'],
       providers: [
-        { n: 'Klook', url: 'https://klook.tpo.lu/OtLpxRKj' },
-        { n: 'Tiqets', url: 'https://tiqets.tpo.lu/6JhmqQ9H' },
-        { n: 'KKday', url: 'https://kkday.tpo.lu/V24a3pmt' },
-        { n: 'WeGoTrip', url: 'https://wegotrip.tpo.lu/lAgsr2Uf' },
-        { n: 'Go City', url: 'https://gocity.tpo.lu/ke1Lofin' }
+        { n: 'Klook', url: 'https://klook.tpo.lu/9yFIOwPa' },
+        { n: 'Tiqets', url: 'https://tiqets.tpo.lu/rOfGWDsD' },
+        { n: 'KKday', url: 'https://kkday.tpo.lu/TQF92kzG' },
+        { n: 'WeGoTrip', url: 'https://wegotrip.tpo.lu/1xpPovEh' },
+        { n: 'Go City', url: 'https://gocity.tpo.lu/515nbDEc' }
       ] },
     { ic: '🛵',
       ar: ['تأجير دراجات وسكوتر', 'دراجات نارية وسكوتر وهوائية للتنقل بحرية في وجهتك'],
       en: ['Bike & scooter rental', 'Motorbikes, scooters and bicycles to get around freely'],
       providers: [
-        { n: 'BikesBooking', url: 'https://bikesbooking.tpo.lu/8tVszIZ4' }
+        { n: 'BikesBooking', url: 'https://bikesbooking.tpo.lu/YHIhPQvc' }
       ] },
     { ic: '⏱️',
       ar: ['تعويض تأخير الرحلات', 'رحلتك تأخرت أو انلغت؟ اطلب تعويض يوصل إلى 600 يورو'],
       en: ['Flight delay compensation', 'Delayed or cancelled flight? Claim up to €600'],
       providers: [
         // موقوفة مؤقتاً لين يرد مجلس الإمارات للإفتاء على السؤال WHTP65845 (26 نوفمبر 2026)
-        // { n: 'Compensair', url: 'https://compensair.tpo.lu/d7M2PjSw' },
-        // { n: 'AirHelp Plus', url: 'https://airhelp.tpo.lu/Q09nuxhT' }
+        // { n: 'Compensair', url: 'https://compensair.tpo.lu/ySvtSQfg' },
+        // { n: 'AirHelp Plus', url: 'https://airhelp.tpo.lu/sHXEVjZs' }
       ] },
     { ic: '🧳',
       ar: ['تخزين الأمتعة', 'خزّن شنطك بأمان في مدينتك قبل تسجيل الدخول أو بعد الخروج من الفندق'],
       en: ['Luggage storage', 'Store your bags safely before check-in or after check-out'],
       providers: [
-        { n: 'Radical Storage', url: 'https://radicalstorage.tpo.lu/rr7cBgkf' },
+        { n: 'Radical Storage', url: 'https://radicalstorage.tpo.lu/HcfMPtFT' },
         { n: 'Bounce', url: 'https://go.bounce.com/NUZUL174118629204709' }
       ] }
   ];
