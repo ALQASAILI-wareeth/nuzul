@@ -170,7 +170,9 @@
     var bl = lang() === 'ar' ? 'ar' : 'en-gb';
     p.set('lang', bl);
     var aid = bookingAid(); if (aid) p.set('aid', aid);
-    return 'https://www.booking.com/searchresults.' + bl + '.html?' + p.toString();
+    // Booking.com MEA على CJ: الرابط العميق يحسب العمولة (نفس رابط partners.js)
+    return 'https://www.dpbolvw.net/click-101929079-11891539?url=' +
+      encodeURIComponent('https://www.booking.com/searchresults.' + bl + '.html?' + p.toString());
   }
   function flightUrl(from, to, date, pax) {
     if (!TP_MARKER) return LINKS.flightsHome;
