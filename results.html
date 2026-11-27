@@ -62,6 +62,11 @@
   .meta:empty{min-height:32px}
   @media(max-width:430px){.meta:empty{min-height:73px}}
   #hsTitle:empty::before{content:"\a0"}
+  /* تنبيه التواريخ القديمة: يطفو أسفل الشاشة (ما يحرّك محتوى الصفحة) */
+  #dnote{position:fixed;inset-inline:12px;bottom:12px;z-index:60;max-width:560px;margin-inline:auto;display:flex;align-items:center;gap:10px;background:#0A2540;color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 10px 30px rgba(6,47,82,.35)}
+  #dnote[hidden]{display:none}
+  #dnote p{margin:0;flex:1;font-size:14px;line-height:1.5}
+  #dnote button{flex:none;width:44px;height:44px;border-radius:10px;border:0;background:rgba(255,255,255,.14);color:#fff;font:inherit;cursor:pointer}
   #hl:empty{min-height:100vh}
   .frow > span:empty::after{content:"\a0";display:inline-block;height:40px;vertical-align:middle}
   .panel.shut h2 i{transform:rotate(90deg)}
@@ -249,6 +254,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
 
   <a class="back" href="/" data-i="back">→ الرجوع للصفحة الرئيسية</a>
 </main>
+<div id="dnote" role="status" hidden><p></p><button type="button" id="dnx" aria-label="✕">✕</button></div>
 
 <div class="sh" id="sh" hidden><div class="shp" id="shp" role="dialog" aria-modal="true" aria-labelledby="shN"></div></div>
 <footer>
@@ -803,6 +809,25 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     rooms: Math.min(5, Math.max(1, +qs.get('r') || 1))
   };
   if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin),1));
+  // تواريخ صارت ماضية في الرابط (رابط محفوظ، رحلة سابقة، أو تاريخ مكتوب يدوياً): ما نرسلها لمواقع الحجز.
+  // نخلي نفس عدد الليالي ونبدأ من بكرة، ونعرض سطر يوضح للزائر، ونحدّث الرابط.
+  let datesMoved = false;
+  if (S.cin < fmt(today)) {
+    const n = Math.min(30, Math.max(1, Math.round((localDay(S.cout) - localDay(S.cin)) / 864e5)));
+    S.cin = fmt(addDays(today, 1)); S.cout = fmt(addDays(localDay(S.cin), n)); datesMoved = true;
+    try { const u = new URLSearchParams(location.search); u.set('ci', S.cin); u.set('co', S.cout); history.replaceState(history.state, '', '?' + u.toString()); } catch(e){}
+  }
+  function renderDNote(){
+    const box = $('dnote'); if (!box) return;
+    if (!datesMoved || box.dataset.closed) { box.hidden = true; return; }
+    box.hidden = false;
+    $('dnx').onclick = () => { box.hidden = true; box.dataset.closed = '1'; };
+    $('dnx').setAttribute('aria-label', lang === 'ar' ? 'إغلاق' : 'Close');
+    if (!box.dataset.timer) box.dataset.timer = setTimeout(() => { box.hidden = true; box.dataset.closed = '1'; }, 12000);
+    box.querySelector('p').textContent = lang === 'ar'
+      ? 'التواريخ صارت قديمة، فعرضنا نفس عدد الليالي من بكرة. تقدر تغيّرها من «تعديل البحث».'
+      : 'Those dates had passed, so we show the same nights from tomorrow. Change them in “Edit search”.';
+  }
   const tp = qs.get('t') || '';
   const F = {type: ['hotel','apartment','resort','villa'].includes(tp) ? tp : '', budget:'', stars: tp === '5star' ? '5' : '', rating8:false, freeCancel:false, sort:'best', near:false};
 
@@ -1190,11 +1215,15 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     if (window.NZKEEP && !h.f) NZKEEP.addHistory(trip);
     $('shp').querySelectorAll('.sha').forEach(x => x.addEventListener('click', () => { sh.dataset.went = '1'; if (window.NZKEEP && !h.f) NZKEEP.markBooked(trip, x.querySelector('span') ? x.querySelector('span').textContent : ''); }));
     sh.hidden = false; document.body.classList.add('shlock');
+    // زر الرجوع في الجوال يسكّر اللوحة بدل ما يطلع من الصفحة
+    if (!(history.state && history.state.nzSheet)) { try { history.pushState(Object.assign({}, history.state, {nzSheet: 1}), ''); } catch(e){} }
     requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add('on')));
     setTimeout(() => { try { $('shx').focus({preventScroll:true}); } catch(e){} }, 60);
   }
-  function closeSheet(){
-    const sh = $('sh'); if (sh.hidden) return;
+  function closeSheet(fromBack){
+    const sh = $('sh'); if (sh.hidden || sh.dataset.closing) return;
+    sh.dataset.closing = '1'; setTimeout(() => { delete sh.dataset.closing; }, 240);
+    if (fromBack !== true && history.state && history.state.nzSheet) { try { history.back(); } catch(e){} }
     sh.classList.remove('on'); document.body.classList.remove('shlock'); $('shp').style.transform = '';
     setTimeout(() => { sh.hidden = true; }, 230);
     if (shFrom) { try { shFrom.focus({preventScroll:true}); } catch(e){} shFrom = null; }
@@ -1202,7 +1231,18 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   (function(){
     const sh = $('sh'), p = $('shp');
     sh.addEventListener('click', e => { if (e.target === sh) closeSheet(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeSheet();
+      // التنقل بزر Tab يبقى داخل اللوحة وهي مفتوحة
+      if (e.key === 'Tab' && !sh.hidden) {
+        const f = [...p.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1], a = document.activeElement;
+        if (e.shiftKey && (a === first || !p.contains(a))) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && (a === last || !p.contains(a))) { e.preventDefault(); first.focus(); }
+      }
+    });
+    window.addEventListener('popstate', () => { if (!sh.hidden) closeSheet(true); });
     // سحبة لتحت تسكّر اللوحة
     let y0 = null, dy = 0;
     p.addEventListener('touchstart', e => { y0 = p.scrollTop <= 0 ? e.touches[0].clientY : null; dy = 0; }, {passive:true});
@@ -1294,7 +1334,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     $('title').textContent = L.title(n);
     document.title = (lang === 'ar' ? 'نُزُل — ' : 'Nuzul — ') + L.title(n);
     $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span><span>🛏️ ' + L.rooms(S.rooms) + '</span>';
-    renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits(); renderNote(); openAsked();
+    renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits(); renderNote(); renderDNote(); openAsked();
     if (window.NZKEEP) NZKEEP.saveSearch(S, (k && DEST[k].ar) || S.n || S.d);
     $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
     $('mailBtn').href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent(L.mailSub) + '&body=' + encodeURIComponent(L.mailBody(n, S.cin, S.cout, S.adults));
@@ -1316,6 +1356,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     const raw = v; const k = ALIAS[raw] || raw.toLowerCase();
     S.d = (DEST[k] && k === 'makkah') ? 'Makkah' : (DEST[k] && k === 'madinah') ? 'Madinah' : (DEST[k] ? k.replace(/\b\w/g, c => c.toUpperCase()) : raw);
     S.n = raw; canon(); S.cin = isDate($('e_cin').value) ? $('e_cin').value : S.cin; S.cout = isDate($('e_cout').value) ? $('e_cout').value : S.cout;
+    if (S.cin < fmt(today)) { S.cin = fmt(addDays(today, 1)); if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin), 3)); }
     if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin),1));
     S.adults = +$('e_ad').value; S.rooms = +$('e_rm').value; F.near = false;
     const u = new URLSearchParams({d:S.d, n:S.n, ci:S.cin, co:S.cout, a:S.adults, r:S.rooms});
