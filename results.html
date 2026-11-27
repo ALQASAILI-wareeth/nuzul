@@ -52,6 +52,7 @@
   .quick > span{display:flex;gap:8px;flex:1 1 260px}
   .quick a{flex:1;text-align:center;padding:11px 6px;border-radius:10px;font-weight:800;font-size:14.5px;color:#fff;white-space:nowrap}
   .panel h2{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  #fToggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:start;cursor:pointer}
   .panel h2 i{font-style:normal;transition:transform .2s;color:var(--muted)}
   .panel.shut h2{margin-bottom:0}
   #fpanel{margin-bottom:14px}
@@ -181,7 +182,7 @@
   </div>
 </header>
 
-<div class="top" id="top">
+<section class="top" id="top" aria-labelledby="title">
   <div class="wrap">
     <h1 id="title"></h1>
     <div class="meta" id="meta"></div>
@@ -195,12 +196,12 @@
       <button class="go" id="e_go" type="button" data-i="update">تحديث</button>
     </form>
   </div>
-</div>
+</section>
 
 <main class="wrap">
   <div class="qnote" id="qnote" hidden></div>
   <div class="panel" id="fpanel">
-    <h2 id="fToggle" role="button" tabindex="0" aria-expanded="true"><span data-i="fH">🎯 حدّد اللي يناسبك (اختياري)</span><i aria-hidden="true">▾</i></h2>
+    <h2><button type="button" id="fToggle" aria-expanded="true"><span data-i="fH">🎯 حدّد اللي يناسبك (اختياري)</span><i aria-hidden="true">▾</i></button></h2>
     <div class="frow near" id="nearRow"><b data-i="fNear">الموقع</b><span id="nearChips"></span></div>
     <div class="frow"><b data-i="fType">نوع الإقامة</b><span id="typeChips"></span></div>
     <div class="frow"><b data-i="fBudget">الميزانية/ليلة</b><span id="budgetChips"></span></div>
@@ -222,7 +223,7 @@
 function set(shut){p.classList.toggle('shut',shut);t.setAttribute('aria-expanded',String(!shut));}
 set(window.innerWidth<=860);
 t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
-t.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(!p.classList.contains('shut'));}});})();
+})();
 (function(){var t=new URLSearchParams(location.search).get('t');if(['apartment','resort','villa'].indexOf(t)<0)document.getElementById('hs').hidden=false;})();
   </script>
   <div class="chn nz-low"><div><b data-i="chH">🔔 العروض توصلك أول بأول</b><span data-i="chP">عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.</span></div><nav><a class="w" href="https://whatsapp.com/channel/0029Vb8niNp3wtb9Lh3q2l3X" target="_blank" rel="noopener" data-i="chWa">قناة واتساب</a><a class="t" href="https://t.me/nuzul_travel" target="_blank" rel="noopener" data-i="chTg">تيليجرام</a></nav></div>
@@ -1090,7 +1091,7 @@ t.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.prev
         '<div class="hb"><button type="button" class="cmp">' + L.cmp + '</button></div>';
       c.querySelector('.hn').textContent = lang === 'ar' ? h.ar : h.n;
       if (lang === 'ar') c.querySelector('.he').textContent = h.f ? '' : h.n;
-      c.tabIndex = 0; c.setAttribute('role', 'button');
+      // البطاقة نفسها تنفتح بالضغط، ومن الكيبورد عن طريق زر «قارن» اللي داخلها (بدون عناصر تفاعلية متداخلة)
       const open = () => openSheet(c, {h:h, g:g, city:(h.c || H.city), extra:extra, im:c.querySelector('.hi img'), hc:hc, ex:ex, bk:bk, ag:ag});
       c.onclick = e => { if (e.target.closest('.fv')) return; open(); };
       c.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); open(); } };
@@ -1135,7 +1136,7 @@ t.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.prev
   window.addEventListener('focus', backFromBooking);
   function openSheet(from, d){
     const L = T[lang], h = d.h, sh = $('sh');
-    shFrom = from;
+    shFrom = (from && from.contains && from.contains(document.activeElement)) ? document.activeElement : ((from && from.querySelector && from.querySelector('.cmp')) || from);
     const src = d.im && !d.im.parentNode.classList.contains('noimg') ? d.im.currentSrc || d.im.src : '';
     const a = (cls, name, href) => '<a class="sha ' + cls + '" target="_blank" rel="noopener sponsored" href="' + esc(href) + '"><span>' + esc(name) + '</span><small>' + L.shGo + ' ↗</small></a>';
     $('shp').innerHTML = '<div class="shg" aria-hidden="true"><i></i></div><button type="button" class="shx" id="shx" aria-label="' + L.shClose + '">✕</button>' +

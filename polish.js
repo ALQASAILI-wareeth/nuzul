@@ -44,8 +44,11 @@
   // الحاوية موجودة في الصفحة من البداية (حجز مساحة)، ولو مو موجودة ننشئها مثل قبل
   var badges = D.querySelector('.search > .nz-badges') || D.createElement('div');
   badges.className = 'nz-badges';
+  // على الجوال الشريط يتمرّر أفقياً، فلازم يوصله الكيبورد (قاعدة إتاحة)
+  badges.tabIndex = 0; badges.setAttribute('role', 'group');
   function drawBadges() {
     badges.innerHTML = TR[lang()].map(function (t) { return '<span>' + svg(t[0]) + t[1] + '</span>'; }).join('');
+    badges.setAttribute('aria-label', lang() === 'en' ? 'Why NUZUL' : 'مزايا نُزُل');
   }
   if (search) { search.appendChild(badges); drawBadges(); }
 
