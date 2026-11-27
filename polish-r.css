@@ -63,8 +63,8 @@ main{margin-top:-22px;position:relative;background:var(--bg);background:linear-g
 .tip .ic .nze{width:26px;height:26px;color:#c98600}
 .edit .nze{color:var(--navy2)}
 h2 .nze,h3 .nze{color:var(--teal)}
-.top.ph h1{text-shadow:0 1px 3px rgba(0,20,40,.7),0 2px 16px rgba(0,20,40,.55)}
-.top.ph .meta span{background:rgba(6,40,70,.42);border-color:rgba(255,255,255,.30)}
+.top.ph h1,.top.phs h1{text-shadow:0 1px 3px rgba(0,20,40,.7),0 2px 16px rgba(0,20,40,.55)}
+.top.ph .meta span,.top.phs .meta span{background:rgba(6,40,70,.42);border-color:rgba(255,255,255,.30)}
 
 /* وضوح الكتابة + علامات الصح */
 :root{--muted:#48566a}

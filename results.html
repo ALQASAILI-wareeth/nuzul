@@ -32,6 +32,7 @@
 
   .top{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#0a93c2 100%);color:#fff;padding:22px 0 26px;position:relative;background-size:cover;background-position:center}
   .top.ph{padding:70px 0 26px;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+  .top.phs{text-shadow:0 1px 6px rgba(0,0,0,.55)}
   .top h1{font-size:clamp(24px,5.5vw,34px);font-weight:800;line-height:1.25}
   .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:15px;opacity:.92}
   .meta span{display:inline-flex;align-items:center;gap:5px}
@@ -169,7 +170,7 @@
   footer a{color:#fff;opacity:.85}
   .creds{margin-top:10px;font-size:12px}.creds summary{cursor:pointer;opacity:.8}.creds ul{margin:6px 0 0;padding-inline-start:18px;display:grid;gap:2px;opacity:.85}.creds p{margin-top:6px;opacity:.8}
 </style>
-<link rel="stylesheet" href="polish-r.css?v=20261125m">
+<link rel="stylesheet" href="polish-r.css?v=20261127a">
 </head>
 <body>
 <header>
@@ -225,6 +226,8 @@ set(window.innerWidth<=860);
 t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
 })();
 (function(){var t=new URLSearchParams(location.search).get('t');if(['apartment','resort','villa'].indexOf(t)<0)document.getElementById('hs').hidden=false;})();
+// صورة الوجهة المحفوظة من زيارة سابقة: نطبقها قبل أول رسم عشان الترويسة تطلع بطولها الكامل من البداية بدون قفز
+(function(){try{var o=JSON.parse(localStorage.getItem('nuzul_wiki'));if(!o||typeof o!=='object'||typeof o.t!=='number'||o.t<Date.now()-6048e5||o.t>Date.now()+6e4||!o.hero||typeof o.hero!=='object')return;var d=(new URLSearchParams(location.search).get('d')||'').replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g,'').replace(/\s+/g,' ').trim().slice(0,80)||'Dubai',c=o.hero['u:'+d.toLowerCase()];if(!c||typeof c.src!=='string'||typeof c.file!=='string')return;var u=new URL(c.src);if(u.protocol!=='https:'||['upload.wikimedia.org','thumb.wikimedia.org'].indexOf(u.hostname)<0)return;var t=document.getElementById('top');t.style.backgroundImage='linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("'+u.href.replace(/["'()\\\s]/g,encodeURIComponent)+'")';t.classList.add('ph');}catch(e){}})();
   </script>
   <div class="chn nz-low"><div><b data-i="chH">🔔 العروض توصلك أول بأول</b><span data-i="chP">عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.</span></div><nav><a class="w" href="https://whatsapp.com/channel/0029Vb8niNp3wtb9Lh3q2l3X" target="_blank" rel="noopener" data-i="chWa">قناة واتساب</a><a class="t" href="https://t.me/nuzul_travel" target="_blank" rel="noopener" data-i="chTg">تيليجرام</a></nav></div>
   <h3 id="cardsH">قارن على أكثر من موقع</h3>
@@ -773,6 +776,24 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   // ويكيميديا صارت تخدم الصور المصغّرة من thumb.wikimedia.org (الأصلية تبقى على upload)
   const IMG_HOSTS = ['upload.wikimedia.org', 'thumb.wikimedia.org'];
   const safeImg = u => { try { const x = new URL(u); return (x.protocol === 'https:' && IMG_HOSTS.indexOf(x.hostname) >= 0) ? x.href.replace(/["'()\\\s]/g, encodeURIComponent) : ''; } catch(e) { return ''; } };
+  // ويكيبيديا: نحفظ نتائج الصور في المتصفح 7 أيام (عشان ما نكرر الطلبات)، وإذا رجعت 429 أو خطأ نوقف الطلبات 10 دقائق.
+  // في الحالتين تبقى الصفحة شغالة: الترويسة الزرقاء وصور المدن المحلية بدل صور ويكيبيديا.
+  const WK = 'nuzul_wiki', WCOOL = 'nuzul_wiki_cool', WTTL = 7 * 864e5;
+  const WSTORE = (() => { try { const o = JSON.parse(localStorage.getItem(WK)); if (o && typeof o === 'object' && !Array.isArray(o) && typeof o.t === 'number' && o.t > Date.now() - WTTL && o.t <= Date.now() + 6e4) return o; } catch(e) {} return {t: Date.now()}; })();
+  const wsec = n => (WSTORE[n] && typeof WSTORE[n] === 'object' && !Array.isArray(WSTORE[n])) ? WSTORE[n] : (WSTORE[n] = {});
+  let wSaveT = 0;
+  function wSave(){ clearTimeout(wSaveT); wSaveT = setTimeout(() => { try { let j = JSON.stringify(WSTORE); if (j.length > 300000) { WSTORE.wiki = {}; WSTORE.gal = {}; j = JSON.stringify(WSTORE); } localStorage.setItem(WK, j); } catch(e) {} }, 400); }
+  const wCool = () => { try { return +sessionStorage.getItem(WCOOL) > Date.now(); } catch(e) { return false; } };
+  const wStop = () => { try { sessionStorage.setItem(WCOOL, String(Date.now() + 6e5)); } catch(e) {} };
+  async function wjson(u){
+    if (wCool()) throw new Error('wiki paused');
+    let r; try { r = await fetch(u); } catch(e) { wStop(); throw e; }
+    if (!r.ok) { if (r.status === 429 || r.status >= 500) wStop(); throw new Error('wiki ' + r.status); }
+    return r.json();
+  }
+  const wStr = (x, n) => typeof x === 'string' ? x.slice(0, n) : '';
+  // أي شي نقرأه من التخزين نتحقق منه من جديد (رابط ويكيميديا فقط، نصوص قصيرة)
+  function wPic(o){ if (!o || typeof o !== 'object') return null; const src = safeImg(o.src), file = wStr(o.file, 200); if (!src || !file || badPic(file)) return null; return {src: src, file: file, raw: wStr(o.raw, 300) || file, who: wStr(o.who, 60), lic: wStr(o.lic, 40), wide: o.wide === true}; }
   const S = {
     d: clean(qs.get('d')) || 'Dubai',
     n: clean(qs.get('n')),
@@ -926,9 +947,11 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   const genTitle = city => NOPIC[city] ? {ar: 'اختيارات جاهزة لبحثك', en: 'Ready-made picks for your search'} : null;
   async function gallery(title){
     if (title in GAL) return GAL[title];
+    const gc = wsec('gal')[title];
+    if (Array.isArray(gc)) return (GAL[title] = gc.map(wPic).filter(Boolean));
     const wl = /[؀-ۿ]/.test(title) ? 'ar' : 'en', out = [];
     try {
-      const d = await (await fetch('https://' + wl + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&generator=images&gimlimit=50&prop=imageinfo&iiprop=url|size|mime|extmetadata&iiurlwidth=640&titles=' + encodeURIComponent(title))).json();
+      const d = await wjson('https://' + wl + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&generator=images&gimlimit=50&prop=imageinfo&iiprop=url|size|mime|extmetadata&iiurlwidth=640&titles=' + encodeURIComponent(title));
       Object.values((d.query || {}).pages || {}).forEach(p => {
         const ii = (p.imageinfo || [])[0]; if (!ii || p.imagerepository !== 'shared' || !ii.thumburl) return;
         if (ii.mime !== 'image/jpeg' || ii.width < 700 || badPic(p.title)) return;
@@ -938,6 +961,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
         const su = safeImg(ii.thumburl); if (!su) return;
         out.push({wide: r >= 1.2, src: su, file: String(p.title).replace(/^[^:]+:/, ''), who: ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60), lic: (md.LicenseShortName || {}).value || ''});
       });
+      wsec('gal')[title] = out; wSave();
     } catch(e) {}
     return (GAL[title] = out);
   }
@@ -991,18 +1015,21 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   async function fillWiki(){
     const run = ++wikiRun, boxes = [...document.querySelectorAll('#hl .hi[data-w]')];
     if (!boxes.length) return;
+    const wc = wsec('wiki');
+    boxes.forEach(b => b.dataset.w.split('|').map(decodeURIComponent).forEach(t => { if (!(t in WIKI) && t in wc) { const v = wc[t] === null ? null : wPic(wc[t]); if (v || wc[t] === null) WIKI[t] = v; } }));
     const need = [...new Set(boxes.flatMap(b => b.dataset.w.split('|').map(decodeURIComponent)))].filter(t => !(t in WIKI));
     try {
       for (const wl of ['en', 'ar']) { const nl = need.filter(t => /[؀-ۿ]/.test(t) === (wl === 'ar'));
       for (let i = 0; i < nl.length; i += 40) {
         const part = nl.slice(i, i + 40);
-        const d = await (await fetch('https://' + wl + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=640&pilicense=free&titles=' + encodeURIComponent(part.join('|')))).json();
+        const d = await wjson('https://' + wl + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=640&pilicense=free&titles=' + encodeURIComponent(part.join('|')));
         const q = d.query || {}, map = {};
         part.forEach(t => map[t] = t);
         (q.normalized || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         (q.redirects || []).forEach(n => { part.forEach(t => { if (map[t] === n.from) map[t] = n.to; }); });
         const by = {}; Object.values(q.pages || {}).forEach(p => { by[p.title] = p; });
         part.forEach(t => { const p = by[map[t]]; WIKI[t] = (p && p.thumbnail && p.pageimage && !badPic(p.pageimage) && !unfitPic(p.pageimage) && safeImg(p.thumbnail.source)) ? {src: safeImg(p.thumbnail.source), file: decodeURIComponent(p.pageimage).replace(/_/g, ' '), raw: p.pageimage} : null; });
+        part.forEach(t => { wc[t] = WIKI[t]; }); wSave();
       } }
     } catch(e) {}
     if (run !== wikiRun) return;
@@ -1027,7 +1054,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     if (!fl.length) return;
     try {
       for (let i = 0; i < fl.length; i += 40) {
-        const m = await (await fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata&titles=' + encodeURIComponent(fl.slice(i, i + 40).map(f => 'File:' + f).join('|')))).json();
+        const m = await wjson('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata&titles=' + encodeURIComponent(fl.slice(i, i + 40).map(f => 'File:' + f).join('|')));
         Object.values((m.query || {}).pages || {}).forEach(p => {
           const md = ((p.imageinfo || [])[0] || {}).extmetadata || {}, name = (p.title || '').replace(/^File:/, '');
           const w = Object.values(files).find(x => x.file === name); if (!w) return;
@@ -1037,6 +1064,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
         });
       }
       if (run === wikiRun) renderCredits();
+      wSave();
     } catch(e) {}
   }
 
@@ -1203,34 +1231,53 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   // صورة الوجهة لأي مدينة في العالم (صورة حرة من ويكيبيديا/ويكيميديا)
   const WIKI_NAME = {makkah:'Mecca', madinah:'Medina', 'abu dhabi':'Abu Dhabi', 'kuala lumpur':'Kuala Lumpur', cairo:'Cairo', tbilisi:'Tbilisi', batumi:'Batumi', maldives:'Maldives', salalah:'Salalah', bangkok:'Bangkok'};
   let heroFor = '';
+  const HERO_BG = src => 'linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("' + src + '")';
+  const heroKeys = name => ['n:' + name.toLowerCase(), 'u:' + S.d.toLowerCase()];
+  // الترويسة ما تغيّر طولها بعد ما تظهر: الطول الكامل (ph) بس إذا الصورة محفوظة من زيارة سابقة وطبقناها قبل أول رسم،
+  // وغير كذا تنزل الصورة في نفس المكان بدون ما تدفع الصفحة (phs)
+  function showHero(c){
+    const top = $('top');
+    top.style.backgroundImage = HERO_BG(c.src);
+    top.classList.add(top.classList.contains('ph') ? 'ph' : 'phs');
+    HERO_CR = [c.file, c.who, c.lic]; renderCredits();
+  }
   async function loadHero(){
     const k = key(), name = (k && WIKI_NAME[k]) || S.d;
-    if (!name || heroFor === name) return; heroFor = name;
-    const top = $('top');
-    top.classList.remove('ph'); top.style.backgroundImage = ''; HERO_CR = null;
+    if (!name || heroFor === name) return;
+    const first = !heroFor; heroFor = name;
+    const top = $('top'), hc = wsec('hero'), keys = heroKeys(name);
+    const ck = keys.find(x => hc[x] === null || wPic(hc[x])), cached = ck ? (hc[ck] === null ? null : wPic(hc[ck])) : undefined;
+    if (!(first && cached && top.classList.contains('ph'))) { top.classList.remove('ph', 'phs'); top.style.backgroundImage = ''; HERO_CR = null; }
+    if (cached === null) return;
+    if (cached) {
+      showHero(cached);
+      // لو الصورة المحفوظة انحذفت من ويكيميديا: نشيلها من الذاكرة والترويسة تبقى زرقاء
+      const t = new Image(); t.onerror = () => { keys.forEach(x => delete hc[x]); wSave(); if (heroFor === name) { top.style.backgroundImage = ''; top.classList.remove('phs'); HERO_CR = null; renderCredits(); } }; t.src = cached.src;
+      return;
+    }
     const ar = /[؀-ۿ]/.test(name), wiki = ar ? 'ar' : 'en';
     try {
       let pg = null;
       for (const tt of [name, tourTitle(name)]) {
         const q = 'https://' + wiki + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=1280&pilicense=free&titles=' + encodeURIComponent(tt);
-        const d = await (await fetch(q)).json();
+        const d = await wjson(q);
         const x = Object.values((d.query || {}).pages || {})[0] || {};
         if (heroFor !== name) return;
         if (x.thumbnail && x.pageimage && !badPic(x.pageimage) && !unfitPic(x.pageimage) && safeImg(x.thumbnail.source)) { pg = x; break; }
       }
       // لا صورة رئيسية مناسبة: نترك الترويسة الزرقاء بدل صورة عشوائية من قائمة الصور
-      if (!pg) return;
+      if (!pg) { keys.forEach(x => hc[x] = null); wSave(); return; }
       const src = safeImg(pg.thumbnail.source); if (!src) return;
       await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
       if (heroFor !== name) return;
-      top.style.backgroundImage = 'linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("' + src + '")';
-      top.classList.add('ph');
-      const file = decodeURIComponent(pg.pageimage).replace(/_/g, ' ');
-      HERO_CR = [file, '', '']; renderCredits();
+      const c = {src: src, file: decodeURIComponent(pg.pageimage).replace(/_/g, ' '), who: '', lic: ''};
+      showHero(c);
+      keys.forEach(x => hc[x] = c); wSave();
       try {
-        const m = await (await fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata&titles=File:' + encodeURIComponent(pg.pageimage))).json();
+        const m = await wjson('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata&titles=File:' + encodeURIComponent(pg.pageimage));
         const md = ((Object.values(m.query.pages)[0].imageinfo || [])[0] || {}).extmetadata || {};
-        HERO_CR = [file, ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60), (md.LicenseShortName || {}).value || '']; renderCredits();
+        c.who = ((md.Artist || {}).value || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 60); c.lic = String((md.LicenseShortName || {}).value || '').slice(0, 40);
+        wSave(); if (heroFor === name) { HERO_CR = [c.file, c.who, c.lic]; renderCredits(); }
       } catch(e){}
     } catch(e){}
   }
