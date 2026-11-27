@@ -41,7 +41,8 @@
   function svg(n) { return '<svg class="nzi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + I[n] + '</svg>'; }
 
   var search = D.querySelector('.search');
-  var badges = D.createElement('div');
+  // الحاوية موجودة في الصفحة من البداية (حجز مساحة)، ولو مو موجودة ننشئها مثل قبل
+  var badges = D.querySelector('.search > .nz-badges') || D.createElement('div');
   badges.className = 'nz-badges';
   function drawBadges() {
     badges.innerHTML = TR[lang()].map(function (t) { return '<span>' + svg(t[0]) + t[1] + '</span>'; }).join('');

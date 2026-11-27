@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://upload.wikimedia.org https://thumb.wikimedia.org https://commons.wikimedia.org; connect-src 'self' https://en.wikipedia.org https://ar.wikipedia.org https://commons.wikimedia.org https://cloudflareinsights.com https://*.cloudflareinsights.com; media-src 'self'; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://upload.wikimedia.org https://thumb.wikimedia.org https://commons.wikimedia.org; connect-src 'self' https://en.wikipedia.org https://ar.wikipedia.org https://commons.wikimedia.org https://cloudflareinsights.com https://*.cloudflareinsights.com; media-src 'self'; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>نُزُل — قارن مواقع حجز الفنادق</title>
 <meta name="description" content="قارن بين Booking.com و Hotels.com و Expedia من مكان واحد، مع فلاتر للميزانية والنجوم ونوع الإقامة والقرب من الحرم.">
@@ -15,9 +15,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="نُزُل">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>@font-face{font-family:'Tajawal';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/tajawal-arabic-400-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}@font-face{font-family:'Tajawal';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/tajawal-arabic-500-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}@font-face{font-family:'Tajawal';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/tajawal-arabic-700-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}@font-face{font-family:'Tajawal';font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/tajawal-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}@font-face{font-family:'Tajawal';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/tajawal-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Tajawal';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/tajawal-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Tajawal';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/tajawal-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Tajawal';font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/tajawal-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}</style>
 <style>
   :root{--navy:#062F52;--navy2:#0062A8;--sand:#FFB238;--sand2:#FFD27A;--teal:#00C2D1;--bg:#dcecfa;--card:#fff;--ink:#1d2733;--muted:#5f6b78;--line:#dce7ee;--radius:16px}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -57,6 +55,13 @@
   .panel h2 i{font-style:normal;transition:transform .2s;color:var(--muted)}
   .panel.shut h2{margin-bottom:0}
   #fpanel{margin-bottom:14px}
+  /* حجز مكان العنوان وسطر التفاصيل قبل ما يعبّيهم السكربت (يمنع قفز الصفحة) */
+  #title:empty::before{content:"\a0"}
+  .meta:empty{min-height:32px}
+  @media(max-width:430px){.meta:empty{min-height:73px}}
+  #hsTitle:empty::before{content:"\a0"}
+  #hl:empty{min-height:100vh}
+  .frow > span:empty::after{content:"\a0";display:inline-block;height:40px;vertical-align:middle}
   .panel.shut h2 i{transform:rotate(90deg)}
   .panel.shut .frow{display:none!important}
   .frow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-top:1px dashed var(--line)}
@@ -193,7 +198,6 @@
 </div>
 
 <main class="wrap">
-  <div class="chn"><div><b data-i="chH">🔔 العروض توصلك أول بأول</b><span data-i="chP">عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.</span></div><nav><a class="w" href="https://whatsapp.com/channel/0029Vb8niNp3wtb9Lh3q2l3X" target="_blank" rel="noopener" data-i="chWa">قناة واتساب</a><a class="t" href="https://t.me/nuzul_travel" target="_blank" rel="noopener" data-i="chTg">تيليجرام</a></nav></div>
   <div class="qnote" id="qnote" hidden></div>
   <div class="panel" id="fpanel">
     <h2 id="fToggle" role="button" tabindex="0" aria-expanded="true"><span data-i="fH">🎯 حدّد اللي يناسبك (اختياري)</span><i aria-hidden="true">▾</i></h2>
@@ -212,6 +216,16 @@
     <div class="hl" id="hl"></div>
     <p class="hnote" data-i="hsNote">* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.</p>
   </section>
+  <script>
+  // يشتغل قبل أول رسم للصفحة: حالة لوحة الفلاتر، وإظهار قسم الفنادق المقترحة مبكراً (عشان الصفحة ما تقفز)
+(function(){var p=document.getElementById('fpanel'),t=document.getElementById('fToggle');if(!p||!t)return;
+function set(shut){p.classList.toggle('shut',shut);t.setAttribute('aria-expanded',String(!shut));}
+set(window.innerWidth<=860);
+t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
+t.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(!p.classList.contains('shut'));}});})();
+(function(){var t=new URLSearchParams(location.search).get('t');if(['apartment','resort','villa'].indexOf(t)<0)document.getElementById('hs').hidden=false;})();
+  </script>
+  <div class="chn nz-low"><div><b data-i="chH">🔔 العروض توصلك أول بأول</b><span data-i="chP">عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.</span></div><nav><a class="w" href="https://whatsapp.com/channel/0029Vb8niNp3wtb9Lh3q2l3X" target="_blank" rel="noopener" data-i="chWa">قناة واتساب</a><a class="t" href="https://t.me/nuzul_travel" target="_blank" rel="noopener" data-i="chTg">تيليجرام</a></nav></div>
   <h3 id="cardsH">قارن على أكثر من موقع</h3>
   <p class="note" data-i="cardsNote">نفس البحث ونفس الفلاتر تنفتح في كل موقع. الأسعار تختلف أحياناً بين المواقع، فقارن قبل ما تحجز.</p>
   <div class="cards" id="cards"></div>
@@ -1084,6 +1098,8 @@
       if (fb) fb.onclick = () => { NZKEEP.toggleFav({city:k, d:S.d, cityAr:DEST[k] ? DEST[k].ar : '', n:h.n, ar:h.ar}); if (HTAB === '_f' && !NZKEEP.favCount(k)) HTAB = ''; renderHotels(); };
       hl.append(c);
     });
+    // أول صورة في القائمة هي أكبر عنصر يظهر للزائر: نحمّلها فوراً بدل التحميل الكسول
+    { const fi = hl.querySelector('.hi img'); if (fi) { fi.loading = 'eager'; fi.fetchPriority = 'high'; } }
     fillWiki();
   }
 
@@ -1256,12 +1272,5 @@
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "467e088c51954c0e9555402613322308"}'></script><!-- End Cloudflare Web Analytics -->
-<script>
-(function(){var p=document.getElementById('fpanel'),t=document.getElementById('fToggle');if(!p||!t)return;
-function set(shut){p.classList.toggle('shut',shut);t.setAttribute('aria-expanded',String(!shut));}
-set(window.innerWidth<=860);
-t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
-t.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(!p.classList.contains('shut'));}});})();
-</script>
 </body>
 </html>
