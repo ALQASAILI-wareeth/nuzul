@@ -67,7 +67,13 @@
   /* Search */
   .search{position:relative;z-index:2;margin-top:-70px}
   .sbox{background:var(--card);border-radius:20px;box-shadow:0 14px 40px rgba(6,47,82,.18);padding:18px;display:grid;gap:12px;
-        grid-template-columns:minmax(0,2fr) repeat(4,minmax(0,1fr)) auto;align-items:end;border:3px solid var(--teal)}
+        grid-template-columns:minmax(0,1.7fr) repeat(2,minmax(150px,1.2fr)) repeat(3,minmax(0,.75fr)) auto;align-items:end;border:3px solid var(--teal)}
+  .f.ages{grid-column:1/-1}
+  .f.ages[hidden]{display:none}
+  .ages .al{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+  .sbox .ages .al select{padding-inline-start:10px;padding-inline-end:28px;background-position:left 10px center}
+  html[lang=en] .sbox .ages .al select{background-position:right 10px center}
+  .f select.miss{border-color:#b3261e}
   .f label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
   .f input,.f select{width:100%;height:48px;border:1.5px solid var(--line);border-radius:12px;padding:0 12px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
   .f input:focus,.f select:focus{outline:none;border-color:var(--navy2)}
@@ -92,8 +98,11 @@
   .alt a:hover{background:var(--navy2);color:#fff}
   .alt a.off{opacity:.5;pointer-events:none}
   @media(max-width:860px){
-    .sbox{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-    .f.dest,.go,.err{grid-column:1/-1}
+    .sbox{grid-template-columns:repeat(6,minmax(0,1fr))}
+    .sbox>.f{grid-column:span 2}
+    .sbox>.f.d2{grid-column:span 3}
+    .f.dest,.go,.err,.sbox>.f.ages{grid-column:1/-1}
+    .sbox>.go{order:1}.sbox>.err,.sbox>.quick{order:2}
   }
 
   /* Sections */
@@ -195,11 +204,11 @@
       <input id="dest" list="cities" data-ph="destPh" placeholder="مثال: دبي، إسطنبول، القاهرة" autocomplete="off">
       <datalist id="cities"></datalist>
     </div>
-    <div class="f">
+    <div class="f d2">
       <label for="cin" data-i="cinL">الوصول</label>
       <input id="cin" type="date">
     </div>
-    <div class="f">
+    <div class="f d2">
       <label for="cout" data-i="coutL">المغادرة</label>
       <input id="cout" type="date">
     </div>
@@ -208,10 +217,18 @@
       <select id="adults"></select>
     </div>
     <div class="f">
+      <label for="kids" data-i="kidsL">الأطفال</label>
+      <select id="kids"></select>
+    </div>
+    <div class="f">
       <label for="rooms" data-i="roomsL">الغرف</label>
       <select id="rooms"></select>
     </div>
     <a class="go off" id="go" href="#" data-i="searchB">🔍 ابحث</a>
+    <div class="f ages" id="agesF" hidden>
+      <label id="agesL" data-i="agesL">عمر كل طفل وقت الوصول</label>
+      <div class="al" id="ages" role="group" aria-labelledby="agesL"></div>
+    </div>
     <div class="err" id="err"></div>
     <div class="quick"><span data-i="quickL">وجهات هالموسم:</span><span id="quick"></span></div>
   </form>
@@ -298,7 +315,7 @@
       h1: 'قارن مواقع الحجز<br>من <span>مكان واحد</span>',
       heroP: 'ابحث مرة وحدة، وقارن الأسعار على أشهر مواقع الحجز، بدون أي رسوم إضافية.',
       destL: 'إلى أين تسافر؟', destPh: 'مثال: دبي، إسطنبول، القاهرة', cinL: 'الوصول', coutL: 'المغادرة',
-      adultsL: 'البالغون', roomsL: 'الغرف', searchB: '🔍 ابحث',
+      adultsL: 'البالغون', roomsL: 'الغرف', kidsL: 'الأطفال', agesL: 'عمر كل طفل وقت الوصول', ageOpt: 'العمر', age0: 'أقل من سنة', ageN: i => 'عمر الطفل ' + i, errAges: 'اختر عمر كل طفل عشان تطلع لك الغرف والأسعار الصح.', searchB: '🔍 ابحث',
       altL: 'قارن السعر نفسه على موقع ثاني:', quickL: 'وجهات هالموسم:', trustL: 'نقارن لك بين:', showAll: n=>'عرض كل المدن ('+n+')', showLess: 'عرض أقل', errDest: 'اكتب المدينة اللي تبي تسافر لها.', errDates: 'اختر تاريخ الوصول والمغادرة.', errOrder: 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول.', errPast: 'تاريخ الوصول راح، اختر تاريخ من اليوم وطالع.',
       destH: 'وجهات حول العالم', destSub: 'اضغط على أي مدينة لتشاهد الفنادق المتاحة فيها، أو ابحث عن أي مدينة في العالم من خانة البحث',
       typesH: 'اختر نوع إقامتك', typesSub: 'اكتب وجهتك في البحث أعلاه، ثم اختر النوع المناسب',
@@ -320,7 +337,7 @@
       h1: 'Compare booking sites<br>in <span>one place</span>',
       heroP: 'Search once and compare Booking, Hotels.com, Expedia and Agoda. No extra fees.',
       destL: 'Where are you going?', destPh: 'e.g. Paris, New York, Dubai', cinL: 'Check-in', coutL: 'Check-out',
-      adultsL: 'Adults', roomsL: 'Rooms', searchB: '🔍 Search',
+      adultsL: 'Adults', roomsL: 'Rooms', kidsL: 'Children', agesL: 'Each child’s age at check-in', ageOpt: 'Age', age0: 'Under 1', ageN: i => 'Age of child ' + i, errAges: 'Please choose each child’s age so the sites show the right rooms and prices.', searchB: '🔍 Search',
       altL: 'Compare the same stay on another site:', quickL: 'In season now:', trustL: 'We compare:', showAll: n=>'Show all cities ('+n+')', showLess: 'Show less', errDest: 'Type the city you want to visit.', errDates: 'Choose your check-in and check-out dates.', errOrder: 'Check-out must be after check-in.', errPast: 'That check-in date has passed. Please pick today or later.',
       destH: 'Destinations around the world', destSub: 'Tap any city to see available hotels, or search any city in the world above',
       typesH: 'Choose your type of stay', typesSub: 'Type your destination in the search above, then pick a stay type',
@@ -437,6 +454,7 @@
   // صفحة المقارنة داخل نُزُل
   function resultsUrl(text, opts = {}, type = ''){
     const p = new URLSearchParams({d: toEn(text), n: text.trim(), ci: opts.cin || '', co: opts.cout || '', a: opts.adults || 2, r: opts.rooms || 1});
+    if (opts.ages && opts.ages.length) { p.set('c', opts.ages.length); p.set('ca', opts.ages.join(',')); }
     if (type) p.set('t', type);
     return '/results.html?' + p.toString();
   }
@@ -448,6 +466,24 @@
   $('cout').value = fmt(addDays(today,4));
   for (let i=1;i<=10;i++) $('adults').add(new Option(i, i, i===2, i===2));
   for (let i=1;i<=5;i++) $('rooms').add(new Option(i, i));
+  for (let i=0;i<=6;i++) $('kids').add(new Option(i, i));
+  // أعمار الأطفال: قائمة لكل طفل، ونحفظ اللي اختاره لو غيّر العدد
+  function renderAges(){
+    const n = +$('kids').value || 0, box = $('ages'), old = [...box.querySelectorAll('select')].map(x => x.value);
+    box.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+      const sel = document.createElement('select');
+      sel.setAttribute('aria-label', t('ageN')(i + 1));
+      sel.add(new Option(t('ageOpt'), ''));
+      sel.add(new Option(t('age0'), '0'));
+      for (let a = 1; a <= 17; a++) sel.add(new Option(a, a));
+      sel.value = old[i] || '';
+      sel.addEventListener('change', () => { sel.classList.remove('miss'); update(); renderTypes(); });
+      box.append(sel);
+    }
+    $('agesF').hidden = !n;
+  }
+  function kidAges(){ return [...$('ages').querySelectorAll('select')].map(x => x.value); }
   $('yr').textContent = today.getFullYear();
 
   function update(){
@@ -458,12 +494,13 @@
     else if (!cin || !cout) msg = t('errDates');
     else if (cin < fmt(new Date())) msg = t('errPast');
     else if (cout <= cin) msg = t('errOrder');
+    else if (kidAges().some(v => v === '')) msg = t('errAges');
     $('err').textContent = msg;
     $('err').style.display = msg ? 'block' : 'none';
     const ok = dest && !msg;
     $('go').classList.toggle('off', !ok);
     $('go').setAttribute('aria-disabled', ok ? 'false' : 'true');
-    const o = {cin, cout, adults:$('adults').value, rooms:$('rooms').value};
+    const o = currentOpts();
     $('go').href = ok ? resultsUrl(dest, o) : '#';
 
     return ok;
@@ -477,16 +514,20 @@
     $(id).addEventListener('input', () => { update(); renderTypes(); });
     $(id).addEventListener('change', () => { update(); renderTypes(); });
   });
+  $('kids').addEventListener('change', () => { renderAges(); update(); renderTypes(); const f = [...$('ages').querySelectorAll('select')].find(x => !x.value); if (f) f.focus(); });
   $('go').addEventListener('click', e => {
     if (!update()) {
       e.preventDefault();
+      const miss = [...$('ages').querySelectorAll('select')].filter(x => !x.value);
+      if ($('dest').value.trim() && miss.length) { miss.forEach(x => x.classList.add('miss')); miss[0].focus(); return; }
       if (!$('dest').value.trim()) { $('err').textContent = t('errDest'); $('err').style.display = 'block'; }
       $('dest').focus();
     }
   });
 
   function currentOpts(){
-    return {cin:$('cin').value, cout:$('cout').value, adults:$('adults').value, rooms:$('rooms').value};
+    const ages = kidAges();
+    return {cin:$('cin').value, cout:$('cout').value, adults:$('adults').value, rooms:$('rooms').value, ages: ages.every(v => v !== '') ? ages : []};
   }
 
   function renderCities(){
@@ -569,6 +610,7 @@
     document.querySelectorAll('[data-h]').forEach(el => { el.innerHTML = t(el.dataset.h); });
     document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = t(el.dataset.ph); });
     $('langBtn').textContent = t('other');
+    renderAges();
     $('cities').innerHTML = '';
     CITIES.forEach(c => $('cities').append(new Option(lang === 'ar' ? (c.ar + ' — ' + c.cAr) : (c.en + ' — ' + c.cEn), lang === 'ar' ? c.ar : c.en)));
     renderQuick(); renderCities(); renderTypes(); update();
@@ -590,7 +632,7 @@
 </body>
 </html>
 <script src="search-ui.js?v=20261124c"></script>
-<script src="keep.js?v=20261127a"></script>
+<script src="keep.js?v=20261127b"></script>
 <script src="extras.js?v=20261126c"></script>
 <script src="home.js?v=20261125m"></script>
 <script src="business-parser.js?v=20261124c"></script>

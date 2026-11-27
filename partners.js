@@ -14,6 +14,11 @@
   const BUDGET = { eco: [0, 100], mid: [100, 250], lux: [250, 0] };
   const BK_TYPE = { hotel: 204, apartment: 201, resort: 206, villa: 213 };
   const HC_TYPE = { hotel: 'HOTEL', apartment: 'APARTMENT', villa: 'VILLA' };
+  // أعمار الأطفال (0–17، حد أقصى 6 مثل Expedia). o.ages = [5, 9] أو '5,9'
+  function kidAges(o = {}) {
+    const a = Array.isArray(o.ages) ? o.ages : String(o.ages || '').split(',');
+    return a.map(x => String(x).trim()).filter(x => /^\d{1,2}$/.test(x) && +x <= 17).map(Number).slice(0, 6);
+  }
 
   function bookingUrl(place, o = {}, f = {}, lang = 'ar') {
     const p = new URLSearchParams();
@@ -22,7 +27,9 @@
     if (o.cout) p.set('checkout', o.cout);
     p.set('group_adults', o.adults || 2);
     p.set('no_rooms', o.rooms || 1);
-    p.set('group_children', 0);
+    const kids = kidAges(o);
+    p.set('group_children', kids.length);
+    kids.forEach(k => p.append('age', k));   // Booking: age= لكل طفل
     const n = [];
     if (f.filter) n.push(f.filter);
     if (f.type && BK_TYPE[f.type]) n.push('ht_id=' + BK_TYPE[f.type]);
@@ -54,6 +61,9 @@
     const per = [];
     for (let i = 0; i < rooms; i++) per.push(Math.max(1, Math.floor(adults / rooms) + (i < adults % rooms ? 1 : 0)));
     p.set('adults', per.join(','));
+    // الأطفال: رقم الغرفة_العمر، نوزّعهم على الغرف بالتناوب (children=1_5,2_9)
+    const kids = kidAges(o);
+    if (kids.length) p.set('children', kids.map((k, i) => (i % rooms + 1) + '_' + k).join(','));
     p.set('rooms', rooms);
     if (f.hotel) p.set('hotelName', f.hotel);
     if (f.type && HC_TYPE[f.type]) p.append('lodging', HC_TYPE[f.type]);
@@ -86,7 +96,10 @@
     if (o.cin) p.set('chkin', o.cin);
     if (o.cout) p.set('chkout', o.cout);
     const rooms = Math.max(1, +o.rooms || 1), adults = Math.max(1, +o.adults || 2);
-    for (let i = 0; i < rooms; i++) p.set('rm' + (i + 1), 'a' + Math.max(1, Math.floor(adults / rooms) + (i < adults % rooms ? 1 : 0)));
+    const kids = kidAges(o);
+    // rm1=a2:c5:c9 — نفس توزيع الأطفال على الغرف
+    for (let i = 0; i < rooms; i++) p.set('rm' + (i + 1), 'a' + Math.max(1, Math.floor(adults / rooms) + (i < adults % rooms ? 1 : 0)) +
+      kids.filter((k, j) => j % rooms === i).map(k => ':c' + k).join(''));
     return 'https://' + host + '/h' + id + '.Hotel-Information?' + p.toString();
   }
   function hotelsHotelUrl(id, o = {}, ref = 'hotel') {
@@ -109,6 +122,8 @@
     if (o.cin) p.set('checkin', o.cin);
     if (o.cout) p.set('checkout', o.cout);
     p.set('adults', Math.max(1, +o.adults || 2));
+    const kids = kidAges(o);
+    if (kids.length) { p.set('children', kids.length); p.set('childrenAges', kids.join(',')); }
     p.set('lang', lang === 'ar' ? 'ar' : 'en');
     p.set('campaign', campaign);
     return 'https://www.stay22.com/allez/' + provider + '?' + p.toString();
@@ -130,5 +145,5 @@
     return s22({ address: S22_CITY[place] || place }, o, lang, 'nuzul_city', 'agoda');
   }
 
-  window.NUZUL = { AID, EG, EX, S22, bookingUrl, bookingHotelUrl, bookingCityUrl, agodaHotelUrl, agodaCityUrl, hotelsUrl, expediaUrl, hotelsHotelUrl, expediaHotelUrl };
+  window.NUZUL = { AID, kidAges, EG, EX, S22, bookingUrl, bookingHotelUrl, bookingCityUrl, agodaHotelUrl, agodaCityUrl, hotelsUrl, expediaUrl, hotelsHotelUrl, expediaHotelUrl };
 })();
