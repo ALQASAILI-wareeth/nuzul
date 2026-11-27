@@ -876,6 +876,9 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   function imgHtml(k, alt, isArea){
     const im = IMG[k]; if (!im) return '';
     const L = T[lang]; credit(im[0], im[1], im[2]);
+    // صور فنادقنا: على الجوال نرسل الجزء الظاهر فقط من الصورة (قصّة 320×360 من الوسط، نفس اللي يبيّن بالضبط)، وعلى الكمبيوتر نسخة 400 أو 640 حسب الشاشة
+    if (!im[3]) return '<div class="hi"><picture><source media="(max-width:560px)" srcset="/img/hotels/m/' + k + '.webp"><img loading="lazy" decoding="async" width="640" height="360" src="/img/hotels/' + k + '.webp" srcset="/img/hotels/s/' + k + '.webp 400w, /img/hotels/' + k + '.webp 640w" sizes="(max-width:700px) 100vw, (max-width:1000px) 50vw, 320px" data-full="/img/hotels/' + k + '.webp" alt="' + esc(alt) + '" onerror="this.closest(\'.hi\').classList.add(\'noimg\')"></picture>' +
+      (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>';
     return '<div class="hi"><img loading="lazy" decoding="async" width="640" height="360" src="' + (im[3] ? 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(im[0].replace(/ /g,'_')) + '?width=640' : '/img/hotels/' + k + '.webp') + '" alt="' + esc(alt) + '" onerror="this.parentNode.classList.add(\'noimg\')">' +
       (isArea ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>';
   }
@@ -975,7 +978,8 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
         if (!b.isConnected) return;
         let p = null; while (n < pics.length) { const c = pics[n++]; if (!used.has(c.src)) { p = c; break; } }
         if (!p) return; used.add(p.src);
-        const old = b.querySelector('img'); if (!old) return;
+        const oldI = b.querySelector('img'); if (!oldI) return;
+        const old = oldI.parentNode.tagName === 'PICTURE' ? oldI.parentNode : oldI;
         const im = new Image(); im.loading = 'lazy'; im.decoding = 'async'; im.width = 640; im.height = 360; im.alt = ''; im.dataset.area = '1';
         im.onerror = () => { if (im.parentNode === b) b.replaceChild(old, im); };
         b.replaceChild(im, old); im.src = p.src; credit(p.file, p.who, p.lic);
@@ -1137,7 +1141,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   function openSheet(from, d){
     const L = T[lang], h = d.h, sh = $('sh');
     shFrom = (from && from.contains && from.contains(document.activeElement)) ? document.activeElement : ((from && from.querySelector && from.querySelector('.cmp')) || from);
-    const src = d.im && !d.im.parentNode.classList.contains('noimg') ? d.im.currentSrc || d.im.src : '';
+    const src = d.im && !d.im.closest('.hi').classList.contains('noimg') ? d.im.dataset.full || d.im.currentSrc || d.im.src : '';
     const a = (cls, name, href) => '<a class="sha ' + cls + '" target="_blank" rel="noopener sponsored" href="' + esc(href) + '"><span>' + esc(name) + '</span><small>' + L.shGo + ' ↗</small></a>';
     $('shp').innerHTML = '<div class="shg" aria-hidden="true"><i></i></div><button type="button" class="shx" id="shx" aria-label="' + L.shClose + '">✕</button>' +
       (src ? '<div class="shi"><img alt="" src="' + esc(src) + '">' + ((h.area || (d.im && d.im.dataset.area)) ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>' : '') +
