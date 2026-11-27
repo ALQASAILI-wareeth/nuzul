@@ -69,11 +69,17 @@
   }
 
   // ---------- 4) تواريخ مقروءة ----------
+  // نفس ناتج Intl.DateTimeFormat('ar-AE-u-nu-latn' / 'en-GB', {day:'numeric', month:'long'}) حرفياً،
+  // بس بدون تحميل بيانات Intl وقت فتح الصفحة (كانت أطول جزء في تشغيل هذا الملف على الجوال)
+  var MONTHS = {
+    ar: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  };
   function fmt(v) {
     if (!v) return '';
     var p = v.split('-'); var d = new Date(+p[0], +p[1] - 1, +p[2]);
-    try { return new Intl.DateTimeFormat(lang() === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB', { day: 'numeric', month: 'long' }).format(d); }
-    catch (e) { return v; }
+    if (isNaN(d)) return v;
+    return d.getDate() + ' ' + MONTHS[lang()][d.getMonth()];
   }
   var dates = [];
   ['cin', 'cout'].forEach(function (id) {
@@ -109,15 +115,20 @@
 
   // ---------- 6) حركة هادئة ----------
   var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // القياس (getBoundingClientRect) يصير في أول إطار رسم بدل وسط تشغيل السكربت، ومرة وحدة لكل إطار مهما كثرت التغييرات
+  var revealQ = 0;
   function reveal() {
-    if (calm || !('IntersectionObserver' in window)) return;
+    if (calm || !('IntersectionObserver' in window) || revealQ) return;
+    revealQ = requestAnimationFrame(function () { revealQ = 0; revealNow(); });
+  }
+  function revealNow() {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('nz-in'); io.unobserve(e.target); } });
     }, { rootMargin: '0px 0px -8% 0px' });
-    D.querySelectorAll('section').forEach(function (s) {
-      if (s.dataset.rv) return; s.dataset.rv = '1';
-      if (s.getBoundingClientRect().top > window.innerHeight * 0.9) { s.classList.add('nz-rv'); io.observe(s); }
-    });
+    // نقرأ المواقع كلها أول، بعدين نضيف الكلاسات (بدل قراءة/كتابة بالتناوب)
+    var fresh = [].filter.call(D.querySelectorAll('section'), function (s) { return !s.dataset.rv; });
+    var low = fresh.map(function (s) { return s.getBoundingClientRect().top > window.innerHeight * 0.9; });
+    fresh.forEach(function (s, i) { s.dataset.rv = '1'; if (low[i]) { s.classList.add('nz-rv'); io.observe(s); } });
   }
 
   function all() { swapIcons(); syncDates(); foldBusiness(); reveal(); drawBadges(); }
