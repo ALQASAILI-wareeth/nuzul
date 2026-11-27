@@ -219,6 +219,8 @@
   function maybeA2hs() {
     if (standalone() || get(K_A2HS, 0) || document.getElementById('nza')) return;
     if (visits() < 2) return;
+    // الاقتراح للجوال والتابلت بس (شاشة لمس بدون ماوس). على الكمبيوتر متصفحه يعرض زر التثبيت بنفسه
+    if (!(window.matchMedia && matchMedia('(hover: none) and (pointer: coarse)').matches)) return;
     var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent);
     if (!deferred && !ios) return;
     css();
