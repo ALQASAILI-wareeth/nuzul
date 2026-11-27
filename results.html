@@ -37,13 +37,16 @@
   .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:15px;opacity:.92}
   .meta span{display:inline-flex;align-items:center;gap:5px}
   .edit{margin-top:12px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);color:#fff;font-weight:700;font-size:14px;padding:6px 14px;border-radius:999px}
-  .eform{display:none;margin-top:14px;background:#fff;border-radius:16px;padding:14px;gap:10px;grid-template-columns:minmax(0,2fr) repeat(4,minmax(0,1fr)) auto;align-items:end;color:var(--ink)}
+  .eform{display:none;margin-top:14px;background:#fff;border-radius:16px;padding:14px;gap:10px;grid-template-columns:minmax(0,1.7fr) repeat(2,minmax(130px,1.2fr)) repeat(3,minmax(0,.75fr)) auto;align-items:end;color:var(--ink)}
+  .eform .ages{grid-column:1/-1}.eform .ages[hidden]{display:none}
+  .eform .al{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+  .eform select.miss{border-color:#b3261e}
   .eform.on{display:grid}
   .eform label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:3px}
   .eform input,.eform select{width:100%;min-width:0;height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;font:inherit;font-size:16px;background:#fff;color:var(--ink);-webkit-appearance:none;appearance:none}
   .eform input[type=date]{display:block;line-height:44px;text-align:start}
   .eform .go{height:44px;padding:0 20px;border:0;border-radius:10px;background:var(--sand);color:var(--navy);font-weight:800}
-  @media(max-width:760px){.eform{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.eform .d,.eform .go{grid-column:1/-1}}
+  @media(max-width:760px){.eform{grid-template-columns:repeat(6,minmax(0,1fr))}.eform>div{grid-column:span 2}.eform>div.dt{grid-column:span 3}.eform .d,.eform .go,.eform>.ages{grid-column:1/-1}.eform .go{order:1}}
 
   main{padding:18px 0 10px}
   .panel{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:16px}
@@ -195,11 +198,13 @@
     <button class="edit" id="editBtn" type="button" data-i="edit">✏️ تعديل البحث</button>
     <form class="eform" id="eform" onsubmit="return false">
       <div class="d"><label for="e_dest" data-i="destL">الوجهة</label><input id="e_dest" autocomplete="off"></div>
-      <div><label for="e_cin" data-i="cinL">الوصول</label><input id="e_cin" type="date"></div>
-      <div><label for="e_cout" data-i="coutL">المغادرة</label><input id="e_cout" type="date"></div>
+      <div class="dt"><label for="e_cin" data-i="cinL">الوصول</label><input id="e_cin" type="date"></div>
+      <div class="dt"><label for="e_cout" data-i="coutL">المغادرة</label><input id="e_cout" type="date"></div>
       <div><label for="e_ad" data-i="adultsL">البالغون</label><select id="e_ad"></select></div>
+      <div><label for="e_kd" data-i="kidsL">الأطفال</label><select id="e_kd"></select></div>
       <div><label for="e_rm" data-i="roomsL">الغرف</label><select id="e_rm"></select></div>
       <button class="go" id="e_go" type="button" data-i="update">تحديث</button>
+      <div class="ages" id="e_agesF" hidden><label id="e_agesL" data-i="agesL">عمر كل طفل وقت الوصول</label><div class="al" id="e_ages" role="group" aria-labelledby="e_agesL"></div></div>
     </form>
   </div>
 </section>
@@ -266,10 +271,10 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
 </footer>
 
 <script src="search.js?v=20261124c"></script>
-<script src="partners.js?v=20261126a"></script>
+<script src="partners.js?v=20261127a"></script>
 <script src="hotels-more.js?v=20261124c"></script>
 <script src="hotel-ids.js?v=20261124c"></script>
-<script src="keep.js?v=20261127a"></script>
+<script src="keep.js?v=20261127b"></script>
 <script src="polish-r.js?v=20261124c"></script>
 <script src="ptr.js?v=20261124c"></script>
 <script>
@@ -277,7 +282,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   const MAIL = 'info@nuzultravel.com';
   const T = {
     ar:{brand:'نُزُل',tagline:'احجز إقامتك بثقة',other:'English',edit:'✏️ تعديل البحث',update:'تحديث',destL:'الوجهة',cinL:'الوصول',coutL:'المغادرة',adultsL:'البالغون',roomsL:'الغرف',
-      title:n=>'فنادق '+n, nights:n=>n===1?'ليلة وحدة':(n===2?'ليلتين':n+' ليالي'), adults:n=>n===1?'بالغ واحد':n+' بالغين', rooms:n=>n===1?'غرفة':(n===2?'غرفتين':n+' غرف'),
+      title:n=>'فنادق '+n, nights:n=>n===1?'ليلة وحدة':(n===2?'ليلتين':n+' ليالي'), adults:n=>n===1?'بالغ واحد':n+' بالغين', kids:n=>n===1?'طفل واحد':(n===2?'طفلين':n+' أطفال'), kidsL:'الأطفال', agesL:'عمر كل طفل وقت الوصول', ageOpt:'العمر', age0:'أقل من سنة', ageN:i=>'عمر الطفل '+i, rooms:n=>n===1?'غرفة':(n===2?'غرفتين':n+' غرف'),
       qH:'قارن السعر على:',fH:'🎯 حدّد اللي يناسبك (اختياري)',fNear:'الموقع',fType:'نوع الإقامة',fBudget:'الميزانية/ليلة',fStars:'النجوم',fMore:'مميزات',fSort:'الترتيب',
       any:'الكل', types:{hotel:'🏨 فندق',apartment:'🏢 شقة فندقية',resort:'🏝️ منتجع',villa:'🏡 فيلا'},
       budget:{eco:'💲 أقل من 100$',mid:'💲💲 100–250$',lux:'💎 فوق 250$'}, stars:{3:'3★ فأكثر',4:'4★ فأكثر',5:'5★ فقط'},
@@ -296,7 +301,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
       hsSub:'اضغط على الفندق عشان تقارن السعر لتواريخك على مواقع الحجز.',hsNote:'* المسافات ووقت المشي تقريبية. السعر النهائي يظهر في موقع الحجز. الصور من ويكيميديا كومنز بحقوق أصحابها، و«صورة المنطقة» تعني إن الصورة للمنطقة مو للفندق نفسه.',
       cardsAll:n=>'أو شوف كل فنادق '+n+' على مواقع الحجز', all:'الكل', walk:'🚶 ', cheaper:'💲 الأوفر', cheaperB:'💲 اقتصادي', areaPic:'📷 صورة المنطقة', cmp:'شوف الأسعار ←', shQ:'شوف السعر لتواريخك على:', shGo:'شوف السعر', shClose:'إغلاق', shNote:'السعر يختلف بين المواقع، فقارن بينها قبل ما تحجز. الحجز والدفع يتمان عند الموقع اللي تختاره. على الجوال: اختر «متابعة إلى الموقع» إذا ما عندك تطبيقهم.', favTab:n=>'♥ مفضلتي ('+n+')', favAdd:'أضف للمفضلة', favRm:'حذف من المفضلة', chH:'🔔 العروض توصلك أول بأول', chP:'عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.', chWa:'قناة واتساب', chTg:'تيليجرام', noH:'ما فيه فنادق مختارة تطابق الفلاتر. شوف كل الفنادق تحت 👇'},
     en:{brand:'Nuzul',tagline:'Book your stay with confidence',other:'العربية',edit:'✏️ Edit search',update:'Update',destL:'Destination',cinL:'Check-in',coutL:'Check-out',adultsL:'Adults',roomsL:'Rooms',
-      title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', rooms:n=>n+(n===1?' room':' rooms'),
+      title:n=>'Hotels in '+n, nights:n=>n+(n===1?' night':' nights'), adults:n=>n+' adults', kids:n=>n+(n===1?' child':' children'), kidsL:'Children', agesL:'Each child’s age at check-in', ageOpt:'Age', age0:'Under 1', ageN:i=>'Age of child '+i, rooms:n=>n+(n===1?' room':' rooms'),
       qH:'Compare prices on:',fH:'🎯 Narrow it down (optional)',fNear:'Location',fType:'Stay type',fBudget:'Budget/night',fStars:'Stars',fMore:'Extras',fSort:'Sort by',
       any:'Any', types:{hotel:'🏨 Hotel',apartment:'🏢 Apartment',resort:'🏝️ Resort',villa:'🏡 Villa'},
       budget:{eco:'💲 Under $100',mid:'💲💲 $100–250',lux:'💎 $250+'}, stars:{3:'3★ & up',4:'4★ & up',5:'5★ only'},
@@ -806,7 +811,9 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     cin: isDate(qs.get('ci')) ? qs.get('ci') : fmt(addDays(today,1)),
     cout: isDate(qs.get('co')) ? qs.get('co') : fmt(addDays(today,4)),
     adults: Math.min(10, Math.max(1, +qs.get('a') || 2)),
-    rooms: Math.min(5, Math.max(1, +qs.get('r') || 1))
+    rooms: Math.min(5, Math.max(1, +qs.get('r') || 1)),
+    // أعمار الأطفال من ca (0–17، حد أقصى 6). العدد = عدد الأعمار الصحيحة، وما نخترع عمر ناقص
+    ages: (qs.get('ca') || '').split(',').map(x => x.trim()).filter(x => /^\d{1,2}$/.test(x) && +x <= 17).map(Number).slice(0, 6)
   };
   if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin),1));
   // تواريخ صارت ماضية في الرابط (رابط محفوظ، رحلة سابقة، أو تاريخ مكتوب يدوياً): ما نرسلها لمواقع الحجز.
@@ -851,7 +858,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   function renderNote(){
     const box = $('qnote'); if (!box) return;
     if (!Q.kind) { box.hidden = true; box.innerHTML = ''; return; }
-    const ar = lang === 'ar', base = '&ci=' + S.cin + '&co=' + S.cout + '&a=' + S.adults + '&r=' + S.rooms;
+    const ar = lang === 'ar', base = '&ci=' + S.cin + '&co=' + S.cout + '&a=' + S.adults + '&r=' + S.rooms + kidsQ();
     const chip = (d, label) => '<a class="qc" href="?d=' + encodeURIComponent(d) + base + '">' + esc(label) + '</a>';
     const cityChip = c => chip(c.en, ar ? c.ar : c.en);
     let msg = '', chipsH = '';
@@ -875,7 +882,9 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   const dispName = () => { const k = key(); if (lang === 'ar') { if (k) return (S.n && ALIAS[S.n] === k) ? S.n : (DEST[k].ar || S.d); return S.n && /[؀-ۿ]/.test(S.n) ? S.n : S.d; } return S.d; };
   const dateTxt = s => new Date(s+'T12:00:00').toLocaleDateString(lang === 'ar' ? 'ar-AE' : 'en-GB', {day:'numeric', month:'short'});
   const place = () => { const k = key(); return (F.near && k && DEST[k].near) ? DEST[k].near.q : S.d; };
-  const opts = () => ({cin:S.cin, cout:S.cout, adults:S.adults, rooms:S.rooms});
+  const opts = () => ({cin:S.cin, cout:S.cout, adults:S.adults, rooms:S.rooms, ages:S.ages});
+  function kidsQ(){ return S.ages.length ? '&c=' + S.ages.length + '&ca=' + S.ages.join(',') : ''; }
+  const kidsTxt = () => S.ages.length ? ' · 👶 ' + T[lang].kids(S.ages.length) : '';
 
   function chips(el, list, cur, onPick){
     el.innerHTML = '';
@@ -1200,7 +1209,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
       (src ? '<div class="shi"><img alt="" src="' + esc(src) + '">' + ((h.area || (d.im && d.im.dataset.area)) ? '<span class="lab">' + L.areaPic + '</span>' : '') + '</div>' : '') +
       '<div class="shb"><h3 id="shN"></h3>' + (lang === 'ar' ? '<div class="he" id="shE"></div>' : '') +
       '<div class="hm">' + (h.s ? '<span class="st">' + '★'.repeat(h.s) + '</span>' : '') + (h.v ? '<span class="vv">' + L.cheaperB + '</span>' : '') + '<span>📍 ' + esc(d.g[lang]) + '</span>' + d.extra + '</div>' +
-      '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
+      '<div class="shd">📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + ' · 👥 ' + L.adults(S.adults) + kidsTxt() + ' · 🛏️ ' + L.rooms(S.rooms) + '</div>' +
       (h.f ? '' : '<div class="shpm" id="shpm"><button type="button" class="pmh" id="pmh" aria-expanded="false" aria-controls="pml"><i class="pmi" aria-hidden="true">🎁</i><b>' + (lang === 'ar' ? 'احجز إقامتك وارجع لنا' : 'Book your stay, then come back') + '</b><span>' + (lang === 'ar' ? 'جهّزنا لك قائمة بأقرب المطاعم والكوفيهات وأماكن الترفيه حول الفندق.' : 'We have a list of the nearest restaurants, cafés and fun places around the hotel ready for you.') + '</span><em class="pmt" aria-hidden="true"><u>🍽️</u><u>☕</u><u>🌳</u><u>🎡</u></em><small class="pmc"><span class="pmo">' + (lang === 'ar' ? 'شوف القائمة ↓' : 'See the list ↓') + '</span><span class="pmx">' + (lang === 'ar' ? 'إخفاء القائمة ↑' : 'Hide the list ↑') + '</span></small></button><div class="pml" id="pml" hidden>' + nearHtml(h, d.city) + '</div></div>') +
       '<div class="shq">' + L.shQ + '</div>' +
       a('b2', 'Hotels.com', d.hc) + a('b3', 'Expedia', d.ex) + a('b1', 'Booking.com', d.bk) + (d.ag ? a('b4', 'Agoda', d.ag) : '') +
@@ -1333,7 +1342,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     const n = dispName();
     $('title').textContent = L.title(n);
     document.title = (lang === 'ar' ? 'نُزُل — ' : 'Nuzul — ') + L.title(n);
-    $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span><span>🛏️ ' + L.rooms(S.rooms) + '</span>';
+    $('meta').innerHTML = '<span>📅 ' + dateTxt(S.cin) + ' – ' + dateTxt(S.cout) + ' · ' + L.nights(nights()) + '</span><span>👥 ' + L.adults(S.adults) + '</span>' + (S.ages.length ? '<span>👶 ' + L.kids(S.ages.length) + '</span>' : '') + '<span>🛏️ ' + L.rooms(S.rooms) + '</span>';
     renderFilters(); renderHotels(); renderCards(); loadHero(); renderCredits(); renderNote(); renderDNote(); openAsked();
     if (window.NZKEEP) NZKEEP.saveSearch(S, (k && DEST[k].ar) || S.n || S.d);
     $('tipTxt').innerHTML = (k && DEST[k].tip) ? DEST[k].tip[lang] : '<b>💡</b> ' + L.genTip;
@@ -1343,23 +1352,43 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   // edit form
   for (let i=1;i<=10;i++) $('e_ad').add(new Option(i, i));
   for (let i=1;i<=5;i++) $('e_rm').add(new Option(i, i));
+  for (let i=0;i<=6;i++) $('e_kd').add(new Option(i, i));
+  function renderAges(vals){
+    const L = T[lang], n = +$('e_kd').value || 0, box = $('e_ages'), old = vals || [...box.querySelectorAll('select')].map(x => x.value);
+    box.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+      const sel = document.createElement('select');
+      sel.setAttribute('aria-label', L.ageN(i + 1));
+      sel.add(new Option(L.ageOpt, '')); sel.add(new Option(L.age0, '0'));
+      for (let a = 1; a <= 17; a++) sel.add(new Option(a, a));
+      sel.value = old[i] != null ? String(old[i]) : '';
+      sel.addEventListener('change', () => sel.classList.remove('miss'));
+      box.append(sel);
+    }
+    $('e_agesF').hidden = !n;
+  }
+  $('e_kd').addEventListener('change', () => { renderAges(); const f = [...$('e_ages').querySelectorAll('select')].find(x => !x.value); if (f) f.focus(); });
   $('e_cin').addEventListener('change', () => {
     const v = $('e_cin').value; if (!v) return;
     const nx = fmt(addDays(localDay(v), 1));
     $('e_cout').min = nx; $('e_cout').value = nx;
   });
-  function fillForm(){ $('e_dest').value = lang === 'ar' ? dispName() : S.d; $('e_cin').value = S.cin; $('e_cout').value = S.cout; $('e_ad').value = S.adults; $('e_rm').value = S.rooms; $('e_cin').min = fmt(today); }
+  function fillForm(){ $('e_dest').value = lang === 'ar' ? dispName() : S.d; $('e_cin').value = S.cin; $('e_cout').value = S.cout; $('e_ad').value = S.adults; $('e_rm').value = S.rooms; $('e_kd').value = S.ages.length; renderAges(S.ages); $('e_cin').min = fmt(today); }
   $('editBtn').onclick = () => { fillForm(); $('eform').classList.toggle('on'); };
   $('e_dest').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('e_go').click(); } });
   $('e_go').onclick = () => {
     const v = clean($('e_dest').value); if (!v) return $('e_dest').focus();
+    const miss = [...$('e_ages').querySelectorAll('select')].filter(x => !x.value);
+    if (miss.length) { miss.forEach(x => x.classList.add('miss')); return miss[0].focus(); }
     const raw = v; const k = ALIAS[raw] || raw.toLowerCase();
     S.d = (DEST[k] && k === 'makkah') ? 'Makkah' : (DEST[k] && k === 'madinah') ? 'Madinah' : (DEST[k] ? k.replace(/\b\w/g, c => c.toUpperCase()) : raw);
     S.n = raw; canon(); S.cin = isDate($('e_cin').value) ? $('e_cin').value : S.cin; S.cout = isDate($('e_cout').value) ? $('e_cout').value : S.cout;
     if (S.cin < fmt(today)) { S.cin = fmt(addDays(today, 1)); if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin), 3)); }
     if (S.cout <= S.cin) S.cout = fmt(addDays(localDay(S.cin),1));
     S.adults = +$('e_ad').value; S.rooms = +$('e_rm').value; F.near = false;
+    S.ages = [...$('e_ages').querySelectorAll('select')].map(x => +x.value);
     const u = new URLSearchParams({d:S.d, n:S.n, ci:S.cin, co:S.cout, a:S.adults, r:S.rooms});
+    if (S.ages.length) { u.set('c', S.ages.length); u.set('ca', S.ages.join(',')); }
     try { history.replaceState(null, '', '?' + u.toString()); } catch(e){}
     $('eform').classList.remove('on'); render(); window.scrollTo({top:0, behavior:'smooth'});
   };

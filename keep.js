@@ -31,13 +31,16 @@
   /* ---------- آخر بحث ---------- */
   function saveSearch(S, name) {
     if (!S || !S.d) return;
-    set(K_LAST, {d: S.d, n: S.n || '', name: name || S.n || S.d, ci: S.cin, co: S.cout, a: S.adults, r: S.rooms, ts: Date.now()});
+    set(K_LAST, {d: S.d, n: S.n || '', name: name || S.n || S.d, ci: S.cin, co: S.cout, a: S.adults, r: S.rooms, k: (S.ages || []).join(','), ts: Date.now()});
   }
+  // أعمار الأطفال المحفوظة: "5,9" فقط (0–17، حد أقصى 6)، وأي شي ثاني يرجع فاضي
+  function kids(v) { v = str(v); return /^(1[0-7]|\d)(,(1[0-7]|\d)){0,5}$/.test(v) ? v : ''; }
+  function kidsX(k, extra) { var x = extra || {}; if (k) { x.c = k.split(',').length; x.ca = k; } return x; }
   // آخر بحث بعد التنظيف: نصوص فقط، تواريخ صحيحة فقط، وعدد البالغين والغرف أرقام ضمن الحدود
   function lastSearch() {
     var v = get(K_LAST, null);
     if (!v || typeof v !== 'object' || Array.isArray(v) || !str(v.d).trim()) return null;
-    return {d: str(v.d), n: str(v.n), name: str(v.name), ci: isYmd(v.ci) ? v.ci : '', co: isYmd(v.co) ? v.co : '', a: num(v.a, 1, 10, 2), r: num(v.r, 1, 5, 1)};
+    return {d: str(v.d), n: str(v.n), name: str(v.name), ci: isYmd(v.ci) ? v.ci : '', co: isYmd(v.co) ? v.co : '', a: num(v.a, 1, 10, 2), r: num(v.r, 1, 5, 1), k: kids(v.k)};
   }
   // التواريخ القديمة ما تنفع: نرجّع نفس عدد الليالي ابتداءً من بكرة
   function freshDates(ci, co) {
@@ -180,14 +183,14 @@
       var n = Math.max(1, Math.round((new Date(base.co) - new Date(base.ci)) / 864e5));
       var nm = ar ? (last.name || last.n || last.d) : last.d;
       html += '<div class="c last"><div class="tx"><small>' + L.last + '</small><b>' + esc(nm) + '</b><span>' + esc(dt(base.ci) + ' – ' + dt(base.co) + ' · ' + L.nights(n) + ' · ' + L.ad(last.a)) + '</span></div>' +
-        '<a class="go" href="' + esc(resultsUrl(last.d, last.n, base, last.a, last.r)) + '">' + L.go + '</a></div>';
+        '<a class="go" href="' + esc(resultsUrl(last.d, last.n, base, last.a, last.r, kidsX(last.k))) + '">' + L.go + '</a></div>';
     }
     html += '</div>';
     if (fv.length) {
       html += '<h3>❤️ ' + L.favH + ' (' + fv.length + ')</h3><div class="row">';
       fv.slice(0, 6).forEach(function (f) {
         html += '<div class="c"><div class="tx"><b>' + esc(ar ? (f.ar || f.n) : f.n) + '</b><span>' + esc(ar ? (f.cityAr || f.d) : f.d) + '</span></div>' +
-          '<a class="go" href="' + esc(resultsUrl(f.d, '', base, last && last.a, last && last.r, {fav: 1})) + '">' + L.see + '</a>' +
+          '<a class="go" href="' + esc(resultsUrl(f.d, '', base, last && last.a, last && last.r, kidsX(last && last.k, {fav: 1}))) + '">' + L.see + '</a>' +
           '<button type="button" data-rm="' + esc(f.id) + '" aria-label="' + L.rm + '" title="' + L.rm + '">✕</button></div>';
       });
       html += '</div>';
