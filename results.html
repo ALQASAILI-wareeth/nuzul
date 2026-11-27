@@ -227,7 +227,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
 })();
 (function(){var t=new URLSearchParams(location.search).get('t');if(['apartment','resort','villa'].indexOf(t)<0)document.getElementById('hs').hidden=false;})();
 // صورة الوجهة المحفوظة من زيارة سابقة: نطبقها قبل أول رسم عشان الترويسة تطلع بطولها الكامل من البداية بدون قفز
-(function(){try{var o=JSON.parse(localStorage.getItem('nuzul_wiki'));if(!o||typeof o!=='object'||typeof o.t!=='number'||o.t<Date.now()-6048e5||o.t>Date.now()+6e4||!o.hero||typeof o.hero!=='object')return;var d=(new URLSearchParams(location.search).get('d')||'').replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g,'').replace(/\s+/g,' ').trim().slice(0,80)||'Dubai',c=o.hero['u:'+d.toLowerCase()];if(!c||typeof c.src!=='string'||typeof c.file!=='string')return;var u=new URL(c.src);if(u.protocol!=='https:'||['upload.wikimedia.org','thumb.wikimedia.org'].indexOf(u.hostname)<0)return;var t=document.getElementById('top');t.style.backgroundImage='linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("'+u.href.replace(/["'()\\\s]/g,encodeURIComponent)+'")';t.classList.add('ph');}catch(e){}})();
+(function(){try{var o=JSON.parse(localStorage.getItem('nuzul_wiki'));if(!o||typeof o!=='object'||typeof o.t!=='number'||o.t<Date.now()-6048e5||o.t>Date.now()+6e4||!o.hero||typeof o.hero!=='object')return;var d=(new URLSearchParams(location.search).get('d')||'').replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g,'').replace(/\s+/g,' ').trim().slice(0,80)||'Dubai',c=o.hero['u:'+d.toLowerCase()];if(!c||typeof c.src!=='string'||typeof c.file!=='string')return;var u=new URL(c.src);if(u.protocol!=='https:'||['upload.wikimedia.org','thumb.wikimedia.org'].indexOf(u.hostname)<0)return;var h=u.href.replace(/["'()\\\s]/g,encodeURIComponent);if(window.innerWidth<=760)h=h.replace(/\/1280px-([^/]+)$/,'/960px-$1');var t=document.getElementById('top');t.style.backgroundImage='linear-gradient(180deg,rgba(6,47,82,.20) 0%,rgba(6,47,82,.30) 45%,rgba(6,47,82,.66) 100%),url("'+h+'")';t.classList.add('ph');}catch(e){}})();
   </script>
   <div class="chn nz-low"><div><b data-i="chH">🔔 العروض توصلك أول بأول</b><span data-i="chP">عروض الفنادق والمواسم كل أسبوع في قناتنا، بدون إزعاج.</span></div><nav><a class="w" href="https://whatsapp.com/channel/0029Vb8niNp3wtb9Lh3q2l3X" target="_blank" rel="noopener" data-i="chWa">قناة واتساب</a><a class="t" href="https://t.me/nuzul_travel" target="_blank" rel="noopener" data-i="chTg">تيليجرام</a></nav></div>
   <h3 id="cardsH">قارن على أكثر من موقع</h3>
@@ -1235,9 +1235,12 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
   const heroKeys = name => ['n:' + name.toLowerCase(), 'u:' + S.d.toLowerCase()];
   // الترويسة ما تغيّر طولها بعد ما تظهر: الطول الكامل (ph) بس إذا الصورة محفوظة من زيارة سابقة وطبقناها قبل أول رسم،
   // وغير كذا تنزل الصورة في نفس المكان بدون ما تدفع الصفحة (phs)
+  // صورة الترويسة على الجوال (عرض الشاشة 760 أو أقل): نسخة ويكيميديا القياسية 960px من نفس الصورة بدل 1280px
+  // (ويكيميديا أصلاً تقرّب طلب 800 إلى 960). الكمبيوتر يبقى 1280، والذاكرة المحلية تحفظ الرابط الأصلي مثل ما هو.
+  const heroSize = src => (window.innerWidth <= 760 ? src.replace(/\/1280px-([^/]+)$/, '/960px-$1') : src);
   function showHero(c){
     const top = $('top');
-    top.style.backgroundImage = HERO_BG(c.src);
+    top.style.backgroundImage = HERO_BG(heroSize(c.src));
     top.classList.add(top.classList.contains('ph') ? 'ph' : 'phs');
     HERO_CR = [c.file, c.who, c.lic]; renderCredits();
   }
@@ -1252,7 +1255,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
     if (cached) {
       showHero(cached);
       // لو الصورة المحفوظة انحذفت من ويكيميديا: نشيلها من الذاكرة والترويسة تبقى زرقاء
-      const t = new Image(); t.onerror = () => { keys.forEach(x => delete hc[x]); wSave(); if (heroFor === name) { top.style.backgroundImage = ''; top.classList.remove('phs'); HERO_CR = null; renderCredits(); } }; t.src = cached.src;
+      const t = new Image(); t.onerror = () => { keys.forEach(x => delete hc[x]); wSave(); if (heroFor === name) { top.style.backgroundImage = ''; top.classList.remove('phs'); HERO_CR = null; renderCredits(); } }; t.src = heroSize(cached.src);
       return;
     }
     const ar = /[؀-ۿ]/.test(name), wiki = ar ? 'ar' : 'en';
@@ -1268,7 +1271,7 @@ t.addEventListener('click',function(){set(!p.classList.contains('shut'));});
       // لا صورة رئيسية مناسبة: نترك الترويسة الزرقاء بدل صورة عشوائية من قائمة الصور
       if (!pg) { keys.forEach(x => hc[x] = null); wSave(); return; }
       const src = safeImg(pg.thumbnail.source); if (!src) return;
-      await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = src; });
+      await new Promise((ok, no) => { const im = new Image(); im.onload = ok; im.onerror = no; im.src = heroSize(src); });
       if (heroFor !== name) return;
       const c = {src: src, file: decodeURIComponent(pg.pageimage).replace(/_/g, ' '), who: '', lic: ''};
       showHero(c);
